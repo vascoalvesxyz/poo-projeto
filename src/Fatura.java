@@ -1,6 +1,27 @@
 public class Fatura {
+
+    enum Categoria {
+        BELEZA,
+        BEM_ESTAR,
+        BEBES,
+        ANIMAIS,
+        OUTRO
+    }
+
     int id;
     Date data;
-    Cliente cliente;
-    String[] produtos;
+    //Cliente cliente;
+    Produto[] produtos;
+
+    public String toString() {
+        
+    }
+
+    public importFatura() {
+            
+    }
+
+    public exportFatura() {
+
+    }
 }

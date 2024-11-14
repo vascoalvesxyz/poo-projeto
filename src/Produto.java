@@ -1,8 +1,10 @@
 public abstract class Produto {
+
     int codigo;
-    int nome;
+    String nome;
     String descrição;
     int quantidade;
     int valorUnitario;
 
+    abstract public String toString();
 }
