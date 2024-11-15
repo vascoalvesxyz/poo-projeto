@@ -11,14 +11,16 @@ public class ProdutoFarmacia extends Produto {
     private String medico;
     private boolean temPrescricao;
 
+    /* Contructor Sem Prescrição */
     public ProdutoFarmacia(int codigo, int nome, String descrição, int quantidade, int valorUnitario, enum CategoriaFarmacia categoria) {
-        super(codigo, nome, descrição, quantidade, valorUnitario);
+        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.FARMACEUTICO);
         this.temPrescricao = false;
         this.categoria = categoria;
     }
 
+    /* Contructor Com Prescrição */
     public ProdutoFarmacia(int codigo, int nome, String descrição, int quantidade, int valorUnitario, String medico) {
-        super(codigo, nome, descrição, quantidade, valorUnitario);
+        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.FARMACEUTICO);
         this.temPrescricao = true;
         this.medico = medico;
     }

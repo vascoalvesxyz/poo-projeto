@@ -17,11 +17,11 @@ public class Fatura {
         
     }
 
-    public importFatura() {
+    public import() {
             
     }
 
-    public exportFatura() {
+    public export() {
 
     }
 }

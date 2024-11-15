@@ -1,3 +1,8 @@
+public enum TipoProduto {
+    ALIMENTAR,
+    FARMACEUTICO
+}
+
 public abstract class Produto {
 
     int codigo;
@@ -5,6 +10,8 @@ public abstract class Produto {
     String descrição;
     int quantidade;
     int valorUnitario;
+
+    TipoProduto tipo;
 
     abstract public String toString();
 }

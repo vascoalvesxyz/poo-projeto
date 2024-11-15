@@ -18,21 +18,22 @@ public class ProdutoAlimentar extends Produto {
         VINHO
     }
 
-    private Taxa taxa;
+    public Taxa taxa;
+    public CategoriaAlimentar categoria;
+
     private Certificacoes certificacoes;
-    private CategoriaAlimentar categoria;
     private boolean biologico;
 
     // Constructor Padrão ou Para Taxa Normal
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico) {
-        super(codigo, nome, descricao, quantidade, valorUnitario);
+        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
         this.taxa = Taxa.NORMAL; 
         this.biologico = biologico;
     }
 
     // Constructor Para Taxa Reduzida
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario,  boolean biologico, Certificacoes[] certificacoes) {
-        super(codigo, nome, descricao, quantidade, valorUnitario);
+        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
         this.taxa = Taxa.REDUZIDA;
         this.biologico = biologico;
         this.certificacoes = certificacoes;
@@ -40,7 +41,7 @@ public class ProdutoAlimentar extends Produto {
 
     // Constructor Para Taxa Intermédia
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, CategoriaAlimentar categoria) {
-        super(codigo, nome, descricao, quantidade, valorUnitario);
+        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
         this.taxa = Taxa.INTERMEDIA;
         this.biologico = biologico;
         this.categoria = categoria;
