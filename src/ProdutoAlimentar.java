@@ -21,19 +21,19 @@ public class ProdutoAlimentar extends Produto {
     public Taxa taxa;
     public CategoriaAlimentar categoria;
 
-    private Certificacoes certificacoes;
+    private Certificacoes[] certificacoes;
     private boolean biologico;
 
     // Constructor Padrão ou Para Taxa Normal
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico) {
-        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
+        super(codigo, nome, descricao, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
         this.taxa = Taxa.NORMAL; 
         this.biologico = biologico;
     }
 
     // Constructor Para Taxa Reduzida
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario,  boolean biologico, Certificacoes[] certificacoes) {
-        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
+        super(codigo, nome, descricao, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
         this.taxa = Taxa.REDUZIDA;
         this.biologico = biologico;
         this.certificacoes = certificacoes;
@@ -41,35 +41,40 @@ public class ProdutoAlimentar extends Produto {
 
     // Constructor Para Taxa Intermédia
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, CategoriaAlimentar categoria) {
-        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
+        super(codigo, nome, descricao, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
         this.taxa = Taxa.INTERMEDIA;
         this.biologico = biologico;
         this.categoria = categoria;
     }
 
-    public Certificacoes[] getCertificacoes() {
-        return this.certificacoes;
-    }
+    // Tabela Utilizada Para Calcular IVA
+    private final int[][] tabelaIvaProdutoAlimentar = {
+            /* Continente, Madeira, Açores */
+            {            6,       5,      4 }, /* 0, Taxa Reduzida */
+            {           13,      12,      9 }, /* 1, Taxa Intermédia */
+            {           23,      22,     16 } /* 2, Taxa Normal */
+    };
 
-    public CategoriaAlimentar getCategoriaAlimentar() {
-        return this.categoria;
+    /* Devolve o IVA atribuido a este produto baseado na localização */
+    public int calcIva(Cliente.Localizacao localizacao)  {
+        int taxa = tabelaIvaProdutoAlimentar[ this.taxa.ordinal()][localizacao.ordinal()];
+        if ( this.categoria == CategoriaAlimentar.VINHO && this.taxa == Taxa.INTERMEDIA) {
+            taxa += 1;
+        } else if (this.certificacoes.length == 4 && this.taxa == Taxa.REDUZIDA) {
+            taxa = -1;
+        }
+        return taxa;
     }
 
     public String toString() {
 
         String str = String.format("Codigo: %02d, Nome: %s, Quantidade: %02d, Valor (sem IVA): %02d", this.codigo, this.nome, this.quantidade, this.valorUnitario);
 
-        String concat;
-        if (this.taxa) {
-            case REDUZIDA:
-                concat = String.format(", Certificações: %s\n", certificacoesToString() );
-                break;
-            case INTERMEDIA:
-                concat = String.format(", Categoria: %s\n", categoriaToString() );
-                break;
-            default:
-                concat = "\n";
-                break;
+        String concat = "\n";
+        if (this.taxa == Taxa.REDUZIDA) {
+            concat = String.format(", Certificações: %s\n", certificacoesToString());
+        } else if (this.taxa == Taxa.INTERMEDIA) {
+            concat = String.format(", Categoria: %s\n", categoriaToString());
         }
 
         str.concat(concat);
@@ -77,42 +82,16 @@ public class ProdutoAlimentar extends Produto {
     }
 
     private String certificacoesToString() {
+        String[] certificacoes = {"ISO22000 ", "FSSC22000 ", "HACCP ", "GMP "};
         String res = "";
-        for (Certificacoes cert: this.certificacoes) {
-            String s;
-            switch(cert) {
-                case ISO22000:
-                    s = "ISO22000 "; 
-                    break;
-                case FSSC22000: 
-                    s = "FSSC22000 ";
-                    break;
-                case HACCP:
-                    s = "HACCP ";
-                    break;
-                case GMP:
-                    s = "GMP ";
-                    break;
-            }
-            res.concat(s);
+        for (Certificacoes cert : this.certificacoes) {
+            res = res.concat(certificacoes[cert.ordinal()] + " ");
         }
         return res;
     }
 
     private String categoriaToString() {
-        String res;
-        switch(this.categoria) {
-            case CONGELADOS:
-                res = "Congelados";
-                break;
-            case ENLATADOS:
-                res = "Enlatados";
-                break;
-            case VINHO:
-                res = "Vinho";
-                break;
-        }
-        return res;
+        String[] categoria = { "Congelados", "Enlatados", "Vinho" };
+        return categoria[this.categoria.ordinal()] ;
     }
-
 }

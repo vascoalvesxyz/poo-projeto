@@ -1,6 +1,6 @@
 public class ProdutoFarmacia extends Produto {
     
-    public enum CategoriaFarmacia {
+    private enum CategoriaFarmacia {
         BELEZA,
         BEM_ESTAR,
         BEBES,
@@ -10,57 +10,50 @@ public class ProdutoFarmacia extends Produto {
 
     private String medico;
     private boolean temPrescricao;
+    private CategoriaFarmacia categoria;
 
     /* Contructor Sem Prescrição */
-    public ProdutoFarmacia(int codigo, int nome, String descrição, int quantidade, int valorUnitario, enum CategoriaFarmacia categoria) {
+    public ProdutoFarmacia(int codigo, String nome, String descrição, int quantidade, int valorUnitario, CategoriaFarmacia categoria) {
         super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.FARMACEUTICO);
         this.temPrescricao = false;
         this.categoria = categoria;
     }
 
     /* Contructor Com Prescrição */
-    public ProdutoFarmacia(int codigo, int nome, String descrição, int quantidade, int valorUnitario, String medico) {
+    public ProdutoFarmacia(int codigo, String nome, String descrição, int quantidade, int valorUnitario, String medico) {
         super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.FARMACEUTICO);
         this.temPrescricao = true;
         this.medico = medico;
     }
 
-    public String toString() {
+    private int[][] tabelaIvaProdutoFarmaceutico = {
+            /* Continente, Madeira, Açores */
+            { 13, 12, 9 }, /* 0, Sem Prescrição */
+            { 6, 5, 4 }, /* 1, Com Prescrição */
+    };
 
-        String str = String.format("Codigo: %02d, Nome: %s, Quantidade: %02d, Valor (sem IVA): %02d", this.codigo, this.nome, this.quantidade, this.valorUnitario);
-
-        if (temPrescricao == true) {
-            str.concat(String.format(" Médico: %s\n", this.medico));
-        } else {
-            str.concat(String.format(" Categoria: %s\n", categoriaToString() ));
+    public int calcIva(Cliente.Localizacao localizacao) {
+        int idx = this.temPrescricao ? 1 : 0;
+        int taxa = tabelaIvaProdutoFarmaceutico[idx][localizacao.ordinal()];
+        if (!this.temPrescricao && this.categoria == CategoriaFarmacia.ANIMAIS) {
+            taxa += -1;
         }
+        return taxa;
+    }
 
+    public String toString() {
+        String str = String.format("Codigo: %02d, Nome: %s, Quantidade: %02d, Valor (sem IVA): %02d", this.codigo, this.nome, this.quantidade, this.valorUnitario);
+        if (temPrescricao) {
+            str = str.concat(String.format(" Médico: %s\n", this.medico));
+        } else {
+            str = str.concat(String.format(" Categoria: %s\n", categoriaToString() ));
+        }
         return str;
     }
 
     private String categoriaToString() {
-        String categoria;
-        switch (this.categoria) {
-            case BELEZA:
-                categoria = "Beleza";
-                break;
-            case BEM_ESTAR:
-                categoria = "Bem-estar";
-                break;
-            case BEBES:
-                categoria = "Bebés";
-                break;
-            case ANIMAIS:
-                categoria = "Animais";
-                break;
-            case OUTRO:
-                categoria = "Outro";
-                break;
-            default:
-                categoria = "NA";
-                break;
-        }
-        return categoria;
+        String[] categoria = { "Beleza", "Bem-estar", "Bebés", "Animais", "Outro" };
+        return categoria[this.categoria.ordinal()];
     }
 
 }

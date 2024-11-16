@@ -1,17 +1,33 @@
-public enum TipoProduto {
-    ALIMENTAR,
-    FARMACEUTICO
-}
-
 public abstract class Produto {
 
-    int codigo;
-    String nome;
-    String descrição;
-    int quantidade;
-    int valorUnitario;
+    public enum TipoProduto {
+        ALIMENTAR,
+        FARMACEUTICO
+    }
 
-    TipoProduto tipo;
+    protected int codigo;
+    protected String nome;
+    protected String descrição;
+    protected int quantidade;
+    protected int valorUnitario;
 
+    private TipoProduto tipo;
+
+    public Produto(int codigo, String nome, String descrição, int quantidade, int valorUnitario, TipoProduto tipo) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.descrição = descrição;
+        this.quantidade = quantidade;
+        this.valorUnitario = valorUnitario;
+        this.tipo = tipo;
+    }
+
+    public boolean isAlimentar() {
+        if (this.tipo == TipoProduto.ALIMENTAR)
+            return true;
+        return false;
+    }
+
+    abstract public int calcIva(Cliente.Localizacao localizacao);
     abstract public String toString();
 }
