@@ -28,6 +28,6 @@ public abstract class Produto {
         return false;
     }
 
-    abstract public int calcIva(Cliente.Localizacao localizacao);
+    abstract public double calcIva(Cliente.Localizacao localizacao);
     abstract public String toString();
 }

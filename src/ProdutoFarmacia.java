@@ -32,9 +32,9 @@ public class ProdutoFarmacia extends Produto {
             { 6, 5, 4 }, /* 1, Com Prescrição */
     };
 
-    public int calcIva(Cliente.Localizacao localizacao) {
+    public double calcIva(Cliente.Localizacao localizacao) {
         int idx = this.temPrescricao ? 1 : 0;
-        int taxa = tabelaIvaProdutoFarmaceutico[idx][localizacao.ordinal()];
+        double taxa = tabelaIvaProdutoFarmaceutico[idx][localizacao.ordinal()];
         if (!this.temPrescricao && this.categoria == CategoriaFarmacia.ANIMAIS) {
             taxa += -1;
         }

@@ -2,12 +2,14 @@ import java.util.Scanner;
 
 public class Cliente {
 
+    /* Enums*/
     public enum Localizacao {
         PORTUGAL,
         MADEIRA,
         ACORES
     }
 
+    /* Variaveis */
     private String nome;
     private int contribuinte;
     private Localizacao localizacao;
@@ -26,7 +28,36 @@ public class Cliente {
         this.faturas = faturas;
     }
 
-    public static Cliente initCliente() {
+    public static Localizacao pedirLocalizacao() {
+        Scanner scanner = new Scanner(System.in);
+        Localizacao localizacao = null;
+        while (localizacao == null) {
+            System.out.println("""
+            Selecione a localização do cliente:
+            1 - Portugal
+            2 - Madeira
+            3 - Açores
+            """);
+
+            int opcao = scanner.nextInt();
+            switch (opcao) {
+                case 1:
+                    localizacao = Localizacao.PORTUGAL;
+                    break;
+                case 2:
+                    localizacao = Localizacao.MADEIRA;
+                    break;
+                case 3:
+                    localizacao = Localizacao.ACORES;
+                    break;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+            }
+        }
+        return localizacao;
+    }
+
+    public static Cliente init() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -38,31 +69,9 @@ public class Cliente {
         System.out.println("Insira o número de contribuinte:");
         int contribuinte = scanner.nextInt();
 
-        /* Pedir Localização */
-        Cliente.Localizacao localizacao = null;
-        while (localizacao == null) {
-            System.out.println("Selecione a localização do cliente:");
-            System.out.println("1 - Portugal");
-            System.out.println("2 - Madeira");
-            System.out.println("3 - Açores");
+        /* Pedir Localizacação */
+        Localizacao localizacao = pedirLocalizacao();
 
-            int opcao = scanner.nextInt();
-
-            switch (opcao) {
-                case 1:
-                    localizacao = Cliente.Localizacao.PORTUGAL;
-                    break;
-                case 2:
-                    localizacao = Cliente.Localizacao.MADEIRA;
-                    break;
-                case 3:
-                    localizacao = Cliente.Localizacao.ACORES;
-                    break;
-                default:
-                    System.out.println("Opção inválida! Tente novamente.");
-            }
-
-        }
 
         // Lista de faturas vazia
         Fatura[] faturas = new Fatura[0];
@@ -76,7 +85,40 @@ public class Cliente {
         return cliente;
     }
 
-    // toString
+    public void edit() {
+        Scanner scanner = new Scanner(System.in);
+        int input = 0;
+        do {
+            System.out.println("""
+                    1 - Editar nome.
+                    2 - Editar NIF.
+                    3 - Editar Localização.
+                    0 - Sair.
+                    """);
+            input = scanner.nextInt();
+            switch (input) {
+                case 1:
+                    System.out.print("Novo nome: ");
+                    this.nome = scanner.next();
+                    break;
+                case 2:
+                    System.out.print("Novo NIF: ");
+                    this.contribuinte = scanner.nextInt();
+                    break;
+                case 3:
+                    System.out.print("Nova Localização: ");
+                    this.localizacao = pedirLocalizacao();
+                    break;
+            }
+        }
+        while (input != 0);
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    /* To String */
     public String toString() {
         String[] localizacao = { "Portugal", "Madeira", "Açores", "Desconhecido" };
         return String.format("%s, %d, %s", nome, contribuinte, localizacao[this.localizacao.ordinal()]);

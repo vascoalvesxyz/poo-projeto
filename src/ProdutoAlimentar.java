@@ -56,13 +56,14 @@ public class ProdutoAlimentar extends Produto {
     };
 
     /* Devolve o IVA atribuido a este produto baseado na localização */
-    public int calcIva(Cliente.Localizacao localizacao)  {
-        int taxa = tabelaIvaProdutoAlimentar[ this.taxa.ordinal()][localizacao.ordinal()];
+    public double calcIva(Cliente.Localizacao localizacao)  {
+        double taxa = tabelaIvaProdutoAlimentar[ this.taxa.ordinal()][localizacao.ordinal()];
         if ( this.categoria == CategoriaAlimentar.VINHO && this.taxa == Taxa.INTERMEDIA) {
             taxa += 1;
         } else if (this.certificacoes.length == 4 && this.taxa == Taxa.REDUZIDA) {
             taxa = -1;
         }
+        if (biologico) taxa = taxa * 0.9;
         return taxa;
     }
 
