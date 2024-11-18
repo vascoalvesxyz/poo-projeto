@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Cliente {
 
     public enum Localizacao {
@@ -9,8 +11,7 @@ public class Cliente {
     private String nome;
     private int contribuinte;
     private Localizacao localizacao;
-
-    Fatura[] faturas;
+    private Fatura[] faturas;
 
     // Constructor
     public Cliente(
@@ -25,60 +26,59 @@ public class Cliente {
         this.faturas = faturas;
     }
 
+    public static Cliente initCliente() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        /* Pedir Nome do Cliente */
+        System.out.println("Insira o nome do cliente:");
+        String nome = scanner.nextLine();
+
+        /* Pedir Contribuinte */
+        System.out.println("Insira o número de contribuinte:");
+        int contribuinte = scanner.nextInt();
+
+        /* Pedir Localização */
+        Cliente.Localizacao localizacao = null;
+        while (localizacao == null) {
+            System.out.println("Selecione a localização do cliente:");
+            System.out.println("1 - Portugal");
+            System.out.println("2 - Madeira");
+            System.out.println("3 - Açores");
+
+            int opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    localizacao = Cliente.Localizacao.PORTUGAL;
+                    break;
+                case 2:
+                    localizacao = Cliente.Localizacao.MADEIRA;
+                    break;
+                case 3:
+                    localizacao = Cliente.Localizacao.ACORES;
+                    break;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+            }
+
+        }
+
+        // Lista de faturas vazia
+        Fatura[] faturas = new Fatura[0];
+
+        // Criar o cliente
+        Cliente cliente = new Cliente(nome, contribuinte, localizacao, faturas);
+
+        System.out.print("Cliente criado com sucesso: ");
+        System.out.println(cliente);
+
+        return cliente;
+    }
+
     // toString
     public String toString() {
-        return String.format("%s, %d, %s", nome, contribuinte, localizacaoToString());
+        String[] localizacao = { "Portugal", "Madeira", "Açores", "Desconhecido" };
+        return String.format("%s, %d, %s", nome, contribuinte, localizacao[this.localizacao.ordinal()]);
     }
-
-    private String localizacaoToString() {
-        String loc;
-        switch (this.localizacao) {
-            case PORTUGAL:
-                loc = "Portugal";
-                break;
-            case MADEIRA:
-                loc = "Madeira";
-                break;
-            case ACORES:
-                loc = "Açores";
-                break;
-            default:
-                loc = "Desconhecido";
-        }
-        return loc;
-    }
-
-    // Getters and Setters
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public int getContribuinte() {
-        return contribuinte;
-    }
-
-    public void setContribuinte(int contribuinte) {
-        this.contribuinte = contribuinte;
-    }
-
-    public Localizacao getLocalizacao() {
-        return localizacao;
-    }
-
-    public void setLocalizacao(Localizacao localizacao) {
-        this.localizacao = localizacao;
-    }
-
-    public Fatura[] getFaturas() {
-        return faturas;
-    }
-
-    public void setFaturas(Fatura[] faturas) {
-        this.faturas = faturas;
-    }
-
 }
