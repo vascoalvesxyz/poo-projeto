@@ -14,14 +14,14 @@ public class ProdutoFarmacia extends Produto {
 
     /* Contructor Sem Prescrição */
     public ProdutoFarmacia(int codigo, String nome, String descrição, int quantidade, int valorUnitario, CategoriaFarmacia categoria) {
-        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.FARMACEUTICO);
+        super(codigo, nome, descrição, quantidade, valorUnitario);
         this.temPrescricao = false;
         this.categoria = categoria;
     }
 
     /* Contructor Com Prescrição */
     public ProdutoFarmacia(int codigo, String nome, String descrição, int quantidade, int valorUnitario, String medico) {
-        super(codigo, nome, descrição, quantidade, valorUnitario, TipoProduto.FARMACEUTICO);
+        super(codigo, nome, descrição, quantidade, valorUnitario);
         this.temPrescricao = true;
         this.medico = medico;
     }
@@ -46,14 +46,16 @@ public class ProdutoFarmacia extends Produto {
         if (temPrescricao) {
             str = str.concat(String.format(" Médico: %s\n", this.medico));
         } else {
-            str = str.concat(String.format(" Categoria: %s\n", categoriaToString() ));
+            str = str.concat(String.format(" Categoria: %s\n", categoria ));
         }
         return str;
     }
 
+    /*
     private String categoriaToString() {
         String[] categoria = { "Beleza", "Bem-estar", "Bebés", "Animais", "Outro" };
         return categoria[this.categoria.ordinal()];
     }
+    */
 
 }

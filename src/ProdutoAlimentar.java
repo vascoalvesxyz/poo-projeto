@@ -7,7 +7,8 @@ public class ProdutoAlimentar extends Produto {
     }
 
     public enum Certificacoes {
-        ISO22000, FSSC22000,
+        ISO22000,
+        FSSC22000,
         HACCP,
         GMP
     }
@@ -26,14 +27,14 @@ public class ProdutoAlimentar extends Produto {
 
     // Constructor Padrão ou Para Taxa Normal
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico) {
-        super(codigo, nome, descricao, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
-        this.taxa = Taxa.NORMAL; 
+        super(codigo, nome, descricao, quantidade, valorUnitario);
+        this.taxa = Taxa.NORMAL;
         this.biologico = biologico;
     }
 
     // Constructor Para Taxa Reduzida
-    public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario,  boolean biologico, Certificacoes[] certificacoes) {
-        super(codigo, nome, descricao, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
+    public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, Certificacoes[] certificacoes) {
+        super(codigo, nome, descricao, quantidade, valorUnitario);
         this.taxa = Taxa.REDUZIDA;
         this.biologico = biologico;
         this.certificacoes = certificacoes;
@@ -41,7 +42,7 @@ public class ProdutoAlimentar extends Produto {
 
     // Constructor Para Taxa Intermédia
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, CategoriaAlimentar categoria) {
-        super(codigo, nome, descricao, quantidade, valorUnitario, TipoProduto.ALIMENTAR);
+        super(codigo, nome, descricao, quantidade, valorUnitario);
         this.taxa = Taxa.INTERMEDIA;
         this.biologico = biologico;
         this.categoria = categoria;
@@ -50,15 +51,15 @@ public class ProdutoAlimentar extends Produto {
     // Tabela Utilizada Para Calcular IVA
     private final int[][] tabelaIvaProdutoAlimentar = {
             /* Continente, Madeira, Açores */
-            {            6,       5,      4 }, /* 0, Taxa Reduzida */
-            {           13,      12,      9 }, /* 1, Taxa Intermédia */
-            {           23,      22,     16 } /* 2, Taxa Normal */
+            {6, 5, 4}, /* 0, Taxa Reduzida */
+            {13, 12, 9}, /* 1, Taxa Intermédia */
+            {23, 22, 16} /* 2, Taxa Normal */
     };
 
     /* Devolve o IVA atribuido a este produto baseado na localização */
-    public double calcIva(Cliente.Localizacao localizacao)  {
-        double taxa = tabelaIvaProdutoAlimentar[ this.taxa.ordinal()][localizacao.ordinal()];
-        if ( this.categoria == CategoriaAlimentar.VINHO && this.taxa == Taxa.INTERMEDIA) {
+    public double calcIva(Cliente.Localizacao localizacao) {
+        double taxa = tabelaIvaProdutoAlimentar[this.taxa.ordinal()][localizacao.ordinal()];
+        if (this.categoria == CategoriaAlimentar.VINHO && this.taxa == Taxa.INTERMEDIA) {
             taxa += 1;
         } else if (this.certificacoes.length == 4 && this.taxa == Taxa.REDUZIDA) {
             taxa = -1;
@@ -75,7 +76,7 @@ public class ProdutoAlimentar extends Produto {
         if (this.taxa == Taxa.REDUZIDA) {
             concat = String.format(", Certificações: %s\n", certificacoesToString());
         } else if (this.taxa == Taxa.INTERMEDIA) {
-            concat = String.format(", Categoria: %s\n", categoriaToString());
+            concat = String.format(", Categoria: %s\n", categoria);
         }
 
         str.concat(concat);
@@ -83,16 +84,10 @@ public class ProdutoAlimentar extends Produto {
     }
 
     private String certificacoesToString() {
-        String[] certificacoes = {"ISO22000 ", "FSSC22000 ", "HACCP ", "GMP "};
         String res = "";
         for (Certificacoes cert : this.certificacoes) {
-            res = res.concat(certificacoes[cert.ordinal()] + " ");
+            res = res.concat(certificacoes + " ");
         }
         return res;
-    }
-
-    private String categoriaToString() {
-        String[] categoria = { "Congelados", "Enlatados", "Vinho" };
-        return categoria[this.categoria.ordinal()] ;
     }
 }

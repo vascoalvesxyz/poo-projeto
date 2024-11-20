@@ -1,8 +1,9 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ClienteArray {
+public class POOFS {
 
+    /* Gestão de Clientes */
     private ArrayList<Cliente> clientes = new ArrayList<>();
 
     private Cliente buscarPorNome(String nome) {
@@ -26,18 +27,19 @@ public class ClienteArray {
             if (scanner.nextLine().equals("s")) {
                 procurarIgual.edit();
             }
+
             /* else {
                 criarClienteNovo();
             }*/
+
             return;
         };
 
         System.out.println("Insira o número de contribuinte:");
-        int contribuinte = scanner.nextInt();
+        String contribuinte = scanner.next();
 
         Cliente.Localizacao localizacao = Cliente.pedirLocalizacao();
-
-        Fatura[] faturas = new Fatura[0]; // Lista de faturas vazia
+        ArrayList<Fatura> faturas = new ArrayList<>(); // Lista de faturas vazia
 
         // Criar o cliente
         Cliente clienteNovo = new Cliente(nome, contribuinte, localizacao, faturas);
@@ -52,7 +54,7 @@ public class ClienteArray {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ClienteArray clientesEmpresa = new ClienteArray();
+        POOFS clientesEmpresa = new POOFS();
 
         int inputInt = 0;
 
@@ -79,6 +81,16 @@ public class ClienteArray {
                 case 2:
                     clientesEmpresa.print();
                     break;
+                /* Adicionar Faturas */
+                case 3:
+                    System.out.print("Nome do cliente: ");
+                    Cliente c;
+                    if ( null != (c = clientesEmpresa.buscarPorNome(sc.next())) ) {
+                        c.novaFatura();
+                    } else {
+                        System.out.println("Cliente não existe!");
+                    }
+                break;
             }
         }
         while (inputInt != 0);

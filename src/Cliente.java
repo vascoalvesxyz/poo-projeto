@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class Cliente {
@@ -11,16 +13,16 @@ public class Cliente {
 
     /* Variaveis */
     private String nome;
-    private int contribuinte;
+    private String contribuinte;
     private Localizacao localizacao;
-    private Fatura[] faturas;
+    private ArrayList<Fatura> faturas;
 
     // Constructor
     public Cliente(
             String nome,
-            int contribuinte,
+            String contribuinte,
             Localizacao localizacao,
-            Fatura[] faturas
+            ArrayList<Fatura> faturas
     ) {
         this.nome = nome;
         this.contribuinte = contribuinte;
@@ -57,34 +59,6 @@ public class Cliente {
         return localizacao;
     }
 
-    public static Cliente init() {
-
-        Scanner scanner = new Scanner(System.in);
-
-        /* Pedir Nome do Cliente */
-        System.out.println("Insira o nome do cliente:");
-        String nome = scanner.nextLine();
-
-        /* Pedir Contribuinte */
-        System.out.println("Insira o número de contribuinte:");
-        int contribuinte = scanner.nextInt();
-
-        /* Pedir Localizacação */
-        Localizacao localizacao = pedirLocalizacao();
-
-
-        // Lista de faturas vazia
-        Fatura[] faturas = new Fatura[0];
-
-        // Criar o cliente
-        Cliente cliente = new Cliente(nome, contribuinte, localizacao, faturas);
-
-        System.out.print("Cliente criado com sucesso: ");
-        System.out.println(cliente);
-
-        return cliente;
-    }
-
     public void edit() {
         Scanner scanner = new Scanner(System.in);
         int input = 0;
@@ -103,24 +77,67 @@ public class Cliente {
                     break;
                 case 2:
                     System.out.print("Novo NIF: ");
-                    this.contribuinte = scanner.nextInt();
+                    this.contribuinte = scanner.next();
                     break;
                 case 3:
                     System.out.print("Nova Localização: ");
                     this.localizacao = pedirLocalizacao();
                     break;
+                case 4:
+                    System.out.print("Nova Fatura");
             }
         }
         while (input != 0);
     }
 
+    /* Gestão de Faturas */
+    private void addFatura(Fatura fatura) {
+        faturas.add(fatura);
+    }
+    private void delFatura(Fatura fatura) {
+        faturas.remove(fatura);
+    }
+
+    public void novaFatura() {
+        Scanner sc = new Scanner(System.in);
+
+        /* Pedir ID */
+        System.out.print("Insere o ID: ");
+        int id = sc.nextInt();
+
+        /* Pedir Data */
+        Calendar cal = pedirData();
+
+        /* Pedir Produtos */
+        ArrayList<Produto> produtos = new ArrayList<Produto>();
+
+        Fatura fatura = new Fatura(id, cal, produtos);
+        addFatura(fatura);
+    }
+
+    private Calendar pedirData() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Insere a Data (dd/mm/YY)): ");
+        String[] dados = scanner.next().split("/");
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, Integer.parseInt(dados[0]));
+        cal.set(Calendar.MONTH, Integer.parseInt(dados[1]));
+        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dados[2]));
+
+        scanner.close();
+        return cal;
+    }
+
+    /*public void printFaturas() { } */
+
+    /* Getters */
     public String getNome() {
         return this.nome;
     }
 
     /* To String */
     public String toString() {
-        String[] localizacao = { "Portugal", "Madeira", "Açores", "Desconhecido" };
-        return String.format("%s, %d, %s", nome, contribuinte, localizacao[this.localizacao.ordinal()]);
+        return String.format("%s, %d, %s", nome, contribuinte, localizacao);
     }
 }
