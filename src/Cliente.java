@@ -30,35 +30,6 @@ public class Cliente {
         this.faturas = faturas;
     }
 
-    public void edit() {
-        Scanner scanner = new Scanner(System.in);
-        int input;
-        do {
-            System.out.println("""
-                    1 - Editar nome.
-                    2 - Editar NIF.
-                    3 - Editar Localização.
-                    0 - Sair.
-                    """);
-            input = scanner.nextInt();
-            switch (input) {
-                case 1:
-                    this.nome = Menu.lerString(scanner, "Novo nome: ");
-                    break;
-                case 2:
-                    this.contribuinte = Menu.lerString(scanner, "Novo contribuinte: ");
-                    break;
-                case 3:
-                    System.out.print("Nova Localização: ");
-                    int idx = Menu.lerEnum(scanner, Localizacao.values());
-                    this.localizacao = Localizacao.values()[idx];
-                    break;
-                case 4:
-                    System.out.print("Nova Fatura");
-            }
-        }
-        while (input != 0);
-    }
 
     /* Gestão de Faturas */
     public void addFatura(Fatura fatura) {
@@ -82,6 +53,19 @@ public class Cliente {
 
     public Localizacao getLocalizacao() {
         return this.localizacao;
+    }
+
+    /* Setters */
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setContribuinte(String contribuinte) {
+        this.contribuinte = contribuinte;
+    }
+
+    public void setLocalizacao(Localizacao localizacao) {
+        this.localizacao = localizacao;
     }
 
     /* To String */

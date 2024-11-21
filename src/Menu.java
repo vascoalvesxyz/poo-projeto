@@ -1,15 +1,20 @@
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Menu {
+    private final Scanner scanner;
+    public Menu(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
-    public static String lerString(Scanner scanner, String mensagem) {
+    public String lerString(String mensagem) {
         System.out.print(mensagem);
         return scanner.nextLine();
     }
 
-    public static int lerInt(Scanner scanner, String mensagem) {
+    public int lerInt(String mensagem) {
         int numero = 0;
         boolean valido = false;
 
@@ -28,15 +33,15 @@ public class Menu {
         return numero;
     }
 
-    public static int lerIntMinMax(Scanner scanner, String mensagem, int min, int max) {
+    public int lerIntMinMax(String mensagem, int min, int max) {
         int res;
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
-        do res = lerInt(scanner, mensagem);
+        do res = lerInt(mensagem);
         while (res < min || res > max);
         return  res;
     }
 
-    public static boolean lerBoolean(Scanner scanner, String questao) {
+    public boolean lerBoolean(String questao) {
         System.out.println(questao + "(s/n)");
 
         String inputStr;
@@ -46,7 +51,7 @@ public class Menu {
         return inputStr.equalsIgnoreCase("s");
     }
 
-    public static Calendar lerData (Scanner scanner){
+    public Calendar lerData(){
         System.out.print("Insere a Data (dd/mm/YY)): ");
         String[] dados = scanner.next().split("/");
 
@@ -57,42 +62,44 @@ public class Menu {
         return cal;
     }
 
-    public static void printEnum(Object[] valores) {
+    public void printEnum(Object[] valores) {
         System.out.println("Escolha uma das opções:");
         for (int i = 0; i < valores.length; i++) {
             System.out.printf("%d - %s%n", i + 1, valores[i].toString());
         }
     }
 
-    public static int lerEnum(Scanner scanner, Object[] valoresEnum) {
+    public int lerEnum(Object[] valoresEnum) {
         printEnum(valoresEnum);
-        int input = lerIntMinMax(scanner, "Opção", 1, valoresEnum.length);
+        int input = lerIntMinMax("Opção", 1, valoresEnum.length);
         return input - 1; // devolve o indice
     }
 
-    public static Produto lerProduto(Scanner scanner) {
+    public Produto lerProduto() {
         String resposta;
-        do resposta = Menu.lerString(scanner, "O produto é alimentar ou farmaceutico? (a/f) ");
+        do resposta = lerString("O produto é alimentar ou farmaceutico? (a/f) ");
         while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
         boolean isAlimentar = resposta.equalsIgnoreCase("a");
 
         Produto novoProduto;
-        if (isAlimentar) novoProduto = pedirProdutoAlimentar(scanner);
-        else novoProduto = pedirProdutoFarmaceutico(scanner);
+        if (isAlimentar) {
+            novoProduto = pedirProdutoAlimentar();
+        }
+        else novoProduto = pedirProdutoFarmaceutico();
         return  novoProduto;
     };
 
-    private static Produto pedirProdutoFarmaceutico(Scanner scanner) {
-        int codigo = Menu.lerInt(scanner, "Codigo: ");
-        String nome = Menu.lerString(scanner, "Nome: ");
-        String descricao = Menu.lerString(scanner, "Descrição: ");
-        int quantidade = Menu.lerInt(scanner, "Quantidade : ");
-        int valor = Menu.lerInt(scanner, "Valor Unitário: ");
-        boolean temPrescricao = Menu.lerBoolean(scanner, "O produto tem prescrição? ");
+    private Produto pedirProdutoFarmaceutico() {
+        int codigo = lerInt("Codigo: ");
+        String nome = lerString("Nome: ");
+        String descricao = lerString("Descrição: ");
+        int quantidade = lerInt("Quantidade : ");
+        int valor = lerInt("Valor Unitário: ");
+        boolean temPrescricao = lerBoolean("O produto tem prescrição? ");
 
         Produto produto = null;
         if (temPrescricao) {
-            String medico = Menu.lerString(scanner, "Nome do médico que fez a receita: ");
+            String medico = lerString("Nome do médico que fez a receita: ");
             produto = new ProdutoFarmacia(codigo, nome, descricao, quantidade, valor, medico);
         } else {
             /* Produto Farmaceutico Sem Prescrição */
@@ -110,16 +117,16 @@ public class Menu {
         return produto;
     }
 
-    private static Produto pedirProdutoAlimentar(Scanner scanner) {
-        int codigo = Menu.lerInt(scanner, "Codigo: ");
-        String nome = Menu.lerString(scanner, "Nome: ");
-        String descricao = Menu.lerString(scanner, "Descrição: ");
-        int quantidade = Menu.lerInt(scanner, "Quantidade : ");
-        int valor = Menu.lerInt(scanner, "Valor Unitário: ");
+    private Produto pedirProdutoAlimentar() {
+        int codigo = lerInt("Codigo: ");
+        String nome = lerString("Nome: ");
+        String descricao = lerString("Descrição: ");
+        int quantidade = lerInt("Quantidade : ");
+        int valor = lerInt("Valor Unitário: ");
 
         Produto produto = null;
         /* Produto Alimentar */
-        boolean biologico = Menu.lerBoolean(scanner, "O produto é biologico? ");
+        boolean biologico = lerBoolean("O produto é biologico? ");
 
         ProdutoAlimentar.Taxa taxa;
         System.out.println("""
@@ -135,7 +142,7 @@ public class Menu {
         switch (inputInt) {
             case 1:
                 /* Taxa Reduzida (Necessita Certificações) */
-                ProdutoAlimentar.Certificacao[] certificacoes = lerCertificacoes(scanner);
+                ProdutoAlimentar.Certificacao[] certificacoes = lerCertificacoes();
                 produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico, certificacoes);
                 break;
             case 2:
@@ -166,7 +173,7 @@ public class Menu {
         return produto;
     }
 
-    private static ProdutoAlimentar.Certificacao[] lerCertificacoes(Scanner scanner) {
+    private ProdutoAlimentar.Certificacao[] lerCertificacoes() {
         // Bloco de texto para exibir as opções
         System.out.println("""
                 Certificações disponíveis:
@@ -249,22 +256,68 @@ public class Menu {
         return certificacoesEscolhidas;
     }
 
-    public static Fatura lerFatura(Scanner scanner, Cliente cliente) {
-        int id = Menu.lerInt(scanner, "Insere o ID: ");
-        Calendar cal = Menu.lerData(scanner);
+    public Fatura lerFatura(Cliente cliente) {
+        int id = lerInt("Insere o ID: ");
+        Calendar cal = lerData();
 
         /* Pedir Produtos */
         ArrayList<Produto> produtos = new ArrayList<Produto>();
         boolean adicionarProduto;
         do {
-            adicionarProduto = Menu.lerBoolean(scanner, "Deseja adicionar um produto? ");
+            adicionarProduto = lerBoolean("Deseja adicionar um produto? ");
             if (adicionarProduto) {
-                Produto novoProduto = Menu.lerProduto(scanner);
+                Produto novoProduto = lerProduto();
                 produtos.add(novoProduto);
             }
 
         } while (adicionarProduto);
 
         return new Fatura(id, cal, cliente, produtos);
+    }
+
+    public Cliente criarCliente(String nome) {
+        String contribuinte = lerString("Insira o número de contribuinte: ");
+
+        int idx = lerEnum(Cliente.Localizacao.values());
+        Cliente.Localizacao localizacao = Cliente.Localizacao.values()[idx];
+
+        ArrayList<Fatura> faturas = new ArrayList<>(); // Lista de faturas vazia
+
+        // Criar o cliente
+        return new Cliente(nome, contribuinte, localizacao, faturas);
+    }
+
+    public void editarCliente(Cliente cliente) {
+        Scanner scanner = new Scanner(System.in);
+        int input;
+        do {
+            System.out.println("""
+                    1 - Editar nome.
+                    2 - Editar NIF.
+                    3 - Editar Localização.
+                    0 - Sair.
+                    """);
+            input = scanner.nextInt();
+            switch (input) {
+                case 1:
+                    String novoNome = lerString("Novo nome: ");
+                    cliente.setNome(novoNome);
+                    break;
+                case 2:
+                    // FALTA VALIDACAO
+                    String novoContribuinte = lerString("Novo contribuinte: ");
+                    cliente.setContribuinte(novoContribuinte);
+                    break;
+                case 3:
+                    System.out.print("Nova Localização: ");
+                    int idx = lerEnum(Cliente.Localizacao.values());
+                    Cliente.Localizacao novaLocalizacao = Cliente.Localizacao.values()[idx];
+                    cliente.setLocalizacao(novaLocalizacao);
+                    break;
+                case 4:
+                    System.out.print("Nova Fatura");
+            }
+        }
+        while (input != 0);
     }
 }
