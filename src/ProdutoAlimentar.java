@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class ProdutoAlimentar extends Produto {
 
     public enum Taxa {
@@ -6,23 +8,23 @@ public class ProdutoAlimentar extends Produto {
         NORMAL
     }
 
-    public enum Certificacoes {
+    public enum Certificacao {
         ISO22000,
         FSSC22000,
         HACCP,
         GMP
     }
 
-    public enum CategoriaAlimentar {
+    public enum Categoria {
         CONGELADOS,
         ENLATADOS,
         VINHO
     }
 
     public Taxa taxa;
-    public CategoriaAlimentar categoria;
+    public Categoria categoria;
 
-    private Certificacoes[] certificacoes;
+    private Certificacao[] certificacoes;
     private boolean biologico;
 
     // Constructor Padrão ou Para Taxa Normal
@@ -33,7 +35,7 @@ public class ProdutoAlimentar extends Produto {
     }
 
     // Constructor Para Taxa Reduzida
-    public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, Certificacoes[] certificacoes) {
+    public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, Certificacao[] certificacoes) {
         super(codigo, nome, descricao, quantidade, valorUnitario);
         this.taxa = Taxa.REDUZIDA;
         this.biologico = biologico;
@@ -41,7 +43,7 @@ public class ProdutoAlimentar extends Produto {
     }
 
     // Constructor Para Taxa Intermédia
-    public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, CategoriaAlimentar categoria) {
+    public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, Categoria categoria) {
         super(codigo, nome, descricao, quantidade, valorUnitario);
         this.taxa = Taxa.INTERMEDIA;
         this.biologico = biologico;
@@ -59,9 +61,10 @@ public class ProdutoAlimentar extends Produto {
     /* Devolve o IVA atribuido a este produto baseado na localização */
     public double calcIva(Cliente.Localizacao localizacao) {
         double taxa = tabelaIvaProdutoAlimentar[this.taxa.ordinal()][localizacao.ordinal()];
-        if (this.categoria == CategoriaAlimentar.VINHO && this.taxa == Taxa.INTERMEDIA) {
+        if (this.taxa == Taxa.INTERMEDIA && this.categoria == Categoria.VINHO) {
             taxa += 1;
-        } else if (this.certificacoes.length == 4 && this.taxa == Taxa.REDUZIDA) {
+        }
+        else if (this.taxa == Taxa.REDUZIDA && this.certificacoes.length == 4) {
             taxa = -1;
         }
         if (biologico) taxa = taxa * 0.9;
@@ -85,7 +88,7 @@ public class ProdutoAlimentar extends Produto {
 
     private String certificacoesToString() {
         String res = "";
-        for (Certificacoes cert : this.certificacoes) {
+        for (Certificacao cert : this.certificacoes) {
             res = res.concat(certificacoes + " ");
         }
         return res;

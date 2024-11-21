@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class POOFS {
 
     /* Gestão de Clientes */
-    private ArrayList<Cliente> clientes = new ArrayList<>();
+    private final ArrayList<Cliente> clientes = new ArrayList<>();
 
     private Cliente buscarPorNome(String nome) {
         for (Cliente c : clientes) {
@@ -14,31 +14,22 @@ public class POOFS {
         return null;
     }
 
-    public void criarClienteNovo() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Insira o nome do cliente:");
-        String nome = scanner.nextLine();
-
+    public void pedirClienteNovo(Scanner scanner) {
+        String nome = Menu.lerString(scanner, "Insira o nome do cliente: ");
         /* Verificar se já existe */
         Cliente procurarIgual;
         if( (procurarIgual = buscarPorNome(nome)) != null) {
-            System.out.print("Cliente já existe! Deseja editar? (s/N): ");
-            if (scanner.nextLine().equals("s")) {
+            if (Menu.lerBoolean(scanner, "Cliente já existe! Deseja editar?")) {
                 procurarIgual.edit();
             }
+            return; /* Para a execução. */
+        }
 
-            /* else {
-                criarClienteNovo();
-            }*/
+        String contribuinte = Menu.lerString(scanner, "Insira o número de contribuinte: ");
 
-            return;
-        };
+        int idx = Menu.lerEnum(scanner, Cliente.Localizacao.values());
+        Cliente.Localizacao localizacao = Cliente.Localizacao.values()[idx];
 
-        System.out.println("Insira o número de contribuinte:");
-        String contribuinte = scanner.next();
-
-        Cliente.Localizacao localizacao = Cliente.pedirLocalizacao();
         ArrayList<Fatura> faturas = new ArrayList<>(); // Lista de faturas vazia
 
         // Criar o cliente
@@ -53,8 +44,9 @@ public class POOFS {
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        POOFS clientesEmpresa = new POOFS();
+        Scanner scanner = new Scanner(System.in);
+
+        POOFS empresa = new POOFS();
 
         int inputInt = 0;
 
@@ -68,33 +60,47 @@ public class POOFS {
 6 - Exportar faturas
 7 - Estatistica
 0 - Sair.""");
-            inputInt = sc.nextInt();
 
+            inputInt = Menu.lerInt(scanner, "Opção: ");
+
+            Cliente cliente;
             switch (inputInt) {
                 case 0:
                     return;
+
                 /* Criar / Editar Cliente */
                 case 1:
-                    clientesEmpresa.criarClienteNovo();
+                    empresa.pedirClienteNovo(scanner);
                     break;
                 /* Listar Clientes */
                 case 2:
-                    clientesEmpresa.print();
+                    empresa.print();
                     break;
                 /* Adicionar Faturas */
                 case 3:
-                    System.out.print("Nome do cliente: ");
-                    Cliente c;
-                    if ( null != (c = clientesEmpresa.buscarPorNome(sc.next())) ) {
-                        c.novaFatura();
+                    cliente = empresa.buscarPorNome(Menu.lerString(scanner, "Nome do cliente: "));
+                    if ( cliente != null ) {
+                        System.out.println("Cliente encontrado, insere os dados da fatura:");
+                        Fatura novaFatura = Menu.lerFatura(scanner, cliente);
+                        cliente.addFatura(novaFatura);
                     } else {
                         System.out.println("Cliente não existe!");
                     }
-                break;
+                    break;
+                /* Visualizar Faturas */
+                case 4:
+                    cliente = empresa.buscarPorNome(Menu.lerString(scanner, "Nome do cliente: "));
+                    if ( cliente != null ) {
+                        cliente.printFaturas();
+                    } else {
+                        System.out.println("Cliente não existe!");
+                    }
+                    break;
             }
         }
         while (inputInt != 0);
 
+        scanner.close();
     }
 
 }

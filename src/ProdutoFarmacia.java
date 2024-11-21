@@ -1,6 +1,8 @@
+import java.util.Scanner;
+
 public class ProdutoFarmacia extends Produto {
     
-    private enum CategoriaFarmacia {
+    public enum Categoria {
         BELEZA,
         BEM_ESTAR,
         BEBES,
@@ -10,10 +12,10 @@ public class ProdutoFarmacia extends Produto {
 
     private String medico;
     private boolean temPrescricao;
-    private CategoriaFarmacia categoria;
+    private Categoria categoria;
 
     /* Contructor Sem Prescrição */
-    public ProdutoFarmacia(int codigo, String nome, String descrição, int quantidade, int valorUnitario, CategoriaFarmacia categoria) {
+    public ProdutoFarmacia(int codigo, String nome, String descrição, int quantidade, int valorUnitario, Categoria categoria) {
         super(codigo, nome, descrição, quantidade, valorUnitario);
         this.temPrescricao = false;
         this.categoria = categoria;
@@ -35,7 +37,7 @@ public class ProdutoFarmacia extends Produto {
     public double calcIva(Cliente.Localizacao localizacao) {
         int idx = this.temPrescricao ? 1 : 0;
         double taxa = tabelaIvaProdutoFarmaceutico[idx][localizacao.ordinal()];
-        if (!this.temPrescricao && this.categoria == CategoriaFarmacia.ANIMAIS) {
+        if (!this.temPrescricao && this.categoria == Categoria.ANIMAIS) {
             taxa += -1;
         }
         return taxa;
@@ -50,12 +52,5 @@ public class ProdutoFarmacia extends Produto {
         }
         return str;
     }
-
-    /*
-    private String categoriaToString() {
-        String[] categoria = { "Beleza", "Bem-estar", "Bebés", "Animais", "Outro" };
-        return categoria[this.categoria.ordinal()];
-    }
-    */
 
 }

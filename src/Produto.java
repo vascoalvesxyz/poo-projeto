@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public abstract class Produto {
 
     protected int codigo;

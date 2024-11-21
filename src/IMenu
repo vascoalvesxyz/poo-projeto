@@ -1,0 +1,8 @@
+/*
+wip
+
+import java.util.Scanner;
+public interface IMenu {
+    Object pedir(Scanner scanner);
+}
+ */
