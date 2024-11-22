@@ -1,7 +1,7 @@
-import Produto.Produto;
-import Produto.ProdutoFarmaciaPrescrito;
-import Produto.ProdutoFarmaciaSemReceita;
-import Produto.ProdutoAlimentar;
+import produto.Produto;
+import produto.ProdutoAlimentar;
+import produto.ProdutoFarmaciaPrescrito;
+import produto.ProdutoFarmaciaSemReceita;
 
 import java.util.ArrayList;
 import java.util.Calendar;

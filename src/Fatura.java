@@ -1,4 +1,4 @@
-import Produto.Produto;
+import produto.Produto;
 
 import java.io.File;
 import java.io.IOException;

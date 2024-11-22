@@ -1,4 +1,4 @@
-package Produto;
+package produto;
 
 public class ProdutoFarmaciaSemReceita extends ProdutoFarmacia {
 
@@ -18,7 +18,7 @@ public class ProdutoFarmaciaSemReceita extends ProdutoFarmacia {
     }
 
     public double calcIva(Cliente.Localizacao localizacao) {
-        double taxa = new double[] {13, 12, 9}[localizacao.ordinal()];
+        double taxa = new double[]{13, 12, 9}[localizacao.ordinal()];
         if (this.categoria == Categoria.ANIMAIS) {
             taxa += -1;
         }

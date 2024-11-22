@@ -1,4 +1,4 @@
-package Produto;
+package produto;
 
 public class ProdutoFarmaciaPrescrito extends ProdutoFarmacia {
 
@@ -10,7 +10,7 @@ public class ProdutoFarmaciaPrescrito extends ProdutoFarmacia {
     }
 
     public double calcIva(Cliente.Localizacao localizacao) {
-        return new double[] {6, 5, 4}[localizacao.ordinal()];
+        return new double[]{6, 5, 4}[localizacao.ordinal()];
     }
 
     public String toString() {
