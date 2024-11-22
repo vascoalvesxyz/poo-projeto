@@ -1,21 +1,12 @@
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Scanner;
 
 public class Fatura {
 
-    public enum Categoria {
-        BELEZA,
-        BEM_ESTAR,
-        BEBES,
-        ANIMAIS,
-        OUTRO
-    }
-
-    int id;
-    Calendar data;
-    Cliente cliente;
-    ArrayList<Produto> produtos;
+    private final int id;
+    private final Calendar data;
+    private final Cliente cliente;
+    private final ArrayList<Produto> produtos;
 
     public Fatura(int id, Calendar data, Cliente cliente, ArrayList<Produto> produtos) {
         this.id = id;
@@ -30,14 +21,22 @@ public class Fatura {
         apresentar da fatura o total sem IVA, o valor total do IVA e o valor total com IVA.
      */
     public void print() {
-        System.out.println(String.format("== ID: %02d, Data: %s ==", id, data.toString()));
-        System.out.println(String.format("\t> Cliente:\n\t\t%s", cliente.toString()));
+        System.out.printf("== ID: %02d, Data: %s ==%n", id, data.toString());
+        System.out.printf("\t> Cliente:\n\t\t%s%n", cliente.toString());
         System.out.println("\t> Produtos:");
         for (Produto produto : produtos) {
             System.out.println("\t\t" + produto.toString());
             System.out.println("\t\tPreço (ajustado ao IVA do cliente): " + produto.calcIva(cliente.getLocalizacao()));
         }
         System.out.println("========================");
+    }
+
+    public enum Categoria {
+        BELEZA,
+        BEM_ESTAR,
+        BEBES,
+        ANIMAIS,
+        OUTRO
     }
     //public Fatura[] import() { }
     //public void export() { }

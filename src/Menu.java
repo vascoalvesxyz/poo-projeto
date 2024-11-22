@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Menu {
     private final Scanner scanner;
+
     public Menu(Scanner scanner) {
         this.scanner = scanner;
     }
@@ -38,7 +38,7 @@ public class Menu {
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
         do res = lerInt(mensagem);
         while (res < min || res > max);
-        return  res;
+        return res;
     }
 
     public boolean lerBoolean(String questao) {
@@ -51,7 +51,7 @@ public class Menu {
         return inputStr.equalsIgnoreCase("s");
     }
 
-    public Calendar lerData(){
+    public Calendar lerData() {
         System.out.print("Insere a Data (dd/mm/YY)): ");
         String[] dados = scanner.next().split("/");
 
@@ -84,10 +84,9 @@ public class Menu {
         Produto novoProduto;
         if (isAlimentar) {
             novoProduto = pedirProdutoAlimentar();
-        }
-        else novoProduto = pedirProdutoFarmaceutico();
-        return  novoProduto;
-    };
+        } else novoProduto = pedirProdutoFarmaceutico();
+        return novoProduto;
+    }
 
     private Produto pedirProdutoFarmaceutico() {
         int codigo = lerInt("Codigo: ");
@@ -106,7 +105,7 @@ public class Menu {
             ProdutoFarmacia.Categoria categoria = null;
             System.out.print("1 - BELEZA,\n2 - BEM_ESTAR,\n3 - BEBES,\n 4 - ANIMAIS,\n 5 - OUTRO\n");
             while (categoria == null) {
-                System.out.print(String.format("Escolha uma categoria (1-5): "));
+                System.out.print("Escolha uma categoria (1-5): ");
                 int escolha = scanner.nextInt();
                 if (escolha >= 1 && escolha <= 5) {
                     categoria = ProdutoFarmacia.Categoria.values()[escolha - 1];
@@ -130,10 +129,10 @@ public class Menu {
 
         ProdutoAlimentar.Taxa taxa;
         System.out.println("""
-            1 - Taxa Reduzida
-            2 - Taxa Intermédia
-            3 - Taxa Normal
-            """);
+                1 - Taxa Reduzida
+                2 - Taxa Intermédia
+                3 - Taxa Normal
+                """);
 
         int inputInt;
         do inputInt = scanner.nextInt();
@@ -149,12 +148,12 @@ public class Menu {
                 /* Taxa Intermedia (Necessita Categoria) */
                 ProdutoAlimentar.Categoria categoria = null;
                 System.out.print("""
-                    1 - Congelados,
-                    2 - Enlatados,
-                    3 - Vinhos
-                    """);
+                        1 - Congelados,
+                        2 - Enlatados,
+                        3 - Vinhos
+                        """);
                 while (categoria == null) {
-                    System.out.print(String.format("escolha uma categoria (1-3): "));
+                    System.out.print("escolha uma categoria (1-3): ");
                     int escolha = scanner.nextInt();
                     if (escolha >= 1 && escolha <= 3) {
                         categoria = ProdutoAlimentar.Categoria.values()[escolha - 1];

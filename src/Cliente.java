@@ -1,21 +1,12 @@
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Scanner;
 
 public class Cliente {
-
-    /* Enums*/
-    public enum Localizacao {
-        PORTUGAL,
-        MADEIRA,
-        ACORES
-    }
 
     /* Variaveis */
     private String nome;
     private String contribuinte;
     private Localizacao localizacao;
-    private ArrayList<Fatura> faturas;
+    private final ArrayList<Fatura> faturas;
 
     // Constructor
     public Cliente(
@@ -30,12 +21,11 @@ public class Cliente {
         this.faturas = faturas;
     }
 
-
     /* Gestão de Faturas */
     public void addFatura(Fatura fatura) {
         faturas.add(fatura);
     }
-    
+
     public void delFatura(Fatura fatura) {
         faturas.remove(fatura);
     }
@@ -51,25 +41,32 @@ public class Cliente {
         return this.nome;
     }
 
-    public Localizacao getLocalizacao() {
-        return this.localizacao;
-    }
-
     /* Setters */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public void setContribuinte(String contribuinte) {
-        this.contribuinte = contribuinte;
+    public Localizacao getLocalizacao() {
+        return this.localizacao;
     }
 
     public void setLocalizacao(Localizacao localizacao) {
         this.localizacao = localizacao;
     }
 
+    public void setContribuinte(String contribuinte) {
+        this.contribuinte = contribuinte;
+    }
+
     /* To String */
     public String toString() {
         return String.format("%s, %s, %s", nome, contribuinte, localizacao);
+    }
+
+    /* Enums*/
+    public enum Localizacao {
+        PORTUGAL,
+        MADEIRA,
+        ACORES
     }
 }

@@ -1,31 +1,16 @@
-import java.util.Scanner;
-
 public class ProdutoAlimentar extends Produto {
 
-    public enum Taxa {
-        REDUZIDA,
-        INTERMEDIA,
-        NORMAL
-    }
-
-    public enum Certificacao {
-        ISO22000,
-        FSSC22000,
-        HACCP,
-        GMP
-    }
-
-    public enum Categoria {
-        CONGELADOS,
-        ENLATADOS,
-        VINHO
-    }
-
+    // Tabela Utilizada Para Calcular IVA
+    private final int[][] tabelaIvaProdutoAlimentar = {
+            /* Continente, Madeira, Açores */
+            {6, 5, 4}, /* 0, Taxa Reduzida */
+            {13, 12, 9}, /* 1, Taxa Intermédia */
+            {23, 22, 16} /* 2, Taxa Normal */
+    };
     public Taxa taxa;
     public Categoria categoria;
-
     private Certificacao[] certificacoes;
-    private boolean biologico;
+    private final boolean biologico;
 
     // Constructor Padrão ou Para Taxa Normal
     public ProdutoAlimentar(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico) {
@@ -50,21 +35,12 @@ public class ProdutoAlimentar extends Produto {
         this.categoria = categoria;
     }
 
-    // Tabela Utilizada Para Calcular IVA
-    private final int[][] tabelaIvaProdutoAlimentar = {
-            /* Continente, Madeira, Açores */
-            {6, 5, 4}, /* 0, Taxa Reduzida */
-            {13, 12, 9}, /* 1, Taxa Intermédia */
-            {23, 22, 16} /* 2, Taxa Normal */
-    };
-
     /* Devolve o IVA atribuido a este produto baseado na localização */
     public double calcIva(Cliente.Localizacao localizacao) {
         double taxa = tabelaIvaProdutoAlimentar[this.taxa.ordinal()][localizacao.ordinal()];
         if (this.taxa == Taxa.INTERMEDIA && this.categoria == Categoria.VINHO) {
             taxa += 1;
-        }
-        else if (this.taxa == Taxa.REDUZIDA && this.certificacoes.length == 4) {
+        } else if (this.taxa == Taxa.REDUZIDA && this.certificacoes.length == 4) {
             taxa = -1;
         }
         if (biologico) taxa = taxa * 0.9;
@@ -92,5 +68,24 @@ public class ProdutoAlimentar extends Produto {
             res = res.concat(certificacoes + " ");
         }
         return res;
+    }
+
+    public enum Taxa {
+        REDUZIDA,
+        INTERMEDIA,
+        NORMAL
+    }
+
+    public enum Certificacao {
+        ISO22000,
+        FSSC22000,
+        HACCP,
+        GMP
+    }
+
+    public enum Categoria {
+        CONGELADOS,
+        ENLATADOS,
+        VINHO
     }
 }

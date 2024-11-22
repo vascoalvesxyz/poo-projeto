@@ -1,18 +1,13 @@
-import java.util.Scanner;
-
 public class ProdutoFarmacia extends Produto {
-    
-    public enum Categoria {
-        BELEZA,
-        BEM_ESTAR,
-        BEBES,
-        ANIMAIS,
-        OUTRO
-    }
 
     private String medico;
-    private boolean temPrescricao;
+    private final boolean temPrescricao;
     private Categoria categoria;
+    private final int[][] tabelaIvaProdutoFarmaceutico = {
+            /* Continente, Madeira, Açores */
+            {13, 12, 9}, /* 0, Sem Prescrição */
+            {6, 5, 4}, /* 1, Com Prescrição */
+    };
 
     /* Contructor Sem Prescrição */
     public ProdutoFarmacia(int codigo, String nome, String descrição, int quantidade, int valorUnitario, Categoria categoria) {
@@ -28,12 +23,6 @@ public class ProdutoFarmacia extends Produto {
         this.medico = medico;
     }
 
-    private int[][] tabelaIvaProdutoFarmaceutico = {
-            /* Continente, Madeira, Açores */
-            { 13, 12, 9 }, /* 0, Sem Prescrição */
-            { 6, 5, 4 }, /* 1, Com Prescrição */
-    };
-
     public double calcIva(Cliente.Localizacao localizacao) {
         int idx = this.temPrescricao ? 1 : 0;
         double taxa = tabelaIvaProdutoFarmaceutico[idx][localizacao.ordinal()];
@@ -48,9 +37,17 @@ public class ProdutoFarmacia extends Produto {
         if (temPrescricao) {
             str = str.concat(String.format(" Médico: %s\n", this.medico));
         } else {
-            str = str.concat(String.format(" Categoria: %s\n", categoria ));
+            str = str.concat(String.format(" Categoria: %s\n", categoria));
         }
         return str;
+    }
+
+    public enum Categoria {
+        BELEZA,
+        BEM_ESTAR,
+        BEBES,
+        ANIMAIS,
+        OUTRO
     }
 
 }

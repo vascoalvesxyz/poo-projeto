@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public abstract class Produto {
 
     protected int codigo;
@@ -17,5 +15,6 @@ public abstract class Produto {
     }
 
     abstract public double calcIva(Cliente.Localizacao localizacao);
+
     abstract public String toString();
 }
