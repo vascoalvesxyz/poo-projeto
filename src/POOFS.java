@@ -1,14 +1,15 @@
+import gestao.GestorClientes;
+import produto.Cliente;
+
 import java.util.Scanner;
 
 public class POOFS {
     private final GestorClientes gestorClientes;
-    private final GestorFaturas gestorFaturas;
     private final Scanner scanner;
 
     public POOFS() {
-        gestorClientes = new GestorClientes();
-        gestorFaturas = new GestorFaturas();
         scanner = new Scanner(System.in);
+        gestorClientes = new GestorClientes();
     }
 
     public static void main(String[] args) {
@@ -55,41 +56,31 @@ public class POOFS {
     }
 
     private void criarOuEditarCliente() {
-        String nome = lerString("Insira o nome do cliente: ");
-        Cliente cliente = gestorClientes.procurarPorNome(nome);
-
-        if (cliente != null) {
-            System.out.println("Cliente encontrado. A editar...");
-            gestorClientes.editarCliente(cliente, scanner);
-        } else {
-            System.out.println("Cliente não encontrado. A criar novo cliente...");
-            gestorClientes.adicionarCliente(gestorClientes.criarCliente(nome, scanner));
-        }
+        gestorClientes.criar();
     }
 
     private void listarClientes() {
         System.out.println("Lista de Clientes:");
-        gestorClientes.listarTodosClientes();
+        gestorClientes.listar();
     }
 
     private void criarOuEditarFatura() {
-        String nomeCliente = lerString("Insira o nome do cliente: ");
-        Cliente cliente = gestorClientes.procurarPorNome(nomeCliente);
-
-        if (cliente != null) {
-            gestorFaturas.criarOuEditarFatura(cliente, scanner);
-        } else {
-            System.out.println("Cliente não encontrado. Por favor, crie o cliente primeiro.");
-        }
+        Cliente c = gestorClientes.pedirCliente();
+        c.getFaturas().criar();
     }
 
     private void listarFaturas() {
         System.out.println("Lista de Faturas:");
-        gestorFaturas.listarTodasFaturas();
+        for (Cliente c : gestorClientes.getTodosClientes())
+            c.getFaturas().listar();
     }
 
     private void consultarFatura() {
-        System.out.println("Funcionalidade de consulta de faturas ainda não implementada.");
+        Cliente c = gestorClientes.pedirCliente();
+        if (c != null) {
+            System.out.println("Lista de Faturas:");
+            c.getFaturas().listar();
+        }
     }
 
     private int lerInteiro(String mensagem) {
@@ -101,9 +92,4 @@ public class POOFS {
         return scanner.nextInt();
     }
 
-    private String lerString(String mensagem) {
-        System.out.print(mensagem);
-        scanner.nextLine(); // Consumir nova linha pendente
-        return scanner.nextLine();
-    }
 }

@@ -1,4 +1,6 @@
-import java.util.ArrayList;
+package produto;
+
+import gestao.GestorFaturas;
 
 public class Cliente {
 
@@ -6,7 +8,7 @@ public class Cliente {
     private String nome;
     private String contribuinte;
     private Localizacao localizacao;
-    private final ArrayList<Fatura> faturas;
+    private final GestorFaturas faturas;
 
     // Constructor
     public Cliente(
@@ -17,27 +19,20 @@ public class Cliente {
         this.nome = nome;
         this.contribuinte = contribuinte;
         this.localizacao = localizacao;
-        faturas = new ArrayList<>();
-    }
-
-    /* Gestão de Faturas */
-    public void addFatura(Fatura fatura) {
-        faturas.add(fatura);
-    }
-
-    public void delFatura(Fatura fatura) {
-        faturas.remove(fatura);
+        faturas = new GestorFaturas(this);
     }
 
     public void printFaturas() {
-        for (Fatura fatura : this.faturas) {
-            fatura.print();
-        }
+        faturas.listar();
     }
 
     /* Getters */
     public String getNome() {
         return this.nome;
+    }
+
+    public GestorFaturas getFaturas() {
+        return faturas;
     }
 
     /* Setters */

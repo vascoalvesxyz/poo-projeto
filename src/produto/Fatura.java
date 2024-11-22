@@ -1,8 +1,10 @@
-import produto.Produto;
+package produto;
+
+import gestao.GestorProdutos;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Fatura {
@@ -10,13 +12,13 @@ public class Fatura {
     private final int id;
     private final Calendar data;
     private final Cliente cliente;
-    private final ArrayList<Produto> produtos;
+    private final GestorProdutos produtos;
 
-    public Fatura(int id, Calendar data, Cliente cliente, ArrayList<Produto> produtos) {
+    public Fatura(int id, Calendar data, Cliente cliente) {
         this.id = id;
         this.data = data;
         this.cliente = cliente;
-        this.produtos = produtos;
+        this.produtos = new GestorProdutos();
     }
 
     /* Visualizar fatura: apresentar o número da fatura, os dados do cliente e, em seguida, listar
@@ -24,15 +26,16 @@ public class Fatura {
         valor total sem IVA, a taxa do IVA, o valor do IVA e o valor total com IVA. Após esta lista,
         apresentar da fatura o total sem IVA, o valor total do IVA e o valor total com IVA.
      */
-    public void print() {
-        System.out.printf("== ID: %02d, Data: %s ==%n", id, data.toString());
-        System.out.printf("\t> Cliente:\n\t\t%s%n", cliente.toString());
-        System.out.println("\t> Produtos:");
-        for (Produto produto : produtos) {
-            System.out.println("\t\t" + produto.toString());
-            System.out.println("\t\tPreço (ajustado ao IVA do cliente): " + produto.calcIva(cliente.getLocalizacao()));
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+        String res = String.format("== ID: %02d, Data: %s ==%n\n", id, sdf.format(data.getTime()));
+        res += String.format("\t> Cliente:\n\t\t%s\n", cliente.toString());
+        res += String.format("\t> Produtos:\n");
+        for (Produto produto : produtos.getProdutos()) {
+            res += "\t\t" + produto.toString();
         }
-        System.out.println("========================");
+        res += "========================\n" ;
+        return res;
     }
 
     public int getId() {
@@ -58,8 +61,11 @@ public class Fatura {
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
-            e.printStackTrace();
         }
+    }
+
+    public GestorProdutos getProdutos(){
+        return produtos;
     }
 
     //public Fatura[] import() { }
