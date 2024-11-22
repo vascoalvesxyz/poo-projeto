@@ -27,7 +27,6 @@ public class Menu {
             System.out.print(mensagem);
             String entrada = scanner.nextLine();
 
-            // REGEX: '-' 0 ou 1 vezes seguido de todos os digitos 1 ou mais vezes
             if (entrada.matches("-?[0-9]+")) {
                 numero = Integer.parseInt(entrada);
                 valido = true;
@@ -41,8 +40,9 @@ public class Menu {
     public int lerIntMinMax(String mensagem, int min, int max) {
         int res;
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
-        do res = lerInt(mensagem);
-        while (res < min || res > max);
+        do {
+            res = lerInt(mensagem);
+        } while (res < min || res > max);
         return res;
     }
 
@@ -50,8 +50,9 @@ public class Menu {
         System.out.println(questao + "(s/n)");
 
         String inputStr;
-        do inputStr = scanner.nextLine();
-        while (!inputStr.equalsIgnoreCase("s") && !inputStr.equalsIgnoreCase("n"));
+        do {
+            inputStr = scanner.nextLine();
+        } while (!inputStr.equalsIgnoreCase("s") && !inputStr.equalsIgnoreCase("n"));
 
         return inputStr.equalsIgnoreCase("s");
     }
@@ -77,19 +78,22 @@ public class Menu {
     public int lerEnum(Object[] valoresEnum) {
         printEnum(valoresEnum);
         int input = lerIntMinMax("Opção", 1, valoresEnum.length);
-        return input - 1; // devolve o indice
+        return input - 1;
     }
 
     public Produto lerProduto() {
         String resposta;
-        do resposta = lerString("O produto é alimentar ou farmaceutico? (a/f) ");
-        while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
+        do {
+            resposta = lerString("O produto é alimentar ou farmaceutico? (a/f) ");
+        } while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
         boolean isAlimentar = resposta.equalsIgnoreCase("a");
 
         Produto novoProduto;
         if (isAlimentar) {
             novoProduto = pedirProdutoAlimentar();
-        } else novoProduto = pedirProdutoFarmaceutico();
+        } else {
+            novoProduto = pedirProdutoFarmaceutico();
+        }
         return novoProduto;
     }
 
@@ -129,7 +133,6 @@ public class Menu {
         int valor = lerInt("Valor Unitário: ");
 
         Produto produto = null;
-        /* Produto.Produto Alimentar */
         boolean biologico = lerBoolean("O produto é biologico? ");
 
         ProdutoAlimentar.Taxa taxa;
@@ -140,17 +143,16 @@ public class Menu {
                 """);
 
         int inputInt;
-        do inputInt = scanner.nextInt();
-        while (inputInt < 1 || inputInt > 3); // ~[0...3]
+        do {
+            inputInt = scanner.nextInt();
+        } while (inputInt < 1 || inputInt > 3);
 
         switch (inputInt) {
-            case 1:
-                /* Taxa Reduzida (Necessita Certificações) */
+            case 1 -> {
                 ProdutoAlimentar.Certificacao[] certificacoes = lerCertificacoes();
                 produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico, certificacoes);
-                break;
-            case 2:
-                /* Taxa Intermedia (Necessita Categoria) */
+            }
+            case 2 -> {
                 ProdutoAlimentar.Categoria categoria = null;
                 System.out.print("""
                         1 - Congelados,
@@ -158,27 +160,24 @@ public class Menu {
                         3 - Vinhos
                         """);
                 while (categoria == null) {
-                    System.out.print("escolha uma categoria (1-3): ");
+                    System.out.print("Escolha uma categoria (1-3): ");
                     int escolha = scanner.nextInt();
                     if (escolha >= 1 && escolha <= 3) {
                         categoria = ProdutoAlimentar.Categoria.values()[escolha - 1];
                     }
                 }
                 produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico, categoria);
-                break;
-            case 3:
-                /* Taxa Normal */
-                produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico);
-                break;
-            default:
+            }
+            case 3 -> produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico);
+            default -> {
                 System.out.println("Output impossível.");
                 return null;
+            }
         }
         return produto;
     }
 
     private ProdutoAlimentar.Certificacao[] lerCertificacoes() {
-        // Bloco de texto para exibir as opções
         System.out.println("""
                 Certificações disponíveis:
                 1 - ISO22000
@@ -187,20 +186,15 @@ public class Menu {
                 4 - GMP
                 Insira até 4 certificações separadas por vírgulas (ex: 1,2,3):""");
 
-        // Array para armazenar as certificações escolhidas
         ProdutoAlimentar.Certificacao[] certificacoesEscolhidas = new ProdutoAlimentar.Certificacao[4];
-        int count = 0; // Contador para rastrear quantas certificações foram selecionadas
+        int count = 0;
 
         while (count < 4) {
-            // Lê a entrada do usuário
             System.out.print("Escolha suas certificações: ");
             String entrada = scanner.nextLine();
-
-            // Divide a entrada por vírgulas
             String[] escolhas = entrada.split(",");
 
-            // Valida cada escolha
-            boolean valido = true; // Rastreamento de validade
+            boolean valido = true;
             for (String escolha : escolhas) {
                 int indice;
                 try {
@@ -217,10 +211,7 @@ public class Menu {
                     break;
                 }
 
-                // Obtém a certificação correspondente
                 ProdutoAlimentar.Certificacao certificacao = ProdutoAlimentar.Certificacao.values()[indice - 1];
-
-                // Verifica duplicatas no array
                 boolean duplicado = false;
                 for (ProdutoAlimentar.Certificacao c : certificacoesEscolhidas) {
                     if (c == certificacao) {
@@ -235,21 +226,18 @@ public class Menu {
                     count++;
                 }
 
-                // Limita a 4 escolhas
                 if (count >= 4) {
                     break;
                 }
             }
 
             if (valido && count < 4) {
-                System.out.printf("Você escolheu %d certificações. Escolha mais %d.%n",
-                        count, 4 - count);
+                System.out.printf("Você escolheu %d certificações. Escolha mais %d.%n", count, 4 - count);
             } else if (!valido) {
                 System.out.println("Por favor, insira novamente.");
             }
         }
 
-        // Exibe as certificações escolhidas
         System.out.println("Certificações escolhidas:");
         for (ProdutoAlimentar.Certificacao c : certificacoesEscolhidas) {
             if (c != null) {
@@ -264,8 +252,7 @@ public class Menu {
         int id = lerInt("Insere o ID: ");
         Calendar cal = lerData();
 
-        /* Pedir Produtos */
-        ArrayList<Produto> produtos = new ArrayList<Produto>();
+        ArrayList<Produto> produtos = new ArrayList<>();
         boolean adicionarProduto;
         do {
             adicionarProduto = lerBoolean("Deseja adicionar um produto? ");
@@ -273,7 +260,6 @@ public class Menu {
                 Produto novoProduto = lerProduto();
                 produtos.add(novoProduto);
             }
-
         } while (adicionarProduto);
 
         return new Fatura(id, cal, cliente, produtos);
@@ -281,14 +267,11 @@ public class Menu {
 
     public Cliente criarCliente(String nome) {
         String contribuinte = lerString("Insira o número de contribuinte: ");
-
         int idx = lerEnum(Cliente.Localizacao.values());
         Cliente.Localizacao localizacao = Cliente.Localizacao.values()[idx];
 
-        ArrayList<Fatura> faturas = new ArrayList<>(); // Lista de faturas vazia
-
         // Criar o cliente
-        return new Cliente(nome, contribuinte, localizacao, faturas);
+        return new Cliente(nome, contribuinte, localizacao);
     }
 
     public void editarCliente(Cliente cliente) {

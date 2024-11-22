@@ -15,8 +15,8 @@ public class Fatura {
     public Fatura(int id, Calendar data, Cliente cliente, ArrayList<Produto> produtos) {
         this.id = id;
         this.data = data;
-        this.produtos = produtos;
         this.cliente = cliente;
+        this.produtos = produtos;
     }
 
     /* Visualizar fatura: apresentar o número da fatura, os dados do cliente e, em seguida, listar
@@ -33,6 +33,10 @@ public class Fatura {
             System.out.println("\t\tPreço (ajustado ao IVA do cliente): " + produto.calcIva(cliente.getLocalizacao()));
         }
         System.out.println("========================");
+    }
+
+    public int getId() {
+        return id;
     }
 
     public enum Categoria {

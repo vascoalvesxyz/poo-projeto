@@ -12,13 +12,12 @@ public class Cliente {
     public Cliente(
             String nome,
             String contribuinte,
-            Localizacao localizacao,
-            ArrayList<Fatura> faturas
+            Localizacao localizacao
     ) {
         this.nome = nome;
         this.contribuinte = contribuinte;
         this.localizacao = localizacao;
-        this.faturas = faturas;
+        faturas = new ArrayList<>();
     }
 
     /* Gestão de Faturas */
