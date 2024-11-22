@@ -1,3 +1,5 @@
+package Produto;
+
 public abstract class Produto {
 
     protected int codigo;

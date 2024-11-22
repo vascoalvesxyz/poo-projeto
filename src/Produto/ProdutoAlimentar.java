@@ -1,3 +1,5 @@
+package Produto;
+
 public class ProdutoAlimentar extends Produto {
 
     // Tabela Utilizada Para Calcular IVA
@@ -7,6 +9,7 @@ public class ProdutoAlimentar extends Produto {
             {13, 12, 9}, /* 1, Taxa Intermédia */
             {23, 22, 16} /* 2, Taxa Normal */
     };
+
     public Taxa taxa;
     public Categoria categoria;
     private Certificacao[] certificacoes;

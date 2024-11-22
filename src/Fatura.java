@@ -1,3 +1,7 @@
+import Produto.Produto;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -38,6 +42,22 @@ public class Fatura {
         ANIMAIS,
         OUTRO
     }
+
+    public void toFile() {
+        String filename = String.format("fatura-%s-%s.txt", cliente.getNome(), data.getTime());
+        try {
+            File faturaFile = new File(filename);
+            if (faturaFile.createNewFile()) {
+                System.out.println("File created: " + faturaFile.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
     //public Fatura[] import() { }
     //public void export() { }
 }

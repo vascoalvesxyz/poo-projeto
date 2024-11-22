@@ -1,3 +1,8 @@
+import Produto.Produto;
+import Produto.ProdutoFarmaciaPrescrito;
+import Produto.ProdutoFarmaciaSemReceita;
+import Produto.ProdutoAlimentar;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
@@ -99,19 +104,19 @@ public class Menu {
         Produto produto = null;
         if (temPrescricao) {
             String medico = lerString("Nome do médico que fez a receita: ");
-            produto = new ProdutoFarmacia(codigo, nome, descricao, quantidade, valor, medico);
+            produto = new ProdutoFarmaciaPrescrito(codigo, nome, descricao, quantidade, valor, medico);
         } else {
-            /* Produto Farmaceutico Sem Prescrição */
-            ProdutoFarmacia.Categoria categoria = null;
+            /* Produto.Produto Farmaceutico Sem Prescrição */
+            ProdutoFarmaciaSemReceita.Categoria categoria = null;
             System.out.print("1 - BELEZA,\n2 - BEM_ESTAR,\n3 - BEBES,\n 4 - ANIMAIS,\n 5 - OUTRO\n");
             while (categoria == null) {
                 System.out.print("Escolha uma categoria (1-5): ");
                 int escolha = scanner.nextInt();
                 if (escolha >= 1 && escolha <= 5) {
-                    categoria = ProdutoFarmacia.Categoria.values()[escolha - 1];
+                    categoria = ProdutoFarmaciaSemReceita.Categoria.values()[escolha - 1];
                 }
             }
-            produto = new ProdutoFarmacia(codigo, nome, descricao, quantidade, valor, categoria);
+            produto = new ProdutoFarmaciaSemReceita(codigo, nome, descricao, quantidade, valor, categoria);
         }
         return produto;
     }
@@ -124,7 +129,7 @@ public class Menu {
         int valor = lerInt("Valor Unitário: ");
 
         Produto produto = null;
-        /* Produto Alimentar */
+        /* Produto.Produto Alimentar */
         boolean biologico = lerBoolean("O produto é biologico? ");
 
         ProdutoAlimentar.Taxa taxa;
