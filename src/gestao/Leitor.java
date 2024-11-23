@@ -38,7 +38,8 @@ public abstract class Leitor {
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
         do {
             res = lerInt(mensagem);
-        } while (res < min || res > max);
+        }
+        while (res < min || res > max);
         return res;
     }
 
@@ -48,20 +49,10 @@ public abstract class Leitor {
         String inputStr;
         do {
             inputStr = scanner.nextLine();
-        } while (!inputStr.equalsIgnoreCase("s") && !inputStr.equalsIgnoreCase("n"));
+        }
+        while (!inputStr.equalsIgnoreCase("s") && !inputStr.equalsIgnoreCase("n"));
 
         return inputStr.equalsIgnoreCase("s");
-    }
-
-    public Calendar lerData() {
-        System.out.print("Insere a Data (dd/mm/YY)): ");
-        String[] dados = scanner.next().split("/");
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(dados[0]));
-        cal.set(Calendar.MONTH, Integer.parseInt(dados[1]));
-        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dados[2]));
-        return cal;
     }
 
     public void printEnum(Object[] valores) {
@@ -77,4 +68,50 @@ public abstract class Leitor {
         return input - 1;
     }
 
+    public Calendar lerData() {
+        while (true) {
+            try {
+                System.out.print("Insere a Data (dd/mm/yyyy): ");
+                String input = scanner.next();
+                validarFormatoData(input);
+                Calendar cal = analisarData(input);
+                if (validarVeracidadeData(cal)) {
+                    return cal;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Data inválida! Tente novamente.");
+            }
+        }
+    }
+
+    private void validarFormatoData(String data) {
+        if (!data.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
+            throw new IllegalArgumentException("Formato inválido! Use dd/mm/yyyy.");
+        }
+    }
+
+    // Method to parse the date into a Calendar object
+    private Calendar analisarData(String data) {
+        String[] parts = data.split("/");
+
+        int dia = Integer.parseInt(parts[0]);
+        int mes = Integer.parseInt(parts[1]) - 1; // Calendar months are 0-indexed
+        int ano = Integer.parseInt(parts[2]);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setLenient(false);
+        cal.set(Calendar.YEAR, ano);
+        cal.set(Calendar.MONTH, mes);
+        cal.set(Calendar.DAY_OF_MONTH, dia);
+
+        cal.getTime();
+
+        return cal;
+    }
+
+    private boolean validarVeracidadeData(Calendar cal) {
+        int ano = cal.get(Calendar.YEAR);
+        int ANO_MAX = 2200, ANO_MIN = 1900;
+        return ano <= ANO_MAX && ano >= ANO_MIN;
+    }
 }

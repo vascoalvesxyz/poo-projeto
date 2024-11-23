@@ -18,7 +18,7 @@ public class GestorFaturas extends Leitor implements Gestor<Fatura> {
     }
 
     public Fatura procurarPorNumero(int codigo) {
-        for (Fatura f: faturas)
+        for (Fatura f : faturas)
             if (f.getId() == codigo)
                 return f;
         return null;
@@ -26,7 +26,7 @@ public class GestorFaturas extends Leitor implements Gestor<Fatura> {
 
     @Override
     public Fatura criar() {
-        int id = lerInt("Insere o ID: ");
+        int id = lerInt("Insera o ID da fatura: ");
 
         Fatura procuraPorId = procurarPorNumero(id);
         if (procuraPorId != null) {

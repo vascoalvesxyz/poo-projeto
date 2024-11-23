@@ -9,7 +9,7 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
         GMP
     }
 
-    private Certificacao[] certificacoes;
+    private final Certificacao[] certificacoes;
 
     // Constructor Para Taxa Reduzida
     public ProdutoAlimentarTaxaReduzida(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, Certificacao[] certificacoes) {
@@ -29,16 +29,16 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
 
     @Override
     public String toString() {
-        String str = String.format("""
-        Codigo: %02d, Nome: %s, Quantidade: %02d, Valor (sem IVA): %02d, Certificações: %s
-        """, this.codigo, this.nome, this.quantidade, this.valorUnitario, certificacoesToString());
-        return str;
+        return String.format(
+                "Codigo: %d, Nome: %s, Quantidade: %d, Valor (sem IVA): %.2f, Certificações: %s",
+                this.codigo, this.nome, this.quantidade, this.valorUnitario, certificacoesToString()
+        );
     }
 
     private String certificacoesToString() {
         String res = "";
         for (Certificacao cert : this.certificacoes) {
-            res = res.concat(certificacoes + " ");
+            res = res.concat(cert + " ");
         }
         return res;
     }

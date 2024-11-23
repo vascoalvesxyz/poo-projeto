@@ -3,7 +3,7 @@ package produto;
 public class ProdutoAlimentarTaxaNormal extends ProdutoAlimentar {
 
     // Constructor Padrão
-    public ProdutoAlimentarTaxaNormal(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico) {
+    public ProdutoAlimentarTaxaNormal(int codigo, String nome, String descricao, int quantidade, double valorUnitario, boolean biologico) {
         super(codigo, nome, descricao, quantidade, valorUnitario, biologico);
     }
 
@@ -19,10 +19,10 @@ public class ProdutoAlimentarTaxaNormal extends ProdutoAlimentar {
 
     @Override
     public String toString() {
-        String str = String.format("""
-        Codigo: %02d, Nome: %s, Quantidade: %02d, Valor (sem IVA): %02d
-        """, this.codigo, this.nome, this.quantidade, this.valorUnitario);
-        return str;
+        return String.format(
+                "Codigo: %d, Nome: %s, Quantidade: %d, Valor (sem IVA): %.2f",
+                this.codigo, this.nome, this.quantidade, this.valorUnitario
+        );
     }
 
 }

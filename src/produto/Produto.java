@@ -6,9 +6,9 @@ public abstract class Produto {
     protected String nome;
     protected String descricao;
     protected int quantidade;
-    protected int valorUnitario;
+    protected double valorUnitario;
 
-    public Produto(int codigo, String nome, String descricao, int quantidade, int valorUnitario) {
+    public Produto(int codigo, String nome, String descricao, int quantidade, double valorUnitario) {
         this.codigo = codigo;
         this.nome = nome;
         this.descricao = descricao;
@@ -17,5 +17,6 @@ public abstract class Produto {
     }
 
     abstract public double calcIva(Cliente.Localizacao localizacao);
+
     abstract public String toString();
 }

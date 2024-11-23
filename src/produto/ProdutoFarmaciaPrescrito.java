@@ -1,11 +1,10 @@
 package produto;
 
 public class ProdutoFarmaciaPrescrito extends ProdutoFarmacia {
+    private final String medico;
 
-    private String medico;
-
-    public ProdutoFarmaciaPrescrito(int codigo, String nome, String descrição, int quantidade, int valorUnitario, String medico) {
-        super(codigo, nome, descrição, quantidade, valorUnitario);
+    public ProdutoFarmaciaPrescrito(int codigo, String nome, String descricao, int quantidade, double valorUnitario, String medico) {
+        super(codigo, nome, descricao, quantidade, valorUnitario);
         this.medico = medico;
     }
 
@@ -14,7 +13,7 @@ public class ProdutoFarmaciaPrescrito extends ProdutoFarmacia {
     }
 
     public String toString() {
-        String str = String.format("Codigo: %02d, Nome: %s, Quantidade: %02d, Valor (sem IVA): %02d", this.codigo, this.nome, this.quantidade, this.valorUnitario);
+        String str = String.format("Codigo: %d, Nome: %s, Quantidade: %d, Valor (sem IVA): %.2f", this.codigo, this.nome, this.quantidade, this.valorUnitario);
         str = str.concat(String.format(" Médico: %s\n", this.medico));
         return str;
     }

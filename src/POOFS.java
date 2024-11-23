@@ -13,21 +13,21 @@ public class POOFS {
     }
 
     public static void main(String[] args) {
-        new POOFS().executar();
+        new POOFS().menu();
     }
 
-    private void executar() {
+    private void menu() {
         int escolha;
         do {
             apresentarMenu();
-            escolha = lerInteiro("Selecione uma opção: ");
+            escolha = lerEscolha();
             tratarEscolha(escolha);
         } while (escolha != 0);
     }
 
     private void apresentarMenu() {
         System.out.println("""
-                    Menu Principal
+                Menu Principal
                     1. Criar/Editar Cliente
                     2. Listar Clientes
                     3. Criar/Editar Fatura
@@ -66,7 +66,9 @@ public class POOFS {
 
     private void criarOuEditarFatura() {
         Cliente c = gestorClientes.pedirCliente();
-        c.getFaturas().criar();
+        if (c != null) {
+            c.getFaturas().criar();
+        }
     }
 
     private void listarFaturas() {
@@ -83,8 +85,8 @@ public class POOFS {
         }
     }
 
-    private int lerInteiro(String mensagem) {
-        System.out.print(mensagem);
+    private int lerEscolha() {
+        System.out.print("Selecione uma opção: ");
         while (!scanner.hasNextInt()) {
             System.out.println("Entrada inválida. Por favor, insira um número inteiro.");
             scanner.next();

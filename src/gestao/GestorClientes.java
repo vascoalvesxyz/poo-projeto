@@ -16,32 +16,32 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
     public Cliente procurarPorNome(String nome) {
         for (Cliente cliente : clientes) {
             if (cliente.getNome().equalsIgnoreCase(nome))
-                    return cliente;
+                return cliente;
         }
         return null;
     }
 
     @Override
     public Cliente criar() {
-            String nome = lerString("Insira o nome do cliente: ");
+        String nome = lerString("Insira o nome do cliente: ");
 
-            Cliente procurar = procurarPorNome(nome);
-            if (procurar != null) {
-                boolean desejaEditar = lerBoolean("Cliente existe, deseja editar?");
-                if (desejaEditar) {
-                    editar(procurar);
-                }
-                return procurar;
+        Cliente procurar = procurarPorNome(nome);
+        if (procurar != null) {
+            boolean desejaEditar = lerBoolean("Cliente existe, deseja editar?");
+            if (desejaEditar) {
+                editar(procurar);
             }
+            return procurar;
+        }
 
-            String contribuinte = lerString("Insira o número de contribuinte: ");
-            System.out.println("Escolha a localização:");
-            System.out.println("1. Continente\n2. Madeira\n3. Açores");
-            int escolhaLocalizacao = lerIntMinMax("Min", 1, 3);
-            Cliente.Localizacao localizacao = Cliente.Localizacao.values()[escolhaLocalizacao - 1];
-            Cliente novoCliente = new Cliente(nome, contribuinte, localizacao);
-            adicionar(novoCliente);
-            return novoCliente;
+        String contribuinte = lerString("Insira o número de contribuinte: ");
+        System.out.println("Escolha a localização:");
+        System.out.println("1. Continente\n2. Madeira\n3. Açores");
+        int escolhaLocalizacao = lerIntMinMax("Min", 1, 3);
+        Cliente.Localizacao localizacao = Cliente.Localizacao.values()[escolhaLocalizacao - 1];
+        Cliente novoCliente = new Cliente(nome, contribuinte, localizacao);
+        adicionar(novoCliente);
+        return novoCliente;
     }
 
     @Override
@@ -57,23 +57,22 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
                     """);
             input = scanner.nextInt();
             switch (input) {
-                case 1:
+                case 1 -> {
                     String novoNome = lerString("Novo nome: ");
                     cliente.setNome(novoNome);
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     // FALTA VALIDACAO
                     String novoContribuinte = lerString("Novo contribuinte: ");
                     cliente.setContribuinte(novoContribuinte);
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     System.out.print("Nova Localização: ");
                     int idx = lerEnum(Cliente.Localizacao.values());
                     Cliente.Localizacao novaLocalizacao = Cliente.Localizacao.values()[idx];
                     cliente.setLocalizacao(novaLocalizacao);
-                    break;
-                case 4:
-                    System.out.print("Nova Fatura");
+                }
+                case 4 -> System.out.print("Nova Fatura");
             }
         }
         while (input != 0);
@@ -103,8 +102,9 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
         if (procurar == null) {
             System.out.println("Cliente não existe!");
             return null;
+        } else {
+            return procurar;
         }
-        return procurar;
     }
 
 }
