@@ -1,18 +1,12 @@
 package gestao;
 
-import produto.Produto;
-import produto.ProdutoAlimentar;
-import produto.ProdutoFarmaciaPrescrito;
-import produto.ProdutoFarmaciaSemReceita;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
-public abstract class Menu {
+public abstract class Leitor {
     private final Scanner scanner;
 
-    public Menu() {
+    public Leitor() {
         scanner = new Scanner(System.in);
     }
 

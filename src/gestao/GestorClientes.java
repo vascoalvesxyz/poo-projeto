@@ -5,7 +5,7 @@ import produto.Cliente;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes extends Menu implements Gestor<Cliente> {
+public class GestorClientes extends Leitor implements Gestor<Cliente> {
 
     private final ArrayList<Cliente> clientes;
 

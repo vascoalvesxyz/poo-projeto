@@ -1,13 +1,9 @@
 package gestao;
-import produto.Produto;
-import produto.ProdutoAlimentar;
-import produto.ProdutoFarmaciaPrescrito;
-import produto.ProdutoFarmaciaSemReceita;
+import produto.*;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class GestorProdutos extends Menu implements Gestor<Produto> {
+public class GestorProdutos extends Leitor implements Gestor<Produto> {
 
     private final ArrayList<Produto> produtos;
 
@@ -62,7 +58,6 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
         Produto produto = null;
         boolean biologico = lerBoolean("O produto é biologico? ");
 
-        ProdutoAlimentar.Taxa taxa;
         System.out.println("""
                 1 - Taxa Reduzida
                 2 - Taxa Intermédia
@@ -73,11 +68,11 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
 
         switch (inputInt) {
             case 1 -> {
-                ProdutoAlimentar.Certificacao[] certificacoes = lerCertificacoes();
-                produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico, certificacoes);
+                ProdutoAlimentarTaxaReduzida.Certificacao[] certificacoes = lerCertificacoes();
+                produto = new ProdutoAlimentarTaxaReduzida(codigo, nome, descricao, quantidade, valor, biologico, certificacoes);
             }
             case 2 -> {
-                ProdutoAlimentar.Categoria categoria = null;
+                ProdutoAlimentarTaxaIntermedia.Categoria categoria = null;
                 System.out.print("""
                         1 - Congelados,
                         2 - Enlatados,
@@ -86,12 +81,12 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
                 while (categoria == null) {
                     int escolha = lerIntMinMax("Escolha uma categoria ", 1, 3);
                     if (escolha >= 1 && escolha <= 3) {
-                        categoria = ProdutoAlimentar.Categoria.values()[escolha - 1];
+                        categoria = ProdutoAlimentarTaxaIntermedia.Categoria.values()[escolha - 1];
                     }
                 }
-                produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico, categoria);
+                produto = new ProdutoAlimentarTaxaIntermedia(codigo, nome, descricao, quantidade, valor, biologico, categoria);
             }
-            case 3 -> produto = new ProdutoAlimentar(codigo, nome, descricao, quantidade, valor, biologico);
+            case 3 -> produto = new ProdutoAlimentarTaxaNormal(codigo, nome, descricao, quantidade, valor, biologico);
             default -> {
                 System.out.println("Output impossível.");
                 return null;
@@ -100,7 +95,7 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
         return produto;
     }
 
-    private ProdutoAlimentar.Certificacao[] lerCertificacoes() {
+    private ProdutoAlimentarTaxaReduzida.Certificacao[] lerCertificacoes() {
         System.out.println("""
                 Certificações disponíveis:
                 1 - ISO22000
@@ -109,7 +104,7 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
                 4 - GMP
                 Insira até 4 certificações separadas por vírgulas (ex: 1,2,3):""");
 
-        ProdutoAlimentar.Certificacao[] certificacoesEscolhidas = new ProdutoAlimentar.Certificacao[4];
+        ProdutoAlimentarTaxaReduzida.Certificacao[] certificacoesEscolhidas = new ProdutoAlimentarTaxaReduzida.Certificacao[4];
         int count = 0;
 
         while (count < 4) {
@@ -133,9 +128,9 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
                     break;
                 }
 
-                ProdutoAlimentar.Certificacao certificacao = ProdutoAlimentar.Certificacao.values()[indice - 1];
+                ProdutoAlimentarTaxaReduzida.Certificacao certificacao = ProdutoAlimentarTaxaReduzida.Certificacao.values()[indice - 1];
                 boolean duplicado = false;
-                for (ProdutoAlimentar.Certificacao c : certificacoesEscolhidas) {
+                for (ProdutoAlimentarTaxaReduzida.Certificacao c : certificacoesEscolhidas) {
                     if (c == certificacao) {
                         duplicado = true;
                         System.out.println("Certificação já selecionada: " + certificacao);
@@ -161,7 +156,7 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
         }
 
         System.out.println("Certificações escolhidas:");
-        for (ProdutoAlimentar.Certificacao c : certificacoesEscolhidas) {
+        for (ProdutoAlimentarTaxaReduzida.Certificacao c : certificacoesEscolhidas) {
             if (c != null) {
                 System.out.println("- " + c);
             }
@@ -196,6 +191,5 @@ public class GestorProdutos extends Menu implements Gestor<Produto> {
         }
         return produto;
     }
-
 
 }

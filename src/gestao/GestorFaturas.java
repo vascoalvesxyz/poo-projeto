@@ -7,7 +7,7 @@ import produto.Produto;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class GestorFaturas extends Menu implements Gestor<Fatura> {
+public class GestorFaturas extends Leitor implements Gestor<Fatura> {
 
     private final ArrayList<Fatura> faturas;
     private final Cliente cliente;

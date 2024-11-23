@@ -17,6 +17,5 @@ public abstract class Produto {
     }
 
     abstract public double calcIva(Cliente.Localizacao localizacao);
-
     abstract public String toString();
 }
