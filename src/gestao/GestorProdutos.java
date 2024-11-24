@@ -1,5 +1,7 @@
 package gestao;
+
 import produto.*;
+import produto.ProdutoFarmaciaSemReceita.Categoria;
 
 import java.util.ArrayList;
 
@@ -16,16 +18,15 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         String resposta;
         do {
             resposta = lerString("O produto é alimentar ou farmaceutico? (a/f) ");
-        } while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
+        }
+        while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
         boolean isAlimentar = resposta.equalsIgnoreCase("a");
 
-        Produto novoProduto;
         if (isAlimentar) {
-            novoProduto = pedirProdutoAlimentar();
+            return pedirProdutoAlimentar();
         } else {
-            novoProduto = pedirProdutoFarmaceutico();
+            return pedirProdutoFarmaceutico();
         }
-        return novoProduto;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         int codigo = lerInt("Codigo: ");
         String nome = lerString("Nome: ");
         String descricao = lerString("Descrição: ");
-        int quantidade = lerInt("Quantidade : ");
+        int quantidade = lerInt("Quantidade: ");
         int valor = lerInt("Valor Unitário: ");
 
         Produto produto = null;
@@ -169,27 +170,34 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         int codigo = lerInt("Codigo: ");
         String nome = lerString("Nome: ");
         String descricao = lerString("Descrição: ");
-        int quantidade = lerInt("Quantidade : ");
+        int quantidade = lerInt("Quantidade: ");
         int valor = lerInt("Valor Unitário: ");
+
         boolean temPrescricao = lerBoolean("O produto tem prescrição? ");
 
-        Produto produto = null;
         if (temPrescricao) {
             String medico = lerString("Nome do médico que fez a receita: ");
-            produto = new ProdutoFarmaciaPrescrito(codigo, nome, descricao, quantidade, valor, medico);
+            return new ProdutoFarmaciaPrescrito(codigo, nome, descricao, quantidade, valor, medico);
         } else {
-            /* Produto.Produto Farmaceutico Sem Prescrição */
-            ProdutoFarmaciaSemReceita.Categoria categoria = null;
-            System.out.print("1 - BELEZA,\n2 - BEM_ESTAR,\n3 - BEBES,\n 4 - ANIMAIS,\n 5 - OUTRO\n");
-            while (categoria == null) {
-                int escolha = lerIntMinMax("Escolha uma categoria ", 1, 5);
-                if (escolha >= 1 && escolha <= 5) {
-                    categoria = ProdutoFarmaciaSemReceita.Categoria.values()[escolha - 1];
-                }
-            }
-            produto = new ProdutoFarmaciaSemReceita(codigo, nome, descricao, quantidade, valor, categoria);
+            Categoria categoria = obterCategoriaFarmaceutica();
+            return new ProdutoFarmaciaSemReceita(codigo, nome, descricao, quantidade, valor, categoria);
         }
-        return produto;
+    }
+
+    private Categoria obterCategoriaFarmaceutica() {
+        System.out.print("""
+                    1 - BELEZA
+                    2 - BEM ESTAR
+                    3 - BÉBES
+                    4 - ANIMAIS
+                    5 - OUTRO
+                """);
+        while (true) {
+            int escolha = lerIntMinMax("Escolha uma categoria ", 1, 5);
+            if (escolha >= 1 && escolha <= 5) {
+                return Categoria.values()[escolha - 1];
+            }
+        }
     }
 
 }

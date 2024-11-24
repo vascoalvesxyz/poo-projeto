@@ -33,6 +33,7 @@ public abstract class Leitor {
         return numero;
     }
 
+    // TODO change to try catch logic
     public int lerIntMinMax(String mensagem, int min, int max) {
         int res;
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
