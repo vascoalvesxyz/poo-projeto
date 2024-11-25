@@ -13,8 +13,26 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         this.produtos = new ArrayList<>();
     }
 
+    public Produto procurarPorCodigo(int codigo) {
+        for (Produto p : produtos)
+            if (p.getCodigo() == codigo)
+                return p;
+        return null;
+    }
+
     @Override
-    public Produto criar() {
+    public void criarOuEditar() {
+        int codigo = lerInt("Insira o código do produto: ");
+
+        Produto produto = procurarPorCodigo(codigo);
+        if (produto == null) {
+            criar(codigo);
+        } else if (lerBoolean("Produto já existe, deseja editar?")) {
+            editar(produto);
+        }
+    }
+
+    public void criar(int codigo) {
         String resposta;
         do {
             resposta = lerString("O produto é alimentar ou farmaceutico? (a/f) ");
@@ -22,14 +40,15 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
         boolean isAlimentar = resposta.equalsIgnoreCase("a");
 
+        Produto produto;
         if (isAlimentar) {
-            return pedirProdutoAlimentar();
+            produto = pedirProdutoAlimentar(codigo);
         } else {
-            return pedirProdutoFarmaceutico();
+            produto = pedirProdutoFarmaceutico(codigo);
         }
+        adicionar(produto);
     }
 
-    @Override
     public void editar(Produto obj) {
         return;
     }
@@ -49,8 +68,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         return this.produtos;
     }
 
-    private Produto pedirProdutoAlimentar() {
-        int codigo = lerInt("Codigo: ");
+    private Produto pedirProdutoAlimentar(int codigo) {
         String nome = lerString("Nome: ");
         String descricao = lerString("Descrição: ");
         int quantidade = lerInt("Quantidade: ");
@@ -166,8 +184,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         return certificacoesEscolhidas;
     }
 
-    private Produto pedirProdutoFarmaceutico() {
-        int codigo = lerInt("Codigo: ");
+    private Produto pedirProdutoFarmaceutico(int codigo) {
         String nome = lerString("Nome: ");
         String descricao = lerString("Descrição: ");
         int quantidade = lerInt("Quantidade: ");

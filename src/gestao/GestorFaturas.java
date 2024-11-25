@@ -2,7 +2,6 @@ package gestao;
 
 import produto.Cliente;
 import produto.Fatura;
-import produto.Produto;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,33 +24,30 @@ public class GestorFaturas extends Leitor implements Gestor<Fatura> {
     }
 
     @Override
-    public Fatura criar() {
-        int id = lerInt("Insera o ID da fatura: ");
+    public void criarOuEditar() {
+        int id = lerInt("Insira o ID da fatura: ");
 
-        Fatura procuraPorId = procurarPorNumero(id);
-        if (procuraPorId != null) {
-            boolean desejaEditar = lerBoolean("Fatura já existe, deseja editar? ");
-            if (desejaEditar) {
-                editar(procuraPorId);
-            }
-            return procuraPorId;
+        Fatura fatura = procurarPorNumero(id);
+        if (fatura == null) {
+            criar(id);
+        } else if (lerBoolean("Fatura já existe, deseja editar?")) {
+            editar(fatura);
         }
+    }
 
+    public void criar(int id) {
         Calendar cal = lerData();
         Fatura fatura = new Fatura(id, cal, this.cliente);
 
         boolean adicionarProduto;
         do {
-            Produto novoProduto = fatura.getProdutos().criar();
-            fatura.getProdutos().adicionar(novoProduto);
+            fatura.getProdutos().criarOuEditar();
             adicionarProduto = lerBoolean("Deseja adicionar mais um produto? ");
-        } while (adicionarProduto);
+        }
+        while (adicionarProduto);
         adicionar(fatura);
-
-        return fatura;
     }
 
-    @Override
     public void editar(Fatura fatura) {
         //TODO
         System.out.println("Falta implementar");

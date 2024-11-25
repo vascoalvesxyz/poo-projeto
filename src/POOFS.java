@@ -22,7 +22,8 @@ public class POOFS {
             apresentarMenu();
             escolha = lerEscolha();
             tratarEscolha(escolha);
-        } while (escolha != 0);
+        }
+        while (escolha != 0);
     }
 
     private void apresentarMenu() {
@@ -42,11 +43,11 @@ public class POOFS {
 
     private void tratarEscolha(int escolha) {
         switch (escolha) {
-            case 1 -> criarOuEditarCliente();
-            case 2 -> listarClientes();
-            case 3 -> criarOuEditarFatura();
+            case 1 -> gestorClientes.criarOuEditar();
+            case 2 -> gestorClientes.listar();
+            case 3 -> gestorClientes.criarOuEditarFatura();
             case 4 -> listarFaturas();
-            case 5 -> consultarFatura();
+            case 5 -> gestorClientes.consultarFatura();
             case 6 -> System.out.println("Funcionalidade de importar faturas ainda não implementada.");
             case 7 -> System.out.println("Funcionalidade de exportar faturas ainda não implementada.");
             case 8 -> System.out.println("Funcionalidade de estatísticas ainda não implementada.");
@@ -55,34 +56,10 @@ public class POOFS {
         }
     }
 
-    private void criarOuEditarCliente() {
-        gestorClientes.criar();
-    }
-
-    private void listarClientes() {
-        System.out.println("Lista de Clientes:");
-        gestorClientes.listar();
-    }
-
-    private void criarOuEditarFatura() {
-        Cliente c = gestorClientes.pedirCliente();
-        if (c != null) {
-            c.getFaturas().criar();
-        }
-    }
-
     private void listarFaturas() {
         System.out.println("Lista de Faturas:");
         for (Cliente c : gestorClientes.getTodosClientes())
             c.getFaturas().listar();
-    }
-
-    private void consultarFatura() {
-        Cliente c = gestorClientes.pedirCliente();
-        if (c != null) {
-            System.out.println("Lista de Faturas:");
-            c.getFaturas().listar();
-        }
     }
 
     private int lerEscolha() {

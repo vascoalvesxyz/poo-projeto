@@ -16,6 +16,10 @@ public abstract class Produto {
         this.valorUnitario = valorUnitario;
     }
 
+    public int getCodigo() {
+        return codigo;
+    }
+
     abstract public double calcIva(Cliente.Localizacao localizacao);
 
     abstract public String toString();

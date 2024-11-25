@@ -1,6 +1,7 @@
 package gestao;
 
 import produto.Cliente;
+import produto.Cliente.Localizacao;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,29 +23,31 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
     }
 
     @Override
-    public Cliente criar() {
+    public void criarOuEditar() {
         String nome = lerString("Insira o nome do cliente: ");
 
-        Cliente procurar = procurarPorNome(nome);
-        if (procurar != null) {
-            boolean desejaEditar = lerBoolean("Cliente existe, deseja editar?");
-            if (desejaEditar) {
-                editar(procurar);
-            }
-            return procurar;
+        Cliente cliente = procurarPorNome(nome);
+        if (cliente == null) {
+            criar(nome);
+        } else if (lerBoolean("Cliente existe, deseja editar?")) {
+            editar(cliente);
         }
-
-        String contribuinte = lerString("Insira o número de contribuinte: ");
-        System.out.println("Escolha a localização:");
-        System.out.println("1. Continente\n2. Madeira\n3. Açores");
-        int escolhaLocalizacao = lerIntMinMax("Min", 1, 3);
-        Cliente.Localizacao localizacao = Cliente.Localizacao.values()[escolhaLocalizacao - 1];
-        Cliente novoCliente = new Cliente(nome, contribuinte, localizacao);
-        adicionar(novoCliente);
-        return novoCliente;
     }
 
-    @Override
+    public void criar(String nome) {
+        String contribuinte = lerString("Insira o número de contribuinte: ");
+        System.out.println("Escolha a localização:");
+        System.out.println("""
+                    1. Continente
+                    2. Madeira
+                    3. Açores
+                """);
+        int escolhaLocalizacao = lerIntMinMax("Min", 1, 3);
+        Localizacao localizacao = Localizacao.values()[escolhaLocalizacao - 1];
+        Cliente novoCliente = new Cliente(nome, contribuinte, localizacao);
+        adicionar(novoCliente);
+    }
+
     public void editar(Cliente cliente) {
         Scanner scanner = new Scanner(System.in);
         int input;
@@ -86,6 +89,7 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
 
     @Override
     public void listar() {
+        System.out.println("Lista de Clientes:");
         if (clientes.isEmpty()) {
             System.out.println("Nenhum cliente registado.");
         } else {
@@ -97,14 +101,22 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
         return clientes;
     }
 
-    public Cliente pedirCliente() {
-        Cliente procurar = procurarPorNome(lerString("Insira o nome do cliente: "));
-        if (procurar == null) {
-            System.out.println("Cliente não existe!");
-            return null;
+    public void criarOuEditarFatura() {
+        String nome = lerString("Insira o nome do cliente: ");
+        Cliente cliente = procurarPorNome(nome);
+        if (cliente == null) {
+            System.out.println("Esse cliente não existe. Tente outro.");
         } else {
-            return procurar;
+            cliente.getFaturas().criarOuEditar();
         }
     }
 
+    public void consultarFatura() {
+        String nome = lerString("Insira o nome do cliente: ");
+        Cliente cliente = procurarPorNome(nome);
+        if (cliente != null) {
+            System.out.println("Lista de Faturas:");
+            cliente.getFaturas().listar();
+        }
+    }
 }

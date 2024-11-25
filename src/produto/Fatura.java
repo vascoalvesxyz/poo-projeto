@@ -34,7 +34,7 @@ public class Fatura {
         for (Produto produto : produtos.getProdutos()) {
             res += "\t\t" + produto.toString();
         }
-        res += "========================\n" ;
+        res += "========================\n";
         return res;
     }
 
@@ -64,7 +64,7 @@ public class Fatura {
         }
     }
 
-    public GestorProdutos getProdutos(){
+    public GestorProdutos getProdutos() {
         return produtos;
     }
 
