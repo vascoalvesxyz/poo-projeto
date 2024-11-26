@@ -1,6 +1,7 @@
 package produto;
 
 import gestao.GestorFaturas;
+import gestao.Leitor;
 
 public class Cliente {
 
@@ -14,12 +15,13 @@ public class Cliente {
     public Cliente(
             String nome,
             String contribuinte,
-            Localizacao localizacao
+            Localizacao localizacao,
+            Leitor leitor
     ) {
         this.nome = nome;
         this.contribuinte = contribuinte;
         this.localizacao = localizacao;
-        faturas = new GestorFaturas(this);
+        faturas = new GestorFaturas(this, leitor);
     }
 
     public void printFaturas() {

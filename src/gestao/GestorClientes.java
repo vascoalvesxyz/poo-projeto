@@ -6,12 +6,14 @@ import produto.Cliente.Localizacao;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes extends Leitor implements Gestor<Cliente> {
+public class GestorClientes implements Gestor<Cliente> {
 
     private final ArrayList<Cliente> clientes;
+    private final Leitor leitor;
 
-    public GestorClientes() {
+    public GestorClientes(Leitor leitor) {
         this.clientes = new ArrayList<>();
+        this.leitor = leitor;
     }
 
     public Cliente procurarPorNome(String nome) {
@@ -24,27 +26,27 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
 
     @Override
     public void criarOuEditar() {
-        String nome = lerString("Insira o nome do cliente: ");
+        String nome = leitor.lerString("Insira o nome do cliente: ");
 
         Cliente cliente = procurarPorNome(nome);
         if (cliente == null) {
             criar(nome);
-        } else if (lerBoolean("Cliente existe, deseja editar?")) {
+        } else if (leitor.lerBoolean("Cliente existe, deseja editar?")) {
             editar(cliente);
         }
     }
 
     public void criar(String nome) {
-        String contribuinte = lerString("Insira o número de contribuinte: ");
+        String contribuinte = leitor.lerString("Insira o número de contribuinte: ");
         System.out.println("Escolha a localização:");
         System.out.println("""
                     1. Continente
                     2. Madeira
                     3. Açores
                 """);
-        int escolhaLocalizacao = lerIntMinMax("Min", 1, 3);
+        int escolhaLocalizacao = leitor.lerIntMinMax("Min", 1, 3);
         Localizacao localizacao = Localizacao.values()[escolhaLocalizacao - 1];
-        Cliente novoCliente = new Cliente(nome, contribuinte, localizacao);
+        Cliente novoCliente = new Cliente(nome, contribuinte, localizacao, leitor);
         adicionar(novoCliente);
     }
 
@@ -61,17 +63,17 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
             input = scanner.nextInt();
             switch (input) {
                 case 1 -> {
-                    String novoNome = lerString("Novo nome: ");
+                    String novoNome = leitor.lerString("Novo nome: ");
                     cliente.setNome(novoNome);
                 }
                 case 2 -> {
                     // FALTA VALIDACAO
-                    String novoContribuinte = lerString("Novo contribuinte: ");
+                    String novoContribuinte = leitor.lerString("Novo contribuinte: ");
                     cliente.setContribuinte(novoContribuinte);
                 }
                 case 3 -> {
                     System.out.print("Nova Localização: ");
-                    int idx = lerEnum(Cliente.Localizacao.values());
+                    int idx = leitor.lerEnum(Cliente.Localizacao.values());
                     Cliente.Localizacao novaLocalizacao = Cliente.Localizacao.values()[idx];
                     cliente.setLocalizacao(novaLocalizacao);
                 }
@@ -102,7 +104,7 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
     }
 
     public void criarOuEditarFatura() {
-        String nome = lerString("Insira o nome do cliente: ");
+        String nome = leitor.lerString("Insira o nome do cliente: ");
         Cliente cliente = procurarPorNome(nome);
         if (cliente == null) {
             System.out.println("Esse cliente não existe. Tente outro.");
@@ -112,11 +114,17 @@ public class GestorClientes extends Leitor implements Gestor<Cliente> {
     }
 
     public void consultarFatura() {
-        String nome = lerString("Insira o nome do cliente: ");
+        String nome = leitor.lerString("Insira o nome do cliente: ");
         Cliente cliente = procurarPorNome(nome);
         if (cliente != null) {
             System.out.println("Lista de Faturas:");
             cliente.getFaturas().listar();
         }
+    }
+
+    public void listarTodasFaturas() {
+        System.out.println("Lista de Faturas:");
+        for (Cliente c : getTodosClientes())
+            c.getFaturas().listar();
     }
 }

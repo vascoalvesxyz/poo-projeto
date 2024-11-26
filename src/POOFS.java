@@ -1,15 +1,13 @@
 import gestao.GestorClientes;
-import produto.Cliente;
-
-import java.util.Scanner;
+import gestao.Leitor;
 
 public class POOFS {
     private final GestorClientes gestorClientes;
-    private final Scanner scanner;
+    private final Leitor leitor;
 
     public POOFS() {
-        scanner = new Scanner(System.in);
-        gestorClientes = new GestorClientes();
+        leitor = new Leitor();
+        gestorClientes = new GestorClientes(leitor);
     }
 
     public static void main(String[] args) {
@@ -20,7 +18,7 @@ public class POOFS {
         int escolha;
         do {
             apresentarMenu();
-            escolha = lerEscolha();
+            escolha = leitor.lerInt("Selecione uma opção: ");
             tratarEscolha(escolha);
         }
         while (escolha != 0);
@@ -46,7 +44,7 @@ public class POOFS {
             case 1 -> gestorClientes.criarOuEditar();
             case 2 -> gestorClientes.listar();
             case 3 -> gestorClientes.criarOuEditarFatura();
-            case 4 -> listarFaturas();
+            case 4 -> gestorClientes.listarTodasFaturas();
             case 5 -> gestorClientes.consultarFatura();
             case 6 -> System.out.println("Funcionalidade de importar faturas ainda não implementada.");
             case 7 -> System.out.println("Funcionalidade de exportar faturas ainda não implementada.");
@@ -54,21 +52,6 @@ public class POOFS {
             case 0 -> System.out.println("A terminar a aplicação...");
             default -> System.out.println("Opção inválida. Por favor, tente novamente.");
         }
-    }
-
-    private void listarFaturas() {
-        System.out.println("Lista de Faturas:");
-        for (Cliente c : gestorClientes.getTodosClientes())
-            c.getFaturas().listar();
-    }
-
-    private int lerEscolha() {
-        System.out.print("Selecione uma opção: ");
-        while (!scanner.hasNextInt()) {
-            System.out.println("Entrada inválida. Por favor, insira um número inteiro.");
-            scanner.next();
-        }
-        return scanner.nextInt();
     }
 
 }

@@ -3,7 +3,7 @@ package gestao;
 import java.util.Calendar;
 import java.util.Scanner;
 
-public abstract class Leitor {
+public class Leitor {
     private final Scanner scanner;
 
     public Leitor() {

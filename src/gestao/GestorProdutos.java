@@ -5,12 +5,13 @@ import produto.ProdutoFarmaciaSemReceita.Categoria;
 
 import java.util.ArrayList;
 
-public class GestorProdutos extends Leitor implements Gestor<Produto> {
-
+public class GestorProdutos implements Gestor<Produto> {
     private final ArrayList<Produto> produtos;
+    private final Leitor leitor;
 
-    public GestorProdutos() {
+    public GestorProdutos(Leitor leitor) {
         this.produtos = new ArrayList<>();
+        this.leitor = leitor;
     }
 
     public Produto procurarPorCodigo(int codigo) {
@@ -22,12 +23,12 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
 
     @Override
     public void criarOuEditar() {
-        int codigo = lerInt("Insira o código do produto: ");
+        int codigo = leitor.lerInt("Insira o código do produto: ");
 
         Produto produto = procurarPorCodigo(codigo);
         if (produto == null) {
             criar(codigo);
-        } else if (lerBoolean("Produto já existe, deseja editar?")) {
+        } else if (leitor.lerBoolean("Produto já existe, deseja editar?")) {
             editar(produto);
         }
     }
@@ -35,7 +36,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
     public void criar(int codigo) {
         String resposta;
         do {
-            resposta = lerString("O produto é alimentar ou farmaceutico? (a/f) ");
+            resposta = leitor.lerString("O produto é alimentar ou farmaceutico? (a/f) ");
         }
         while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
         boolean isAlimentar = resposta.equalsIgnoreCase("a");
@@ -69,13 +70,13 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
     }
 
     private Produto pedirProdutoAlimentar(int codigo) {
-        String nome = lerString("Nome: ");
-        String descricao = lerString("Descrição: ");
-        int quantidade = lerInt("Quantidade: ");
-        int valor = lerInt("Valor Unitário: ");
+        String nome = leitor.lerString("Nome: ");
+        String descricao = leitor.lerString("Descrição: ");
+        int quantidade = leitor.lerInt("Quantidade: ");
+        int valor = leitor.lerInt("Valor Unitário: ");
 
         Produto produto = null;
-        boolean biologico = lerBoolean("O produto é biologico? ");
+        boolean biologico = leitor.lerBoolean("O produto é biologico? ");
 
         System.out.println("""
                 1 - Taxa Reduzida
@@ -83,7 +84,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
                 3 - Taxa Normal
                 """);
 
-        int inputInt = lerIntMinMax("Escolha uma taxa", 1, 3);
+        int inputInt = leitor.lerIntMinMax("Escolha uma taxa", 1, 3);
 
         switch (inputInt) {
             case 1 -> {
@@ -98,7 +99,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
                         3 - Vinhos
                         """);
                 while (categoria == null) {
-                    int escolha = lerIntMinMax("Escolha uma categoria ", 1, 3);
+                    int escolha = leitor.lerIntMinMax("Escolha uma categoria ", 1, 3);
                     if (escolha >= 1 && escolha <= 3) {
                         categoria = ProdutoAlimentarTaxaIntermedia.Categoria.values()[escolha - 1];
                     }
@@ -127,7 +128,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
         int count = 0;
 
         while (count < 4) {
-            String entrada = lerString("Escolha suas certificações: ");
+            String entrada = leitor.lerString("Escolha suas certificações: ");
             String[] escolhas = entrada.split(",");
 
             boolean valido = true;
@@ -185,15 +186,15 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
     }
 
     private Produto pedirProdutoFarmaceutico(int codigo) {
-        String nome = lerString("Nome: ");
-        String descricao = lerString("Descrição: ");
-        int quantidade = lerInt("Quantidade: ");
-        int valor = lerInt("Valor Unitário: ");
+        String nome = leitor.lerString("Nome: ");
+        String descricao = leitor.lerString("Descrição: ");
+        int quantidade = leitor.lerInt("Quantidade: ");
+        int valor = leitor.lerInt("Valor Unitário: ");
 
-        boolean temPrescricao = lerBoolean("O produto tem prescrição? ");
+        boolean temPrescricao = leitor.lerBoolean("O produto tem prescrição? ");
 
         if (temPrescricao) {
-            String medico = lerString("Nome do médico que fez a receita: ");
+            String medico = leitor.lerString("Nome do médico que fez a receita: ");
             return new ProdutoFarmaciaPrescrito(codigo, nome, descricao, quantidade, valor, medico);
         } else {
             Categoria categoria = obterCategoriaFarmaceutica();
@@ -210,7 +211,7 @@ public class GestorProdutos extends Leitor implements Gestor<Produto> {
                     5 - OUTRO
                 """);
         while (true) {
-            int escolha = lerIntMinMax("Escolha uma categoria ", 1, 5);
+            int escolha = leitor.lerIntMinMax("Escolha uma categoria ", 1, 5);
             if (escolha >= 1 && escolha <= 5) {
                 return Categoria.values()[escolha - 1];
             }

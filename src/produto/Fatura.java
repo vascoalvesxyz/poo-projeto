@@ -1,6 +1,7 @@
 package produto;
 
 import gestao.GestorProdutos;
+import gestao.Leitor;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +15,11 @@ public class Fatura {
     private final Cliente cliente;
     private final GestorProdutos produtos;
 
-    public Fatura(int id, Calendar data, Cliente cliente) {
+    public Fatura(int id, Calendar data, Cliente cliente, Leitor leitor) {
         this.id = id;
         this.data = data;
         this.cliente = cliente;
-        this.produtos = new GestorProdutos();
+        this.produtos = new GestorProdutos(leitor);
     }
 
     /* Visualizar fatura: apresentar o número da fatura, os dados do cliente e, em seguida, listar

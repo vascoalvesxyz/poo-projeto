@@ -6,14 +6,16 @@ import produto.Fatura;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class GestorFaturas extends Leitor implements Gestor<Fatura> {
+public class GestorFaturas implements Gestor<Fatura> {
 
     private final ArrayList<Fatura> faturas;
     private final Cliente cliente;
+    private final Leitor leitor;
 
-    public GestorFaturas(Cliente cliente) {
+    public GestorFaturas(Cliente cliente, Leitor leitor) {
         this.faturas = new ArrayList<>();
         this.cliente = cliente;
+        this.leitor = leitor;
     }
 
     public Fatura procurarPorNumero(int codigo) {
@@ -25,24 +27,24 @@ public class GestorFaturas extends Leitor implements Gestor<Fatura> {
 
     @Override
     public void criarOuEditar() {
-        int id = lerInt("Insira o ID da fatura: ");
+        int id = leitor.lerInt("Insira o ID da fatura: ");
 
         Fatura fatura = procurarPorNumero(id);
         if (fatura == null) {
             criar(id);
-        } else if (lerBoolean("Fatura já existe, deseja editar?")) {
+        } else if (leitor.lerBoolean("Fatura já existe, deseja editar?")) {
             editar(fatura);
         }
     }
 
     public void criar(int id) {
-        Calendar cal = lerData();
-        Fatura fatura = new Fatura(id, cal, this.cliente);
+        Calendar cal = leitor.lerData();
+        Fatura fatura = new Fatura(id, cal, cliente, leitor);
 
         boolean adicionarProduto;
         do {
             fatura.getProdutos().criarOuEditar();
-            adicionarProduto = lerBoolean("Deseja adicionar mais um produto? ");
+            adicionarProduto = leitor.lerBoolean("Deseja adicionar mais um produto? ");
         }
         while (adicionarProduto);
         adicionar(fatura);
