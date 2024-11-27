@@ -5,10 +5,12 @@ import io.Leitor;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Fatura {
+public class Fatura implements Serializable {
+    private static final long serialVersionUID = 4L;
 
     private final int id;
     private final Calendar data;

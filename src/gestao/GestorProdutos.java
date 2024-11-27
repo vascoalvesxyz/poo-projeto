@@ -4,9 +4,11 @@ import io.Leitor;
 import produto.*;
 import produto.ProdutoFarmaciaSemReceita.Categoria;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GestorProdutos extends Gestor<Produto> {
+public class GestorProdutos extends Gestor<Produto> implements Serializable {
+    private static final long serialVersionUID = 5L;
 
     public GestorProdutos(Leitor leitor) {
         super(new ArrayList<Produto>(), leitor);

@@ -4,13 +4,15 @@ import io.Leitor;
 import produto.Cliente;
 import produto.Cliente.Localizacao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes extends Gestor<Cliente> {
+public class GestorClientes extends Gestor<Cliente> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     public GestorClientes(Leitor leitor) {
-        super(new ArrayList<Cliente>(), leitor);
+        super(new ArrayList<>(), leitor);
     }
 
     public Cliente procurarPorNome(String nome) {
@@ -72,12 +74,6 @@ public class GestorClientes extends Gestor<Cliente> {
             }
         }
         while (input != 0);
-    }
-
-    @Override
-    public void adicionar(Cliente cliente) {
-        array.add(cliente);
-        System.out.println("Cliente adicionado com sucesso.");
     }
 
     @Override

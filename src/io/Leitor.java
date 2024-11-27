@@ -90,12 +90,11 @@ public class Leitor {
         }
     }
 
-    // Method to parse the date into a Calendar object
     private Calendar analisarData(String data) {
         String[] parts = data.split("/");
 
         int dia = Integer.parseInt(parts[0]);
-        int mes = Integer.parseInt(parts[1]) - 1; // Calendar months are 0-indexed
+        int mes = Integer.parseInt(parts[1]) - 1;
         int ano = Integer.parseInt(parts[2]);
 
         Calendar cal = Calendar.getInstance();

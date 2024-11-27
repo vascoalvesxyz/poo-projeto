@@ -2,8 +2,10 @@ package produto;
 
 import gestao.GestorFaturas;
 import io.Leitor;
+import java.io.Serializable;
 
-public class Cliente {
+public class Cliente implements Serializable {
+    private static final long serialVersionUID = 2L;
 
     /* Variaveis */
     private String nome;

@@ -1,6 +1,9 @@
 package produto;
 
-public abstract class Produto {
+import java.io.Serializable;
+
+public abstract class Produto implements Serializable {
+    private static final long serialVersionUID = 6L;
 
     protected int codigo;
     protected String nome;

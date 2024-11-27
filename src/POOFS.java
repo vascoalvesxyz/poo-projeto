@@ -11,13 +11,12 @@ public class POOFS {
 
     public POOFS() {
         leitor = new Leitor();
-        ficheiroIO = new FicheiroIO();
-        gestorClientes = new GestorClientes(leitor);
+        ficheiroIO = new FicheiroIO(leitor);
+        gestorClientes = carregarDados();
     }
 
     public static void main(String[] args) {
         POOFS poofs = new POOFS();
-        carregarDados();
         poofs.menu();
     }
 
@@ -61,23 +60,11 @@ public class POOFS {
         }
     }
 
-    private void carregarDados() {
-        // Verifica a existência do ficheiro de objetos
-        File ficheiroDados = new File("dados.ser");
-        if (ficheiroDados.exists() && ficheiroDados.isFile()) {
-            System.out.println("A carregar dados do ficheiro de objetos.");
-            ficheiroIO.lerFicheiroObjetos(ficheiroDados);
-            return;
-        }
-
-        // Verifica a existência do ficheiro inicial de texto
-        File ficheiroDadosIniciais = new File("dados-iniciais.txt");
-        if (ficheiroDadosIniciais.exists() && ficheiroDadosIniciais.isFile()) {
-            System.out.println("A carregar dados do ficheiro de texto.");
-            ficheiroIO.lerFicheiroTexto(ficheiroDadosIniciais);
-            return;
-        }
-
-        System.out.println("Não existe nenhum ficheiro com dados iniciais.");
+    private GestorClientes carregarDados() {
+        if (ficheiroIO.existeFicheiro("dados.ser"))
+            return ficheiroIO.importarClientes("dados.ser");
+        else if (ficheiroIO.existeFicheiro("dados-inicias.txt"))
+            return ficheiroIO.importarClientes("dados-inicias.txt");
+        return new GestorClientes(leitor);
     }
 }

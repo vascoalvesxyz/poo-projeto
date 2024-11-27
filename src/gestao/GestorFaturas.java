@@ -4,10 +4,12 @@ import io.Leitor;
 import produto.Cliente;
 import produto.Fatura;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class GestorFaturas extends Gestor<Fatura> {
+public class GestorFaturas extends Gestor<Fatura> implements Serializable {
+    private static final long serialVersionUID = 3L;
 
     private final Cliente cliente;
 
