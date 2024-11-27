@@ -6,18 +6,14 @@ import produto.Cliente.Localizacao;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes implements Gestor<Cliente> {
-
-    private final ArrayList<Cliente> clientes;
-    private final Leitor leitor;
+public class GestorClientes extends  Gestor<Cliente> {
 
     public GestorClientes(Leitor leitor) {
-        this.clientes = new ArrayList<>();
-        this.leitor = leitor;
+        super(new ArrayList<Cliente>(), leitor);
     }
 
     public Cliente procurarPorNome(String nome) {
-        for (Cliente cliente : clientes) {
+        for (Cliente cliente : array) {
             if (cliente.getNome().equalsIgnoreCase(nome))
                 return cliente;
         }
@@ -85,22 +81,22 @@ public class GestorClientes implements Gestor<Cliente> {
 
     @Override
     public void adicionar(Cliente cliente) {
-        clientes.add(cliente);
+        array.add(cliente);
         System.out.println("Cliente adicionado com sucesso.");
     }
 
     @Override
     public void listar() {
         System.out.println("Lista de Clientes:");
-        if (clientes.isEmpty()) {
+        if (array.isEmpty()) {
             System.out.println("Nenhum cliente registado.");
         } else {
-            clientes.forEach(System.out::println);
+            array.forEach(System.out::println);
         }
     }
 
     public ArrayList<Cliente> getTodosClientes() {
-        return clientes;
+        return array;
     }
 
     public void criarOuEditarFatura() {

@@ -29,11 +29,11 @@ public class Fatura {
      */
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-        String res = String.format("== ID: %02d, Data: %s ==%n\n", id, sdf.format(data.getTime()));
-        res += String.format("\t> Cliente:\n\t\t%s\n", cliente.toString());
+        String res = String.format("== ID: %02d, Data: %s ==%n", id, sdf.format(data.getTime()));
+        res += String.format("\t> Cliente:\n\t\t%s", cliente.toString());
         res += String.format("\t> Produtos:\n");
         for (Produto produto : produtos.getProdutos()) {
-            res += "\t\t" + produto.toString();
+            res += String.format("\t\t%s\n", produto.toString());
         }
         res += "========================\n";
         return res;
@@ -41,14 +41,6 @@ public class Fatura {
 
     public int getId() {
         return id;
-    }
-
-    public enum Categoria {
-        BELEZA,
-        BEM_ESTAR,
-        BEBES,
-        ANIMAIS,
-        OUTRO
     }
 
     public void toFile() {

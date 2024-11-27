@@ -1,11 +1,27 @@
 package gestao;
 
-public interface Gestor<Tipo> {
+import java.util.ArrayList;
 
-    void criarOuEditar();
+public abstract class Gestor<Tipo> {
 
-    void adicionar(Tipo obj);
+    protected ArrayList<Tipo> array;
+    protected Leitor leitor;
 
-    void listar();
+    public Gestor(ArrayList<Tipo> array, Leitor leitor) {
+        this.array = array;
+        this.leitor = leitor;
+    }
+
+    public abstract void criarOuEditar();
+
+    public void listar() {
+        for (Tipo obj : array) {
+            System.out.println(obj.toString());
+        }
+    };
+
+    protected void adicionar(Tipo obj) {
+        array.add(obj);
+    }
 
 }

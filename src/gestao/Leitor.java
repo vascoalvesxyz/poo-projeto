@@ -72,8 +72,7 @@ public class Leitor {
     public Calendar lerData() {
         while (true) {
             try {
-                System.out.print("Insere a Data (dd/mm/yyyy): ");
-                String input = scanner.next();
+                String input = lerString("Insere a Data (dd/mm/yyyy): ");
                 validarFormatoData(input);
                 Calendar cal = analisarData(input);
                 if (validarVeracidadeData(cal)) {

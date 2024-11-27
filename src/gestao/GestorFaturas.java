@@ -6,20 +6,17 @@ import produto.Fatura;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class GestorFaturas implements Gestor<Fatura> {
+public class GestorFaturas extends Gestor<Fatura> {
 
-    private final ArrayList<Fatura> faturas;
     private final Cliente cliente;
-    private final Leitor leitor;
 
     public GestorFaturas(Cliente cliente, Leitor leitor) {
-        this.faturas = new ArrayList<>();
+        super(new ArrayList<Fatura>(), leitor);
         this.cliente = cliente;
-        this.leitor = leitor;
     }
 
     public Fatura procurarPorNumero(int codigo) {
-        for (Fatura f : faturas)
+        for (Fatura f : array)
             if (f.getId() == codigo)
                 return f;
         return null;
@@ -53,22 +50,6 @@ public class GestorFaturas implements Gestor<Fatura> {
     public void editar(Fatura fatura) {
         //TODO
         System.out.println("Falta implementar");
-    }
-
-    @Override
-    public void adicionar(Fatura fatura) {
-        faturas.add(fatura);
-    }
-
-    @Override
-    public void listar() {
-        if (faturas.isEmpty()) {
-            System.out.println("Nenhuma fatura registada.");
-        } else {
-            for (Fatura fatura : this.faturas) {
-                System.out.println(fatura.toString());
-            }
-        }
     }
 
 }
