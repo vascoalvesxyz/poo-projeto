@@ -1,12 +1,14 @@
 package io;
 
 import gestao.GestorClientes;
+import produto.Cliente;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class FicheiroIO {
 
@@ -16,7 +18,7 @@ public class FicheiroIO {
         this.leitor = leitor;
     }
 
-    public GestorClientes importarClientes(String filename) {
+    public ArrayList<Cliente> importarClientes(String filename) {
         if (!existeFicheiro(filename)) return null;
         String[] temp = filename.split(".");
         String ext = temp[temp.length-1];
@@ -34,7 +36,7 @@ public class FicheiroIO {
         return Files.exists(caminho);
     }
 
-    private GestorClientes lerFicheiroObjetos(String filename) {
+    private ArrayList<Cliente> lerFicheiroObjetos(String filename) {
         if (!existeFicheiro(filename)) return null;
         try (
                 FileInputStream fileIn = new FileInputStream(filename);
@@ -48,9 +50,9 @@ public class FicheiroIO {
     }
 
     /* TODO */
-    private GestorClientes lerFicheiroTexto(String filename) {
+    private ArrayList<Cliente> lerFicheiroTexto(String filename) {
         if (!existeFicheiro(filename)) return null;
-        return new GestorClientes(leitor);
+        return new ArrayList<>();
     };
 
 }

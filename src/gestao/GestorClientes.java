@@ -8,8 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes extends Gestor<Cliente> implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class GestorClientes extends Gestor<Cliente> {
 
     public GestorClientes(Leitor leitor) {
         super(new ArrayList<>(), leitor);

@@ -1,8 +1,9 @@
 import gestao.GestorClientes;
 import io.FicheiroIO;
 import io.Leitor;
+import produto.Cliente;
 
-import java.io.File;
+import java.util.ArrayList;
 
 public class POOFS {
     private final GestorClientes gestorClientes;
@@ -12,11 +13,12 @@ public class POOFS {
     public POOFS() {
         leitor = new Leitor();
         ficheiroIO = new FicheiroIO(leitor);
-        gestorClientes = carregarDados();
+        gestorClientes = new GestorClientes(leitor);
     }
 
     public static void main(String[] args) {
         POOFS poofs = new POOFS();
+        poofs.carregarDadosIniciais();
         poofs.menu();
     }
 
@@ -52,7 +54,7 @@ public class POOFS {
             case 3 -> gestorClientes.criarOuEditarFatura();
             case 4 -> gestorClientes.listarTodasFaturas();
             case 5 -> gestorClientes.consultarFatura();
-            case 6 -> System.out.println("Funcionalidade de importar faturas ainda não implementada.");
+            case 6 -> importarDados(leitor.lerString("Nome do ficheiro: "));
             case 7 -> System.out.println("Funcionalidade de exportar faturas ainda não implementada.");
             case 8 -> System.out.println("Funcionalidade de estatísticas ainda não implementada.");
             case 0 -> System.out.println("A terminar a aplicação...");
@@ -60,11 +62,22 @@ public class POOFS {
         }
     }
 
-    private GestorClientes carregarDados() {
+    private void carregarDadosIniciais() {
+        ArrayList<Cliente> res = new ArrayList<>();
         if (ficheiroIO.existeFicheiro("dados.ser"))
-            return ficheiroIO.importarClientes("dados.ser");
+            res = ficheiroIO.importarClientes("dados.ser");
         else if (ficheiroIO.existeFicheiro("dados-inicias.txt"))
-            return ficheiroIO.importarClientes("dados-inicias.txt");
-        return new GestorClientes(leitor);
+            res = ficheiroIO.importarClientes("dados-inicias.txt");
+
+        if (!res.isEmpty())
+            gestorClientes.getTodosClientes().addAll(res);
+    }
+
+    private void importarDados(String caminho) {
+        ArrayList<Cliente> arr = ficheiroIO.importarClientes(caminho);
+        if (!arr.isEmpty())
+            gestorClientes.getTodosClientes().addAll(arr);
+        else
+            System.out.println("Ficheiro Vazio.");
     }
 }
