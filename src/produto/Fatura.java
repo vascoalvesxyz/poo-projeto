@@ -1,7 +1,7 @@
 package produto;
 
 import gestao.GestorProdutos;
-import gestao.Leitor;
+import io.Leitor;
 
 import java.io.File;
 import java.io.IOException;

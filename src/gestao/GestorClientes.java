@@ -1,5 +1,6 @@
 package gestao;
 
+import io.Leitor;
 import produto.Cliente;
 import produto.Cliente.Localizacao;
 

@@ -1,5 +1,7 @@
 package gestao;
 
+import io.Leitor;
+
 import java.util.ArrayList;
 
 public abstract class Gestor<Tipo> {
@@ -18,7 +20,9 @@ public abstract class Gestor<Tipo> {
         for (Tipo obj : array) {
             System.out.println(obj.toString());
         }
-    };
+    }
+
+    ;
 
     protected void adicionar(Tipo obj) {
         array.add(obj);

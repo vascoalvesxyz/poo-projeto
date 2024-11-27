@@ -1,7 +1,7 @@
 package produto;
 
 import gestao.GestorFaturas;
-import gestao.Leitor;
+import io.Leitor;
 
 public class Cliente {
 

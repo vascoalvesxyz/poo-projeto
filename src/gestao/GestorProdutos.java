@@ -1,5 +1,6 @@
 package gestao;
 
+import io.Leitor;
 import produto.*;
 import produto.ProdutoFarmaciaSemReceita.Categoria;
 
@@ -68,7 +69,8 @@ public class GestorProdutos extends Gestor<Produto> {
         int inputInt = leitor.lerIntMinMax("Escolha uma taxa", 1, 3);
 
         switch (inputInt) {
-            case 1 -> produto = new ProdutoAlimentarTaxaReduzida(codigo, nome, descricao, quantidade, valor, biologico, lerCertificacoes());
+            case 1 ->
+                    produto = new ProdutoAlimentarTaxaReduzida(codigo, nome, descricao, quantidade, valor, biologico, lerCertificacoes());
             case 2 -> {
                 int idx = leitor.lerEnum(ProdutoAlimentarTaxaIntermedia.Categoria.values());
                 ProdutoAlimentarTaxaIntermedia.Categoria categoria = ProdutoAlimentarTaxaIntermedia.Categoria.values()[idx];
