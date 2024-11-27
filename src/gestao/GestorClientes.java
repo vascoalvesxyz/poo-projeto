@@ -6,7 +6,7 @@ import produto.Cliente.Localizacao;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes extends  Gestor<Cliente> {
+public class GestorClientes extends Gestor<Cliente> {
 
     public GestorClientes(Leitor leitor) {
         super(new ArrayList<Cliente>(), leitor);
@@ -34,14 +34,8 @@ public class GestorClientes extends  Gestor<Cliente> {
 
     public void criar(String nome) {
         String contribuinte = leitor.lerString("Insira o número de contribuinte: ");
-        System.out.println("Escolha a localização:");
-        System.out.println("""
-                    1. Continente
-                    2. Madeira
-                    3. Açores
-                """);
-        int escolhaLocalizacao = leitor.lerIntMinMax("Min", 1, 3);
-        Localizacao localizacao = Localizacao.values()[escolhaLocalizacao - 1];
+        int escolhaLocalizacao = leitor.lerEnum(Localizacao.values());
+        Localizacao localizacao = Localizacao.values()[escolhaLocalizacao];
         Cliente novoCliente = new Cliente(nome, contribuinte, localizacao, leitor);
         adicionar(novoCliente);
     }
