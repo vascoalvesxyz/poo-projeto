@@ -54,7 +54,7 @@ public class POOFS {
             case 3 -> gestorClientes.criarOuEditarFatura();
             case 4 -> gestorClientes.listarTodasFaturas();
             case 5 -> gestorClientes.consultarFatura();
-            case 6 -> importarDados(leitor.lerString("Nome do ficheiro: "));
+            case 6 -> importarDados();
             case 7 -> System.out.println("Funcionalidade de exportar faturas ainda não implementada.");
             case 8 -> System.out.println("Funcionalidade de estatísticas ainda não implementada.");
             case 0 -> System.out.println("A terminar a aplicação...");
@@ -73,7 +73,8 @@ public class POOFS {
             gestorClientes.getTodosClientes().addAll(res);
     }
 
-    private void importarDados(String caminho) {
+    private void importarDados() {
+        String caminho = leitor.lerString("Nome do ficheiro: ");
         ArrayList<Cliente> arr = ficheiroIO.importarClientes(caminho);
         if (!arr.isEmpty())
             gestorClientes.getTodosClientes().addAll(arr);
