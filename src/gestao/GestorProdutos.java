@@ -16,8 +16,9 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
 
     public Produto procurarPorCodigo(int codigo) {
         for (Produto p : array)
-            if (p.getCodigo() == codigo)
+            if (p.getCodigo() == codigo) {
                 return p;
+            }
         return null;
     }
 
@@ -52,6 +53,11 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
 
     public void editar(Produto obj) {
         return;
+    }
+
+    @Override
+    public void adicionar(Produto produto) {
+        array.add(produto);
     }
 
     public ArrayList<Produto> getProdutos() {
@@ -99,7 +105,9 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
                 continue;
             }
             certificacoesEscolhidas.add(certificacaoNova);
-            if (certificacoesEscolhidas.size() >= 4) break;
+            if (certificacoesEscolhidas.size() >= 4) {
+                break;
+            }
             continuar = leitor.lerBoolean("Quer adicionar mais certificações?");
         }
         while (continuar);

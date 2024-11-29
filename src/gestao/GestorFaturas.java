@@ -20,8 +20,9 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
 
     public Fatura procurarPorNumero(int codigo) {
         for (Fatura f : array)
-            if (f.getId() == codigo)
+            if (f.getId() == codigo) {
                 return f;
+            }
         return null;
     }
 
@@ -35,6 +36,11 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         } else if (leitor.lerBoolean("Fatura já existe, deseja editar?")) {
             editar(fatura);
         }
+    }
+
+    @Override
+    public void adicionar(Fatura fatura) {
+        array.add(fatura);
     }
 
     public void criar(int id) {

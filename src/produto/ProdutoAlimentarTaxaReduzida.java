@@ -14,7 +14,7 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
     private final ArrayList<Certificacao> certificacoes;
 
     // Constructor Para Taxa Reduzida
-    public ProdutoAlimentarTaxaReduzida(int codigo, String nome, String descricao, int quantidade, int valorUnitario, boolean biologico, ArrayList<Certificacao> certificacoes) {
+    public ProdutoAlimentarTaxaReduzida(int codigo, String nome, String descricao, int quantidade, double valorUnitario, boolean biologico, ArrayList<Certificacao> certificacoes) {
         super(codigo, nome, descricao, quantidade, valorUnitario, biologico);
         this.certificacoes = certificacoes;
     }
@@ -24,8 +24,12 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
         /* Continente, Madeira, Açores */
         final int[] tabelaIva = {6, 5, 4};
         double taxa = tabelaIva[localizacao.ordinal()];
-        if (certificacoes.size() == 4) taxa = taxa - 1;
-        if (biologico) taxa = taxa * 0.9;
+        if (certificacoes.size() == 4) {
+            taxa = taxa - 1;
+        }
+        if (biologico) {
+            taxa = taxa * 0.9;
+        }
         return taxa;
     }
 

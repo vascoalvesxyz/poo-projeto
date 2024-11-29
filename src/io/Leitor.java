@@ -71,17 +71,25 @@ public class Leitor {
 
     public Calendar lerData() {
         while (true) {
-            try {
-                String input = lerString("Insere a Data (dd/mm/yyyy): ");
-                validarFormatoData(input);
-                Calendar cal = analisarData(input);
-                if (validarVeracidadeData(cal)) {
-                    return cal;
-                }
-            } catch (IllegalArgumentException e) {
-                System.out.println("Data inválida! Tente novamente.");
+            String input = lerString("Insere a Data (dd/mm/yyyy): ");
+            Calendar cal = validarData(input);
+            if (cal != null) {
+                return cal;
             }
         }
+    }
+
+    public Calendar validarData(String data) {
+        try {
+            validarFormatoData(data);
+            Calendar cal = analisarData(data);
+            if (validarVeracidadeData(cal)) {
+                return cal;
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Data inválida! Tente novamente.");
+        }
+        return null;
     }
 
     private void validarFormatoData(String data) {

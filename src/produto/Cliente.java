@@ -2,6 +2,7 @@ package produto;
 
 import gestao.GestorFaturas;
 import io.Leitor;
+
 import java.io.Serializable;
 
 public class Cliente implements Serializable {
