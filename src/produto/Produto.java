@@ -22,8 +22,15 @@ public abstract class Produto implements Serializable {
     public int getCodigo() {
         return codigo;
     }
+    public double getValorUnitario() {
+        return valorUnitario;
+    }
+    public int getQuantidade() {
+        return quantidade;
+    }
 
     abstract public double calcIva(Cliente.Localizacao localizacao);
 
     abstract public String toString();
+
 }

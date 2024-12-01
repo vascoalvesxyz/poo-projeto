@@ -21,7 +21,7 @@ public class FicheiroIO {
         if (!existeFicheiro(filename)) {
             return null;
         }
-        String[] temp = filename.split(".");
+        String[] temp = filename.split("\\.");
         String ext = temp[temp.length - 1];
         if (ext.equalsIgnoreCase("ser")) {
             return lerFicheiroObjetos(filename);
@@ -45,14 +45,14 @@ public class FicheiroIO {
                 FileInputStream fileIn = new FileInputStream(filename);
                 ObjectInputStream objIn = new ObjectInputStream(fileIn)
         ) {
-            GestorClientes gestorClientes = (GestorClientes) objIn.readObject();
+            ArrayList<Cliente> arr = (ArrayList<Cliente>) objIn.readObject();
+            return arr;
         } catch (Exception e) {
             System.out.printf("Algo correu mal: %s\n", e);
         }
         return null;
     }
 
-    /* TODO */
     private ArrayList<Cliente> lerFicheiroTexto(String filename) {
         if (!existeFicheiro(filename)) {
             return null;
@@ -60,42 +60,20 @@ public class FicheiroIO {
 
         ArrayList<Cliente> clientes = new ArrayList<>();
         File f = new File(filename);
-        String blocoAtual = "";
-        Cliente ultimoCliente = null;
-        Fatura ultimaFatura = null;
-        Produto ultimoProduto = null;
+
         try {
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                System.out.println(linha);
-                if (linha.equals("CLIENTE")) {
-                    blocoAtual = "CLIENTE";
-                } else if (linha.equals("FATURA")) {
-                    blocoAtual = "FATURA";
-                } else if (linha.equals("PRODUTO")) {
-                    blocoAtual = "PRODUTO";
-                } else if (blocoAtual.equals("CLIENTE")) {
-                    ultimoCliente = lerCliente(linha);
-                    clientes.add(ultimoCliente);
-                } else if (blocoAtual.equals("FATURA")) {
-                    if (ultimoCliente == null) {
-                        System.out.println("O ficheiro de dados iniciais é inválido.");
-                        return null;
-                    }
-                    ultimaFatura = lerFatura(linha, ultimoCliente);
-                    ultimoCliente.getFaturas().adicionar(ultimaFatura);
-                } else if (blocoAtual.equals("PRODUTO")) {
-                    if (ultimaFatura == null) {
-                        System.out.println("O ficheiro de dados iniciais é inválido.");
-                        return null;
-                    }
-                    ultimoProduto = lerProduto(linha, ultimaFatura);
-                    ultimaFatura.getProdutos().adicionar(ultimoProduto);
+            String linha = br.readLine();
+            do {
+                String[] dados = linha.split(",");
+                if (dados[0].equals("CLIENTE")) {
+                    System.out.printf("Importando Cliente: %s\n", dados[2]);
+                    Cliente novoCliente = lerCliente(br, linha);
+                    clientes.add(novoCliente);
                 }
-                br.close();
-            }
+            } while ((linha = br.readLine()) != null);
+            br.close();
         } catch (FileNotFoundException ex) {
             System.out.println("Erro ao abrir ficheiro de texto.");
         } catch (IOException ex) {
@@ -105,20 +83,38 @@ public class FicheiroIO {
         return clientes;
     }
 
-    //Cliente_Nome,Cliente_Contribuinte,Cliente_Localizacao
-    private Cliente lerCliente(String input) {
-        String[] dados = input.split(",");
-        return new Cliente(dados[0], dados[1], Cliente.Localizacao.valueOf(dados[2]), leitor);
+    // Tipo, Filhos, Cliente_Nome, Cliente_Contribuinte, Cliente_Localizacao
+    private Cliente lerCliente(BufferedReader br, String linha) throws IOException {
+        String[] dados = linha.split(",");
+        Cliente clienteNovo = new Cliente(dados[2], dados[3], Cliente.Localizacao.valueOf(dados[4]), leitor);
+
+        int nFaturas = Integer.parseInt(dados[1]);
+        for (int i = 0; i < nFaturas; i++) {
+           linha = br.readLine();
+           Fatura novaFatura = lerFatura(br, linha, clienteNovo);
+           clienteNovo.getFaturas().adicionar(novaFatura);
+        }
+
+        return clienteNovo;
     }
 
-    //Fatura_ID,Fatura_Data
-    private Fatura lerFatura(String input, Cliente cliente) {
-        String[] dados = input.split(",");
-        return new Fatura(Integer.parseInt(dados[0]), leitor.validarData(dados[1]), cliente, leitor);
+    // Tipo, Filhos, Fatura_ID, Fatura_Data
+    private Fatura lerFatura(BufferedReader br, String linha, Cliente cliente) throws IOException {
+        String[] dados = linha.split(",");
+        Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), leitor.validarData(dados[3]), cliente, leitor);
+
+        int nProdutos = Integer.parseInt(dados[1]);
+        for (int i = 0; i < nProdutos; i++) {
+            linha = br.readLine();
+            Produto novoProduto = lerProduto(linha);
+            novaFatura.getProdutos().adicionar(novoProduto);
+        }
+
+        return novaFatura;
     }
 
     //Produto_Tipo,Produto_Codigo,Produto_Nome,Produto_Descricao,Produto_Quantidade,Produto_ValorUnitario,EXTRA
-    private Produto lerProduto(String input, Fatura fatura) {
+    private Produto lerProduto(String input) {
         String[] dados = input.split(",");
         Produto produto = null;
         int produtoCodigo = Integer.parseInt(dados[1]), produtoQuantidade = Integer.parseInt(dados[4]);
@@ -138,8 +134,8 @@ public class FicheiroIO {
                 break;
             case "ProdutoAlimentarTaxaIntermedia":
                 produto = new ProdutoAlimentarTaxaIntermedia(
-                        produtoCodigo,
-                        produtoNome,
+                        produtoCodigo,  // idx = 1
+                        produtoNome,    // idx = 2
                         produtoDescricao,
                         produtoQuantidade,
                         produtoValorUnitario,
@@ -186,7 +182,7 @@ public class FicheiroIO {
     }
 
     private ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> lerCertificacoes(String certificacoes) {
-        String[] certificacoesDivididas = certificacoes.split(",");
+        String[] certificacoesDivididas = certificacoes.split("-");
         ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> certificacoesLista = new ArrayList<>();
         for (String c : certificacoesDivididas) {
             certificacoesLista.add(ProdutoAlimentarTaxaReduzida.Certificacao.valueOf(c));

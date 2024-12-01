@@ -1,7 +1,4 @@
-CLIENTE
-João Silva,123456789,PORTUGAL
-FATURA
-1,2024-11-29
-PRODUTO
-ProdutoAlimentarTaxaReduzida,101,Pão Integral,Pão artesanal,2,1.00
-ProdutoAlimentarTaxaIntermedia,102,Leite Desnatado,Leite de alta qualidade,3,0.80
+CLIENTE,1,João Silva,123456789,PORTUGAL
+FATURA,2,1,29/11/2024
+ProdutoAlimentarTaxaReduzida,101,Pão Integral,Pão artesanal,2,1.00,true,ISO22000-FSSC22000-HACCP
+ProdutoAlimentarTaxaIntermedia,102,Leite Desnatado,Leite de alta qualidade,3,0.80,false,VINHO

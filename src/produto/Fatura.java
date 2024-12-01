@@ -31,13 +31,20 @@ public class Fatura implements Serializable {
      */
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-        String res = String.format("== ID: %02d, Data: %s ==%n", id, sdf.format(data.getTime()));
-        res += String.format("\t> Cliente:\n\t\t%s", cliente.toString());
-        res += String.format("\t> Produtos:\n");
+        String res = String.format("=== ID: %02d, DATA: %s ===%n", id, sdf.format(data.getTime()));
+        //int len = res.length();
+        res += String.format("\tCLIENTE: %s\n", cliente.toString());
+        res += String.format("\tPRODUTOS:\n");
+        double total = 0;
         for (Produto produto : produtos.getProdutos()) {
-            res += String.format("\t\t%s\n", produto.toString());
+            double IVA = produto.calcIva(cliente.getLocalizacao());
+            double valorReal = produto.getValorUnitario() * (1+(IVA/100));
+            double totalProduto = valorReal*produto.getQuantidade();
+            total += totalProduto;
+            res += String.format("\t- %s\n\t  IVA: %.1f%%, Valor Real: %.2f, Total: %.2f\n", produto.toString(), IVA, valorReal, totalProduto);
         }
-        res += "========================\n";
+        res += String.format("\tTOTAL: %.2f\n", total);
+        res += "\n\n";
         return res;
     }
 
