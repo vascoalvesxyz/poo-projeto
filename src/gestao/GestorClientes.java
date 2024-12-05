@@ -3,8 +3,9 @@ package gestao;
 import io.Leitor;
 import produto.Cliente;
 import produto.Cliente.Localizacao;
+import produto.Fatura;
+import produto.Produto;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,8 +17,9 @@ public class GestorClientes extends Gestor<Cliente> {
 
     public Cliente procurarPorNome(String nome) {
         for (Cliente cliente : array) {
-            if (cliente.getNome().equalsIgnoreCase(nome))
+            if (cliente.getNome().equalsIgnoreCase(nome)) {
                 return cliente;
+            }
         }
         return null;
     }
@@ -112,5 +114,34 @@ public class GestorClientes extends Gestor<Cliente> {
         System.out.println("Lista de Faturas:");
         for (Cliente c : getTodosClientes())
             c.getFaturas().listar();
+    }
+
+    public void printEstatisticas() {
+        int nrClientes = 0, nrFaturas = 0, nrProdutos = 0;
+        double valorTotalSemIva = 0, valorTotalComIva = 0;
+        for (Cliente cliente : array) {
+            nrClientes += 1;
+            for (Fatura fatura : cliente.getFaturas().array) {
+                nrFaturas += 1;
+                for (Produto produto : fatura.getProdutos().array) {
+                    nrProdutos += 1;
+                    double valorProdutoSemIva = produto.getValorUnitario() * produto.getQuantidade();
+                    valorTotalSemIva += valorProdutoSemIva;
+                    valorTotalComIva += valorProdutoSemIva * (1 + produto.calcIva(cliente.getLocalizacao()) / 100);
+                }
+            }
+        }
+        double valorTotalIva = valorTotalComIva - valorTotalSemIva;
+        System.out.printf("""
+                        Estatísticas do programa:
+                            Número de clientes: %d
+                            Número de faturas: %d
+                            Número de produtos: %d
+                            Valor total sem IVA: %.2f
+                            Valor total do IVA: %.2f
+                            Valor total com IVA: %.2f
+                        """,
+                nrClientes, nrFaturas, nrProdutos, valorTotalSemIva, valorTotalIva, valorTotalComIva
+        );
     }
 }

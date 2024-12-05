@@ -56,7 +56,7 @@ public class POOFS {
             case 5 -> gestorClientes.consultarFatura();
             case 6 -> importarDados();
             case 7 -> System.out.println("Funcionalidade de exportar faturas ainda não implementada.");
-            case 8 -> System.out.println("Funcionalidade de estatísticas ainda não implementada.");
+            case 8 -> gestorClientes.printEstatisticas();
             case 0 -> System.out.println("A terminar a aplicação...");
             default -> System.out.println("Opção inválida. Por favor, tente novamente.");
         }
