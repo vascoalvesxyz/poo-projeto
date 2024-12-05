@@ -10,6 +10,11 @@ public class ProdutoAlimentarTaxaIntermedia extends ProdutoAlimentar {
 
     public Categoria categoria;
 
+    public ProdutoAlimentarTaxaIntermedia() {
+        super();
+        this.categoria = Categoria.VINHO;
+    }
+
     public ProdutoAlimentarTaxaIntermedia(int codigo, String nome, String descricao, int quantidade, double valorUnitario, boolean biologico, Categoria categoria) {
         super(codigo, nome, descricao, quantidade, valorUnitario, biologico);
         this.categoria = categoria;
@@ -31,6 +36,14 @@ public class ProdutoAlimentarTaxaIntermedia extends ProdutoAlimentar {
         return String.format(
                 "Codigo: %d, Nome: %s, Quantidade: %d, Valor (sem IVA): %.2f, Categoria: %s"
                 , this.codigo, this.nome, this.quantidade, this.valorUnitario, categoria
+        );
+    }
+
+    @Override
+    public String toFile() {
+        return String.format(
+                "ProdutoAlimentarTaxaIntermedia,%d,%s,%s,%d,%.2f,%s,%s\n"
+                , codigo, nome, descricao, quantidade, valorUnitario, biologico, categoria
         );
     }
 }

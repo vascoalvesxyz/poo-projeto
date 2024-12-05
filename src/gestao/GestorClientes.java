@@ -6,10 +6,16 @@ import produto.Cliente.Localizacao;
 import produto.Fatura;
 import produto.Produto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes extends Gestor<Cliente> {
+public class GestorClientes extends Gestor<Cliente> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public GestorClientes() {
+        super();
+    }
 
     public GestorClientes(Leitor leitor) {
         super(new ArrayList<>(), leitor);

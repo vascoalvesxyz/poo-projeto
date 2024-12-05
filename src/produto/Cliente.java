@@ -14,6 +14,13 @@ public class Cliente implements Serializable {
     private Localizacao localizacao;
     private final GestorFaturas faturas;
 
+    public Cliente() {
+        this.nome = "";
+        this.contribuinte = "";
+        this.localizacao = Localizacao.PORTUGAL;
+        faturas = new GestorFaturas();
+    }
+
     // Constructor
     public Cliente(
             String nome,
@@ -60,6 +67,10 @@ public class Cliente implements Serializable {
     /* To String */
     public String toString() {
         return String.format("%s, %s, %s", nome, contribuinte, localizacao);
+    }
+
+    public String toFile() {
+        return String.format("CLIENTE,%d,%s,%s,%s\n", getFaturas().size(), nome, contribuinte, localizacao);
     }
 
     /* Enums*/

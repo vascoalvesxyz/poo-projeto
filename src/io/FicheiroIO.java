@@ -1,6 +1,8 @@
 package io;
 
 import gestao.GestorClientes;
+import gestao.GestorFaturas;
+import gestao.GestorProdutos;
 import produto.*;
 
 import java.io.*;
@@ -19,7 +21,7 @@ public class FicheiroIO {
 
     public ArrayList<Cliente> importarClientes(String filename) {
         if (!existeFicheiro(filename)) {
-            return null;
+            return new ArrayList<>();
         }
         String[] temp = filename.split("\\.");
         String ext = temp[temp.length - 1];
@@ -29,7 +31,7 @@ public class FicheiroIO {
             return lerFicheiroTexto(filename);
         }
         System.out.println("Não existe sei como ler este ficheiro.");
-        return null;
+        return new ArrayList<>();
     }
 
     public boolean existeFicheiro(String pathStr) {
@@ -38,9 +40,6 @@ public class FicheiroIO {
     }
 
     private ArrayList<Cliente> lerFicheiroObjetos(String filename) {
-        if (!existeFicheiro(filename)) {
-            return null;
-        }
         try (
                 FileInputStream fileIn = new FileInputStream(filename);
                 ObjectInputStream objIn = new ObjectInputStream(fileIn)
@@ -50,14 +49,10 @@ public class FicheiroIO {
         } catch (Exception e) {
             System.out.printf("Algo correu mal: %s\n", e);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     private ArrayList<Cliente> lerFicheiroTexto(String filename) {
-        if (!existeFicheiro(filename)) {
-            return null;
-        }
-
         ArrayList<Cliente> clientes = new ArrayList<>();
         File f = new File(filename);
 
@@ -121,61 +116,12 @@ public class FicheiroIO {
         String produtoNome = dados[2], produtoDescricao = dados[3];
         double produtoValorUnitario = Double.parseDouble(dados[5]);
         switch (dados[0]) {
-            case "ProdutoAlimentarTaxaReduzida":
-                produto = new ProdutoAlimentarTaxaReduzida(
-                        produtoCodigo,
-                        produtoNome,
-                        produtoDescricao,
-                        produtoQuantidade,
-                        produtoValorUnitario,
-                        Boolean.parseBoolean(dados[6]),
-                        lerCertificacoes(dados[7])
-                );
-                break;
-            case "ProdutoAlimentarTaxaIntermedia":
-                produto = new ProdutoAlimentarTaxaIntermedia(
-                        produtoCodigo,  // idx = 1
-                        produtoNome,    // idx = 2
-                        produtoDescricao,
-                        produtoQuantidade,
-                        produtoValorUnitario,
-                        Boolean.parseBoolean(dados[6]),
-                        ProdutoAlimentarTaxaIntermedia.Categoria.valueOf(dados[7])
-                );
-                break;
-            case "ProdutoAlimentarTaxaNormal":
-                produto = new ProdutoAlimentarTaxaNormal(
-                        produtoCodigo,
-                        produtoNome,
-                        produtoDescricao,
-                        produtoQuantidade,
-                        produtoValorUnitario,
-                        Boolean.parseBoolean(dados[6])
-                );
-                break;
-            case "ProdutoFarmaciaPrescrito":
-                produto = new ProdutoFarmaciaPrescrito(
-                        produtoCodigo,
-                        produtoNome,
-                        produtoDescricao,
-                        produtoQuantidade,
-                        produtoValorUnitario,
-                        dados[6]
-                );
-                break;
-            case "ProdutoFarmaciaSemReceita":
-                produto = new ProdutoFarmaciaSemReceita(
-                        produtoCodigo,
-                        produtoNome,
-                        produtoDescricao,
-                        produtoQuantidade,
-                        produtoValorUnitario,
-                        ProdutoFarmaciaSemReceita.Categoria.valueOf(dados[6])
-                );
-                break;
-            default:
-                System.out.println("Tipo de produto desconhecido: " + dados[5]);
-                break;
+            case "ProdutoAlimentarTaxaReduzida" -> produto = new ProdutoAlimentarTaxaReduzida( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]), lerCertificacoes(dados[7]) );
+            case "ProdutoAlimentarTaxaIntermedia" -> produto = new ProdutoAlimentarTaxaIntermedia( produtoCodigo,  produtoNome,    produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]), ProdutoAlimentarTaxaIntermedia.Categoria.valueOf(dados[7]) );
+            case "ProdutoAlimentarTaxaNormal" -> produto = new ProdutoAlimentarTaxaNormal( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]) );
+            case "ProdutoFarmaciaPrescrito" -> produto = new ProdutoFarmaciaPrescrito( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, dados[6] );
+            case "ProdutoFarmaciaSemReceita" -> produto = new ProdutoFarmaciaSemReceita( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, ProdutoFarmaciaSemReceita.Categoria.valueOf(dados[6]) );
+            default -> System.out.println("Tipo de produto desconhecido: " + dados[5]);
         }
 
         return produto;
@@ -189,4 +135,56 @@ public class FicheiroIO {
         }
         return certificacoesLista;
     }
+
+    public void exportarClientesObj(GestorClientes gc, String filename) {
+        // Serialize the object to the file
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+            oos.writeObject(gc.getArray());
+        } catch (IOException e) {
+            System.err.println("Erro a serilizar: " + e.getMessage());
+        }
+    }
+
+    public void exportarClientesTexto(GestorClientes gc, String filename) {
+        if (existeFicheiro(filename)) {
+            System.out.println("Ficheiro já existe!");
+            return;
+        }
+
+        File f = new File(filename);
+
+        try (
+            FileWriter fw = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(fw);
+        ) {
+            for (Cliente c : gc.getTodosClientes()) {
+                escreverCliente(bw, c);
+            }
+        } catch (IOException e) {
+            System.out.println("Não foi possivel escrever o ficheiro: " + e);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private void escreverCliente(BufferedWriter bw, Cliente c) throws IOException {
+        bw.write(c.toFile());
+        GestorFaturas gf = c.getFaturas();
+        for (Fatura f: gf.getArray()) {
+            escreverFatura(bw, f);
+        }
+    }
+
+    private void escreverFatura(BufferedWriter bw, Fatura f) throws IOException {
+        bw.write(f.toFile());
+        GestorProdutos gp = f.getProdutos();
+        for (Produto p: gp.getArray()) {
+            escreverProduto(bw, p);
+        }
+    }
+
+    private void escreverProduto(BufferedWriter bw, Produto p) throws IOException {
+        bw.write(p.toFile());
+    }
+
 }

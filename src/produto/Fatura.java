@@ -17,6 +17,14 @@ public class Fatura implements Serializable {
     private final Cliente cliente;
     private final GestorProdutos produtos;
 
+
+    public Fatura() {
+        this.id = 0;
+        this.data = Calendar.getInstance();
+        this.cliente = new Cliente();
+        this.produtos = new GestorProdutos();
+    }
+
     public Fatura(int id, Calendar data, Cliente cliente, Leitor leitor) {
         this.id = id;
         this.data = data;
@@ -41,9 +49,9 @@ public class Fatura implements Serializable {
             double valorReal = produto.getValorUnitario() * (1+(IVA/100));
             double totalProduto = valorReal*produto.getQuantidade();
             total += totalProduto;
-            res += String.format("\t- %s\n\t  IVA: %.1f%%, Valor Real: %.2f, Total: %.2f\n", produto.toString(), IVA, valorReal, totalProduto);
+            res += String.format("\t- %s\n\t  IVA: %.1f%%, Valor Real: %.2f€, Total: %.2f€\n", produto.toString(), IVA, valorReal, totalProduto);
         }
-        res += String.format("\tTOTAL: %.2f\n", total);
+        res += String.format("\tTOTAL: %.2f€\n", total);
         res += "\n\n";
         return res;
     }
@@ -52,18 +60,9 @@ public class Fatura implements Serializable {
         return id;
     }
 
-    public void toFile() {
-        String filename = String.format("fatura-%s-%s.txt", cliente.getNome(), data.getTime());
-        try {
-            File faturaFile = new File(filename);
-            if (faturaFile.createNewFile()) {
-                System.out.println("File created: " + faturaFile.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-        }
+    public String toFile() {
+        String dataStr = String.format("%02d/%02d/%04d", data.get(Calendar.DAY_OF_MONTH), data.get(Calendar.MONTH)+1, data.get(Calendar.YEAR) );
+        return String.format("FATURA,%d,%s,%s\n", getProdutos().size(), id, dataStr);
     }
 
     public GestorProdutos getProdutos() {

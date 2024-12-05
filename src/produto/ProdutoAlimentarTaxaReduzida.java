@@ -13,7 +13,11 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
 
     private final ArrayList<Certificacao> certificacoes;
 
-    // Constructor Para Taxa Reduzida
+    public ProdutoAlimentarTaxaReduzida() {
+        super();
+        this.certificacoes = new ArrayList<>();
+    }
+
     public ProdutoAlimentarTaxaReduzida(int codigo, String nome, String descricao, int quantidade, double valorUnitario, boolean biologico, ArrayList<Certificacao> certificacoes) {
         super(codigo, nome, descricao, quantidade, valorUnitario, biologico);
         this.certificacoes = certificacoes;
@@ -37,16 +41,25 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
     public String toString() {
         return String.format(
                 "Codigo: %d, Nome: %s, Quantidade: %d, Valor (sem IVA): %.2f, Certificações: %s",
-                this.codigo, this.nome, this.quantidade, this.valorUnitario, certificacoesToString()
+                this.codigo, this.nome, this.quantidade, this.valorUnitario, certificacoesToString(" ")
         );
     }
 
-    private String certificacoesToString() {
-        String res = "";
-        for (Certificacao cert : this.certificacoes) {
-            res = res.concat(cert + " ");
+    @Override
+    public String toFile() {
+        return String.format(
+                "ProdutoAlimentarTaxaReduzida,%d,%s,%s,%d,%.2f,%s,%s\n"
+                , codigo, nome, descricao, quantidade, valorUnitario, biologico, certificacoesToString("-")
+        );
+    }
+
+    private String certificacoesToString(String sep) {
+        StringBuilder res = new StringBuilder();
+        for (Certificacao cert: certificacoes) {
+            if (!res.isEmpty()) res.append(sep);
+            res.append(cert);
         }
-        return res;
+        return res.toString();
     }
 
 }

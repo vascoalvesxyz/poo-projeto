@@ -13,6 +13,11 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
 
     private final Cliente cliente;
 
+    public GestorFaturas() {
+        super();
+        this.cliente = new Cliente();
+    }
+
     public GestorFaturas(Cliente cliente, Leitor leitor) {
         super(new ArrayList<Fatura>(), leitor);
         this.cliente = cliente;

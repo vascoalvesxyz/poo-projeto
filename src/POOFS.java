@@ -55,9 +55,9 @@ public class POOFS {
             case 4 -> gestorClientes.listarTodasFaturas();
             case 5 -> gestorClientes.consultarFatura();
             case 6 -> importarDados();
-            case 7 -> System.out.println("Funcionalidade de exportar faturas ainda não implementada.");
+            case 7 -> exportarDadosTexto();
             case 8 -> gestorClientes.printEstatisticas();
-            case 0 -> System.out.println("A terminar a aplicação...");
+            case 0 -> salvarSair();
             default -> System.out.println("Opção inválida. Por favor, tente novamente.");
         }
     }
@@ -71,9 +71,7 @@ public class POOFS {
             res = ficheiroIO.importarClientes("dados-iniciais.txt");
         }
 
-        if (!res.isEmpty()) {
-            gestorClientes.getTodosClientes().addAll(res);
-        }
+        gestorClientes.getArray().addAll(res);
     }
 
     private void importarDados() {
@@ -84,5 +82,15 @@ public class POOFS {
         } else {
             System.out.println("Ficheiro Vazio.");
         }
+    }
+
+    private void exportarDadosTexto() {
+        String caminho = leitor.lerString("Nome do ficheiro: ");
+        ficheiroIO.exportarClientesTexto(gestorClientes, caminho);
+    }
+
+    private void salvarSair() {
+        ficheiroIO.exportarClientesObj(gestorClientes, "dados.ser");
+        System.out.println("A terminar a aplicação...");
     }
 }

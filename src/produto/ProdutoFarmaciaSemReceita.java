@@ -12,6 +12,11 @@ public class ProdutoFarmaciaSemReceita extends ProdutoFarmacia {
 
     private final Categoria categoria;
 
+    public ProdutoFarmaciaSemReceita() {
+        super();
+        this.categoria = Categoria.OUTRO;
+    }
+
     public ProdutoFarmaciaSemReceita(int codigo, String nome, String descricao, int quantidade, double valorUnitario, Categoria categoria) {
         super(codigo, nome, descricao, quantidade, valorUnitario);
         this.categoria = categoria;
@@ -29,6 +34,13 @@ public class ProdutoFarmaciaSemReceita extends ProdutoFarmacia {
         String str = String.format("Codigo: %d, Nome: %s, Quantidade: %d, Valor (sem IVA): %.2f", this.codigo, this.nome, this.quantidade, this.valorUnitario);
         str = str.concat(String.format(" Categoria: %s\n", categoria));
         return str;
+    }
+
+    public String toFile() {
+        return String.format(
+                "ProdutoFarmaciaPrescrito,%d,%s,%s,%d,%.2f,%s\n"
+                , codigo, nome, descricao, quantidade, valorUnitario, categoria
+        );
     }
 
 }

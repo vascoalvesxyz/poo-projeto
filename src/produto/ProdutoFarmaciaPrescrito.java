@@ -3,6 +3,11 @@ package produto;
 public class ProdutoFarmaciaPrescrito extends ProdutoFarmacia {
     private final String medico;
 
+    public ProdutoFarmaciaPrescrito() {
+        super();
+        this.medico = "";
+    }
+
     public ProdutoFarmaciaPrescrito(int codigo, String nome, String descricao, int quantidade, double valorUnitario, String medico) {
         super(codigo, nome, descricao, quantidade, valorUnitario);
         this.medico = medico;
@@ -16,6 +21,13 @@ public class ProdutoFarmaciaPrescrito extends ProdutoFarmacia {
         String str = String.format("Codigo: %d, Nome: %s, Quantidade: %d, Valor (sem IVA): %.2f", this.codigo, this.nome, this.quantidade, this.valorUnitario);
         str = str.concat(String.format(" Médico: %s\n", this.medico));
         return str;
+    }
+
+    public String toFile() {
+        return String.format(
+                "ProdutoFarmaciaPrescrito,%d,%s,%s,%d,%.2f,%s\n"
+                , codigo, nome, descricao, quantidade, valorUnitario, medico
+        );
     }
 
 }

@@ -10,6 +10,10 @@ import java.util.ArrayList;
 public class GestorProdutos extends Gestor<Produto> implements Serializable {
     private static final long serialVersionUID = 5L;
 
+    public GestorProdutos() {
+        super();
+    }
+
     public GestorProdutos(Leitor leitor) {
         super(new ArrayList<Produto>(), leitor);
     }
