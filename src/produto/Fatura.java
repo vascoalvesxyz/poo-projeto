@@ -59,7 +59,7 @@ public class Fatura implements Serializable {
 
     public String toFile() {
         String dataStr = String.format("%02d/%02d/%04d", data.get(Calendar.DAY_OF_MONTH), data.get(Calendar.MONTH) + 1, data.get(Calendar.YEAR));
-        return String.format("FATURA,%d,%s,%s\n", getProdutos().size(), id, dataStr);
+        return String.format("FATURA,%d,%s,%s\n", getProdutos().getArraySize(), id, dataStr);
     }
 
     public GestorProdutos getProdutos() {

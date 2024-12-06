@@ -66,7 +66,7 @@ public class Cliente implements Serializable {
     }
 
     public String toFile() {
-        return String.format("CLIENTE,%d,%s,%s,%s\n", getFaturas().size(), nome, contribuinte, localizacao);
+        return String.format("CLIENTE,%d,%s,%s,%s\n", getFaturas().getArraySize(), nome, contribuinte, localizacao);
     }
 
     /* Enums*/

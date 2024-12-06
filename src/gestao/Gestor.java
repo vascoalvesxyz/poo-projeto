@@ -46,7 +46,7 @@ public abstract class Gestor<Tipo> implements Serializable {
         array.add(obj);
     }
 
-    public int size() {
+    public int getArraySize() {
         return array.size();
     }
 
