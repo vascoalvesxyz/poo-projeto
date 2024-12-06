@@ -18,8 +18,8 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         this.cliente = new Cliente();
     }
 
-    public GestorFaturas(Cliente cliente, Leitor leitor) {
-        super(new ArrayList<Fatura>(), leitor);
+    public GestorFaturas(Cliente cliente) {
+        super(new ArrayList<Fatura>());
         this.cliente = cliente;
     }
 
@@ -33,6 +33,7 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
 
     @Override
     public void criarOuEditar() {
+        Leitor leitor = new Leitor();
         int id = leitor.lerInt("Insira o ID da fatura: ");
 
         Fatura fatura = procurarPorNumero(id);
@@ -49,6 +50,7 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
     }
 
     public void criar(int id) {
+        Leitor leitor = new Leitor();
         Calendar cal = leitor.lerData();
         Fatura fatura = new Fatura(id, cal, cliente, leitor);
 
@@ -63,6 +65,7 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
 
     public void editar(Fatura fatura) {
         //TODO
+        Leitor leitor = new Leitor();
         System.out.println("Falta implementar");
     }
 

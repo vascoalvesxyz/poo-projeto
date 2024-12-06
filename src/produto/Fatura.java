@@ -27,7 +27,7 @@ public class Fatura implements Serializable {
         this.id = id;
         this.data = data;
         this.cliente = cliente;
-        this.produtos = new GestorProdutos(leitor);
+        this.produtos = new GestorProdutos();
     }
 
     /* Visualizar fatura: apresentar o número da fatura, os dados do cliente e, em seguida, listar

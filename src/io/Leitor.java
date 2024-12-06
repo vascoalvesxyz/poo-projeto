@@ -1,9 +1,10 @@
 package io;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Scanner;
 
-public class Leitor {
+public class Leitor implements Serializable {
     private final Scanner scanner;
 
     public Leitor() {

@@ -31,7 +31,7 @@ public class Cliente implements Serializable {
         this.nome = nome;
         this.contribuinte = contribuinte;
         this.localizacao = localizacao;
-        faturas = new GestorFaturas(this, leitor);
+        faturas = new GestorFaturas(this);
     }
 
     public void printFaturas() {

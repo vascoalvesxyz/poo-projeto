@@ -19,19 +19,22 @@ public class FicheiroIO {
         this.leitor = leitor;
     }
 
-    public ArrayList<Cliente> importarClientes(String filename) {
-        if (!existeFicheiro(filename)) {
-            return new ArrayList<>();
-        }
+    public void importarClientes(GestorClientes gc, String filename) {
+        if (!existeFicheiro(filename)) return;
+
         String[] temp = filename.split("\\.");
         String ext = temp[temp.length - 1];
+
+        ArrayList<Cliente> clientesImportados = new ArrayList<>();
         if (ext.equalsIgnoreCase("ser")) {
-            return lerFicheiroObjetos(filename);
+            clientesImportados = lerFicheiroObjetos(filename);
         } else if (ext.equalsIgnoreCase("txt")) {
-            return lerFicheiroTexto(filename);
+            clientesImportados = lerFicheiroTexto(filename);
+        } else {
+            System.out.println("Não sei ler esse tipo de ficheiro.");
         }
-        System.out.println("Não existe sei como ler este ficheiro.");
-        return new ArrayList<>();
+
+        gc.getArray().addAll(clientesImportados);
     }
 
     public boolean existeFicheiro(String pathStr) {
@@ -139,7 +142,8 @@ public class FicheiroIO {
     public void exportarClientesObj(GestorClientes gc, String filename) {
         // Serialize the object to the file
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(gc.getArray());
+            ArrayList<Cliente> arrayClientes = gc.getArray();
+            oos.writeObject(arrayClientes);
         } catch (IOException e) {
             System.err.println("Erro a serilizar: " + e.getMessage());
         }

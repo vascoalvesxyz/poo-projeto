@@ -13,7 +13,7 @@ public class POOFS {
     public POOFS() {
         leitor = new Leitor();
         ficheiroIO = new FicheiroIO(leitor);
-        gestorClientes = new GestorClientes(leitor);
+        gestorClientes = new GestorClientes();
     }
 
     public static void main(String[] args) {
@@ -63,25 +63,18 @@ public class POOFS {
     }
 
     private void carregarDadosIniciais() {
-        ArrayList<Cliente> res = new ArrayList<>();
         if (ficheiroIO.existeFicheiro("dados.ser")) {
-            res = ficheiroIO.importarClientes("dados.ser");
+            System.out.println("A importar clientes da ultima sessão.");
+            ficheiroIO.importarClientes(gestorClientes, "dados.ser");
         } else if (ficheiroIO.existeFicheiro("dados-iniciais.txt")) {
             System.out.println("A importar clientes do ficheiro de dados iniciais.");
-            res = ficheiroIO.importarClientes("dados-iniciais.txt");
+            ficheiroIO.importarClientes(gestorClientes, "dados-iniciais.txt");
         }
-
-        gestorClientes.getArray().addAll(res);
     }
 
     private void importarDados() {
         String caminho = leitor.lerString("Nome do ficheiro: ");
-        ArrayList<Cliente> arr = ficheiroIO.importarClientes(caminho);
-        if (!arr.isEmpty()) {
-            gestorClientes.getTodosClientes().addAll(arr);
-        } else {
-            System.out.println("Ficheiro Vazio.");
-        }
+        ficheiroIO.importarClientes(gestorClientes, caminho);
     }
 
     private void exportarDadosTexto() {

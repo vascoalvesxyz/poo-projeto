@@ -1,22 +1,18 @@
 package gestao;
 
-import io.Leitor;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Gestor<Tipo> {
+public abstract class Gestor<Tipo> implements Serializable {
 
     protected ArrayList<Tipo> array;
-    protected Leitor leitor;
 
     public Gestor() {
         this.array = new ArrayList<>();
-        this.leitor = new Leitor();
     }
 
-    public Gestor(ArrayList<Tipo> array, Leitor leitor) {
+    public Gestor(ArrayList<Tipo> array) {
         this.array = array;
-        this.leitor = leitor;
     }
 
     public abstract void criarOuEditar();

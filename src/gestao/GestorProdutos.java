@@ -11,11 +11,7 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
     private static final long serialVersionUID = 5L;
 
     public GestorProdutos() {
-        super();
-    }
-
-    public GestorProdutos(Leitor leitor) {
-        super(new ArrayList<Produto>(), leitor);
+        super(new ArrayList<Produto>());
     }
 
     public Produto procurarPorCodigo(int codigo) {
@@ -28,6 +24,7 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
 
     @Override
     public void criarOuEditar() {
+        Leitor leitor = new Leitor();
         int codigo = leitor.lerInt("Insira o código do produto: ");
 
         Produto produto = procurarPorCodigo(codigo);
@@ -39,6 +36,7 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
     }
 
     public void criar(int codigo) {
+        Leitor leitor = new Leitor();
         String resposta;
         do {
             resposta = leitor.lerString("O produto é alimentar ou farmaceutico? (a/f) ");
@@ -69,6 +67,7 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
     }
 
     private Produto pedirProdutoAlimentar(int codigo) {
+        Leitor leitor = new Leitor();
         String nome = leitor.lerString("Nome: ");
         String descricao = leitor.lerString("Descrição: ");
         int quantidade = leitor.lerInt("Quantidade: ");
@@ -98,6 +97,7 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
     }
 
     private ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> lerCertificacoes() {
+        Leitor leitor = new Leitor();
         ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> certificacoesEscolhidas = new ArrayList<>();
         boolean continuar = true;
         do {
@@ -119,6 +119,7 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
     }
 
     private Produto pedirProdutoFarmaceutico(int codigo) {
+        Leitor leitor = new Leitor();
         String nome = leitor.lerString("Nome: ");
         String descricao = leitor.lerString("Descrição: ");
         int quantidade = leitor.lerInt("Quantidade: ");

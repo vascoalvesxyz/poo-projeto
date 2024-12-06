@@ -10,15 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GestorClientes extends Gestor<Cliente> implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class GestorClientes extends Gestor<Cliente> {
 
     public GestorClientes() {
-        super();
-    }
-
-    public GestorClientes(Leitor leitor) {
-        super(new ArrayList<>(), leitor);
+        super(new ArrayList<>());
     }
 
     public Cliente procurarPorNome(String nome) {
@@ -32,17 +27,19 @@ public class GestorClientes extends Gestor<Cliente> implements Serializable {
 
     @Override
     public void criarOuEditar() {
-        String nome = leitor.lerString("Insira o nome do cliente: ");
+        Leitor l = new Leitor();
+        String nome = l.lerString("Insira o nome do cliente: ");
 
         Cliente cliente = procurarPorNome(nome);
         if (cliente == null) {
             criar(nome);
-        } else if (leitor.lerBoolean("Cliente existe, deseja editar?")) {
+        } else if (l.lerBoolean("Cliente existe, deseja editar?")) {
             editar(cliente);
         }
     }
 
     public void criar(String nome) {
+        Leitor leitor = new Leitor();
         String contribuinte = leitor.lerString("Insira o número de contribuinte: ");
         int escolhaLocalizacao = leitor.lerEnum(Localizacao.values());
         Localizacao localizacao = Localizacao.values()[escolhaLocalizacao];
@@ -51,7 +48,7 @@ public class GestorClientes extends Gestor<Cliente> implements Serializable {
     }
 
     public void editar(Cliente cliente) {
-        Scanner scanner = new Scanner(System.in);
+        Leitor leitor = new Leitor();
         int input;
         do {
             System.out.println("""
@@ -60,7 +57,8 @@ public class GestorClientes extends Gestor<Cliente> implements Serializable {
                     3 - Editar Localização.
                     0 - Sair.
                     """);
-            input = scanner.nextInt();
+            input = leitor.lerIntMinMax("Opção: ", 0,3);
+
             switch (input) {
                 case 1 -> {
                     String novoNome = leitor.lerString("Novo nome: ");
@@ -98,6 +96,7 @@ public class GestorClientes extends Gestor<Cliente> implements Serializable {
     }
 
     public void criarOuEditarFatura() {
+        Leitor leitor = new Leitor();
         String nome = leitor.lerString("Insira o nome do cliente: ");
         Cliente cliente = procurarPorNome(nome);
         if (cliente == null) {
@@ -108,6 +107,7 @@ public class GestorClientes extends Gestor<Cliente> implements Serializable {
     }
 
     public void consultarFatura() {
+        Leitor leitor = new Leitor();
         String nome = leitor.lerString("Insira o nome do cliente: ");
         Cliente cliente = procurarPorNome(nome);
         if (cliente != null) {
