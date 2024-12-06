@@ -127,9 +127,9 @@ public class GestorClientes extends Gestor<Cliente> implements Serializable {
         double valorTotalSemIva = 0, valorTotalComIva = 0;
         for (Cliente cliente : array) {
             nrClientes += 1;
-            for (Fatura fatura : cliente.getFaturas().array) {
+            for (Fatura fatura : cliente.getFaturas().getArray()) {
                 nrFaturas += 1;
-                for (Produto produto : fatura.getProdutos().array) {
+                for (Produto produto : fatura.getProdutos().getArray()) {
                     nrProdutos += 1;
                     double valorProdutoSemIva = produto.getValorUnitario() * produto.getQuantidade();
                     valorTotalSemIva += valorProdutoSemIva;
@@ -143,9 +143,9 @@ public class GestorClientes extends Gestor<Cliente> implements Serializable {
                             Número de clientes: %d
                             Número de faturas: %d
                             Número de produtos: %d
-                            Valor total sem IVA: %.2f
-                            Valor total do IVA: %.2f
-                            Valor total com IVA: %.2f
+                            Valor total sem IVA: %.2f€
+                            Valor total do IVA: %.2f€
+                            Valor total com IVA: %.2f€
                         """,
                 nrClientes, nrFaturas, nrProdutos, valorTotalSemIva, valorTotalIva, valorTotalComIva
         );

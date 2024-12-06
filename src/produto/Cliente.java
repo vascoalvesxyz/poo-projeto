@@ -66,7 +66,7 @@ public class Cliente implements Serializable {
 
     /* To String */
     public String toString() {
-        return String.format("%s, %s, %s", nome, contribuinte, localizacao);
+        return String.format("Nome: %s, Contribuinte: %s, Localização: %s", nome, contribuinte, localizacao);
     }
 
     public String toFile() {
