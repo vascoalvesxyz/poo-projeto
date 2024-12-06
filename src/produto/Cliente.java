@@ -34,10 +34,6 @@ public class Cliente implements Serializable {
         faturas = new GestorFaturas(this);
     }
 
-    public void printFaturas() {
-        faturas.listar();
-    }
-
     /* Getters */
     public String getNome() {
         return this.nome;

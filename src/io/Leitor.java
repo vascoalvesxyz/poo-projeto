@@ -16,13 +16,35 @@ public class Leitor implements Serializable {
         return scanner.nextLine();
     }
 
+    public String lerNome(String mensagem) {
+        String str = "";
+        do {
+            str = lerString(mensagem);
+            // REGEX: Letra Maiuscula, Combinação de Letras e Espaço
+        } while (!str.matches("^[A-Z][A-z ]*$"));
+        return str;
+    }
+
+
+    public String lerContribuinte(String mensagem) {
+        String str = "";
+        boolean isValido = false;
+        do {
+            str = lerString(mensagem);
+            // REGEX: Inicio da linha, Número com 9 digitos, fim da linha
+            if (str.length() == 9 && str.matches("^[0-9]{9}$")) {
+                isValido = true;
+            }
+        } while (!isValido);
+        return str;
+    }
+
     public int lerInt(String mensagem) {
         int numero = 0;
         boolean valido = false;
 
         while (!valido) {
-            System.out.print(mensagem);
-            String entrada = scanner.nextLine();
+            String entrada = lerString(mensagem);
 
             if (entrada.matches("-?[0-9]+")) {
                 numero = Integer.parseInt(entrada);

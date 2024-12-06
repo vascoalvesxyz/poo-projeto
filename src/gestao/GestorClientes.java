@@ -28,7 +28,7 @@ public class GestorClientes extends Gestor<Cliente> {
     @Override
     public void criarOuEditar() {
         Leitor l = new Leitor();
-        String nome = l.lerString("Insira o nome do cliente: ");
+        String nome = l.lerNome("Insira o nome do cliente: ");
 
         Cliente cliente = procurarPorNome(nome);
         if (cliente == null) {
@@ -40,7 +40,7 @@ public class GestorClientes extends Gestor<Cliente> {
 
     public void criar(String nome) {
         Leitor leitor = new Leitor();
-        String contribuinte = leitor.lerString("Insira o número de contribuinte: ");
+        String contribuinte = leitor.lerContribuinte("Contribuinte novo:");
         int escolhaLocalizacao = leitor.lerEnum(Localizacao.values());
         Localizacao localizacao = Localizacao.values()[escolhaLocalizacao];
         Cliente novoCliente = new Cliente(nome, contribuinte, localizacao, leitor);
@@ -61,12 +61,11 @@ public class GestorClientes extends Gestor<Cliente> {
 
             switch (input) {
                 case 1 -> {
-                    String novoNome = leitor.lerString("Novo nome: ");
+                    String novoNome = leitor.lerNome("Novo nome: ");
                     cliente.setNome(novoNome);
                 }
                 case 2 -> {
-                    // FALTA VALIDACAO
-                    String novoContribuinte = leitor.lerString("Novo contribuinte: ");
+                    String novoContribuinte = leitor.lerContribuinte("Novo contribuinte: ");
                     cliente.setContribuinte(novoContribuinte);
                 }
                 case 3 -> {
