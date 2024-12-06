@@ -6,9 +6,7 @@ import produto.Cliente.Localizacao;
 import produto.Fatura;
 import produto.Produto;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class GestorClientes extends Gestor<Cliente> {
 
@@ -31,8 +29,9 @@ public class GestorClientes extends Gestor<Cliente> {
         String nome = l.lerNome("Insira o nome do cliente: ");
         try {
             Cliente cliente = procurarPorNome(nome);
-            if(l.lerBoolean("Cliente existe, deseja editar?"))
+            if (l.lerBoolean("Cliente existe, deseja editar?")) {
                 editar(cliente);
+            }
         } catch (IllegalArgumentException e) {
             criar(nome);
         }
@@ -45,6 +44,7 @@ public class GestorClientes extends Gestor<Cliente> {
         Localizacao localizacao = Localizacao.values()[escolhaLocalizacao];
         Cliente novoCliente = new Cliente(nome, contribuinte, localizacao, leitor);
         adicionar(novoCliente);
+        System.out.println("O cliente foi criado.");
     }
 
     public void editar(Cliente cliente) {
@@ -57,7 +57,7 @@ public class GestorClientes extends Gestor<Cliente> {
                     3 - Editar Localização.
                     0 - Sair.
                     """);
-            input = leitor.lerIntMinMax("Opção: ", 0,3);
+            input = leitor.lerIntMinMax("Opção: ", 0, 3);
 
             switch (input) {
                 case 1 -> {

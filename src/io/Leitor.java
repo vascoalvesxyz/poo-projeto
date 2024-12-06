@@ -1,10 +1,6 @@
 package io;
 
-import gestao.GestorClientes;
-import produto.Cliente;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
@@ -21,25 +17,35 @@ public class Leitor implements Serializable {
     }
 
     public String lerNome(String mensagem) {
-        String str = "";
+        String str;
+        boolean isValido = false;
         do {
             str = lerString(mensagem);
             // REGEX: Letra Maiuscula, Combinação de Letras e Espaço
-        } while (!str.matches("^[A-Z][A-z ]*$"));
+            if (str.matches("^[A-ZÁÉÍÓÚÂÊÔÀÃÕÇ][a-záéíóúâêôàãõç ]*$")) {
+                isValido = true;
+            } else {
+                System.out.println("Nome inválido. Por favor, insira um nome com caracteres alfabéticos e que comece com uma letra maiúscula.");
+            }
+        }
+        while (!isValido);
         return str;
     }
 
 
     public String lerContribuinte(String mensagem) {
-        String str = "";
+        String str;
         boolean isValido = false;
         do {
             str = lerString(mensagem);
             // REGEX: Inicio da linha, Número com 9 digitos, fim da linha
             if (str.length() == 9 && str.matches("^[0-9]{9}$")) {
                 isValido = true;
+            } else {
+                System.out.println("Contribuinte inválido. Por favor, insira um número com 9 dígitos.");
             }
-        } while (!isValido);
+        }
+        while (!isValido);
         return str;
     }
 
@@ -63,10 +69,16 @@ public class Leitor implements Serializable {
     public int lerIntMinMax(String mensagem, int min, int max) {
         int res;
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
+        boolean valido = false;
         do {
             res = lerInt(mensagem);
+            if (res >= min && res <= max) {
+                valido = true;
+            } else {
+                System.out.println("Valor inválido. Por favor, insira um número dentro gama permitida.");
+            }
         }
-        while (res < min || res > max);
+        while (!valido);
         return res;
     }
 
@@ -74,10 +86,16 @@ public class Leitor implements Serializable {
         System.out.println(questao + "(s/n)");
 
         String inputStr;
+        boolean valido = false;
         do {
             inputStr = scanner.nextLine();
+            if (inputStr.equalsIgnoreCase("s") || inputStr.equalsIgnoreCase("n")) {
+                valido = true;
+            } else {
+                System.out.println("Opção inválida. Por favor, insira um \"s\" ou um \"n\".");
+            }
         }
-        while (!inputStr.equalsIgnoreCase("s") && !inputStr.equalsIgnoreCase("n"));
+        while (!valido);
 
         return inputStr.equalsIgnoreCase("s");
     }
