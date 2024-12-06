@@ -1,6 +1,10 @@
 package io;
 
+import gestao.GestorClientes;
+import produto.Cliente;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
@@ -56,7 +60,6 @@ public class Leitor implements Serializable {
         return numero;
     }
 
-    // TODO change to try catch logic
     public int lerIntMinMax(String mensagem, int min, int max) {
         int res;
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);

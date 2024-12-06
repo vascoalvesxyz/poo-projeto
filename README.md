@@ -12,4 +12,7 @@
     1. Clientes
     2. Faturas
     3. Produtos
-- Melhor o menu substancialmente
+- Menu:
+  1. ~Selecionar cliente ao editar~
+  2. ~Selecionar cliente ao consultar fatura~
+  3. ~Selecionar cliente ao editar fatura~

@@ -1,9 +1,6 @@
 import gestao.GestorClientes;
 import io.FicheiroIO;
 import io.Leitor;
-import produto.Cliente;
-
-import java.util.ArrayList;
 
 public class POOFS {
     private final GestorClientes gestorClientes;
@@ -19,21 +16,13 @@ public class POOFS {
     public static void main(String[] args) {
         POOFS poofs = new POOFS();
         poofs.carregarDadosIniciais();
-        poofs.menu();
+        poofs.menuPrincipal();
     }
 
-    private void menu() {
+    private void menuPrincipal() {
         int escolha;
         do {
-            apresentarMenu();
-            escolha = leitor.lerInt("Selecione uma opção: ");
-            tratarEscolha(escolha);
-        }
-        while (escolha != 0);
-    }
-
-    private void apresentarMenu() {
-        System.out.println("""
+            System.out.println("""
                 Menu Principal
                     1. Criar/Editar Cliente
                     2. Listar Clientes
@@ -45,11 +34,15 @@ public class POOFS {
                     8. Estatísticas
                     0. Sair
                 """);
+            escolha = leitor.lerIntMinMax("Selecione uma opção: ", 0, 8);
+            tratarEscolha(escolha);
+        }
+        while (escolha != 0);
     }
 
     private void tratarEscolha(int escolha) {
         switch (escolha) {
-            case 1 -> gestorClientes.criarOuEditar();
+            case 1 -> menuClientes();
             case 2 -> gestorClientes.listar();
             case 3 -> gestorClientes.criarOuEditarFatura();
             case 4 -> gestorClientes.listarTodasFaturas();
@@ -59,6 +52,18 @@ public class POOFS {
             case 8 -> gestorClientes.printEstatisticas();
             case 0 -> salvarSair();
             default -> System.out.println("Opção inválida. Por favor, tente novamente.");
+        }
+    }
+
+    private void menuClientes() {
+        System.out.println("""
+                1 - Criar
+                2 - Editar
+                """);
+        int i = leitor.lerIntMinMax("Opção", 1, 2);
+        switch (i) {
+            case 1 -> gestorClientes.criarOuEditar();
+            case 2 -> gestorClientes.editar(gestorClientes.selecionar());
         }
     }
 

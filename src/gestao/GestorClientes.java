@@ -16,25 +16,25 @@ public class GestorClientes extends Gestor<Cliente> {
         super(new ArrayList<>());
     }
 
-    public Cliente procurarPorNome(String nome) {
+    public Cliente procurarPorNome(String nome) throws IllegalArgumentException {
         for (Cliente cliente : array) {
             if (cliente.getNome().equalsIgnoreCase(nome)) {
                 return cliente;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Não existe cliente com esse nome!");
     }
 
     @Override
     public void criarOuEditar() {
         Leitor l = new Leitor();
         String nome = l.lerNome("Insira o nome do cliente: ");
-
-        Cliente cliente = procurarPorNome(nome);
-        if (cliente == null) {
+        try {
+            Cliente cliente = procurarPorNome(nome);
+            if(l.lerBoolean("Cliente existe, deseja editar?"))
+                editar(cliente);
+        } catch (IllegalArgumentException e) {
             criar(nome);
-        } else if (l.lerBoolean("Cliente existe, deseja editar?")) {
-            editar(cliente);
         }
     }
 
@@ -95,23 +95,20 @@ public class GestorClientes extends Gestor<Cliente> {
     }
 
     public void criarOuEditarFatura() {
-        Leitor leitor = new Leitor();
-        String nome = leitor.lerString("Insira o nome do cliente: ");
-        Cliente cliente = procurarPorNome(nome);
-        if (cliente == null) {
-            System.out.println("Esse cliente não existe. Tente outro.");
-        } else {
+        try {
+            Cliente cliente = selecionar();
             cliente.getFaturas().criarOuEditar();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Não existe clientes.");
         }
     }
 
     public void consultarFatura() {
-        Leitor leitor = new Leitor();
-        String nome = leitor.lerString("Insira o nome do cliente: ");
-        Cliente cliente = procurarPorNome(nome);
-        if (cliente != null) {
-            System.out.println("Lista de Faturas:");
+        try {
+            Cliente cliente = selecionar();
             cliente.getFaturas().listar();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Não existe clientes.");
         }
     }
 

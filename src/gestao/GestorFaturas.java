@@ -23,12 +23,12 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         this.cliente = cliente;
     }
 
-    public Fatura procurarPorNumero(int codigo) {
+    public Fatura procurarPorNumero(int codigo) throws IllegalArgumentException {
         for (Fatura f : array)
             if (f.getId() == codigo) {
                 return f;
             }
-        return null;
+        throw new IllegalArgumentException();
     }
 
     @Override
@@ -36,11 +36,13 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         Leitor leitor = new Leitor();
         int id = leitor.lerInt("Insira o ID da fatura: ");
 
-        Fatura fatura = procurarPorNumero(id);
-        if (fatura == null) {
+        try {
+            Fatura fatura = procurarPorNumero(id);
+            if (leitor.lerBoolean("Fatura já existe, deseja editar?")) {
+                editar(fatura);
+            }
+        } catch (IllegalArgumentException e) {
             criar(id);
-        } else if (leitor.lerBoolean("Fatura já existe, deseja editar?")) {
-            editar(fatura);
         }
     }
 
@@ -64,9 +66,7 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
     }
 
     public void editar(Fatura fatura) {
-        //TODO
         Leitor leitor = new Leitor();
-        System.out.println("Falta implementar");
     }
 
 }
