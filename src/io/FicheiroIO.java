@@ -20,7 +20,9 @@ public class FicheiroIO {
     }
 
     public void importarClientes(GestorClientes gc, String filename) {
-        if (!existeFicheiro(filename)) return;
+        if (!existeFicheiro(filename)) {
+            return;
+        }
 
         String[] temp = filename.split("\\.");
         String ext = temp[temp.length - 1];
@@ -47,8 +49,7 @@ public class FicheiroIO {
                 FileInputStream fileIn = new FileInputStream(filename);
                 ObjectInputStream objIn = new ObjectInputStream(fileIn)
         ) {
-            ArrayList<Cliente> arr = (ArrayList<Cliente>) objIn.readObject();
-            return arr;
+            return (ArrayList<Cliente>) objIn.readObject();
         } catch (Exception e) {
             System.out.printf("Algo correu mal: %s\n", e);
         }
@@ -70,7 +71,8 @@ public class FicheiroIO {
                     Cliente novoCliente = lerCliente(br, linha);
                     clientes.add(novoCliente);
                 }
-            } while ((linha = br.readLine()) != null);
+            }
+            while ((linha = br.readLine()) != null);
             br.close();
         } catch (FileNotFoundException ex) {
             System.out.println("Erro ao abrir ficheiro de texto.");
@@ -88,9 +90,9 @@ public class FicheiroIO {
 
         int nFaturas = Integer.parseInt(dados[1]);
         for (int i = 0; i < nFaturas; i++) {
-           linha = br.readLine();
-           Fatura novaFatura = lerFatura(br, linha, clienteNovo);
-           clienteNovo.getFaturas().adicionar(novaFatura);
+            linha = br.readLine();
+            Fatura novaFatura = lerFatura(br, linha, clienteNovo);
+            clienteNovo.getFaturas().adicionar(novaFatura);
         }
 
         return clienteNovo;
@@ -99,7 +101,7 @@ public class FicheiroIO {
     // Tipo, Filhos, Fatura_ID, Fatura_Data
     private Fatura lerFatura(BufferedReader br, String linha, Cliente cliente) throws IOException {
         String[] dados = linha.split(",");
-        Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), leitor.validarData(dados[3]), cliente, leitor);
+        Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), leitor.validarData(dados[3]), cliente);
 
         int nProdutos = Integer.parseInt(dados[1]);
         for (int i = 0; i < nProdutos; i++) {
@@ -119,11 +121,16 @@ public class FicheiroIO {
         String produtoNome = dados[2], produtoDescricao = dados[3];
         double produtoValorUnitario = Double.parseDouble(dados[5]);
         switch (dados[0]) {
-            case "ProdutoAlimentarTaxaReduzida" -> produto = new ProdutoAlimentarTaxaReduzida( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]), lerCertificacoes(dados[7]) );
-            case "ProdutoAlimentarTaxaIntermedia" -> produto = new ProdutoAlimentarTaxaIntermedia( produtoCodigo,  produtoNome,    produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]), ProdutoAlimentarTaxaIntermedia.Categoria.valueOf(dados[7]) );
-            case "ProdutoAlimentarTaxaNormal" -> produto = new ProdutoAlimentarTaxaNormal( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]) );
-            case "ProdutoFarmaciaPrescrito" -> produto = new ProdutoFarmaciaPrescrito( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, dados[6] );
-            case "ProdutoFarmaciaSemReceita" -> produto = new ProdutoFarmaciaSemReceita( produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, ProdutoFarmaciaSemReceita.Categoria.valueOf(dados[6]) );
+            case "ProdutoAlimentarTaxaReduzida" ->
+                    produto = new ProdutoAlimentarTaxaReduzida(produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]), lerCertificacoes(dados[7]));
+            case "ProdutoAlimentarTaxaIntermedia" ->
+                    produto = new ProdutoAlimentarTaxaIntermedia(produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]), ProdutoAlimentarTaxaIntermedia.Categoria.valueOf(dados[7]));
+            case "ProdutoAlimentarTaxaNormal" ->
+                    produto = new ProdutoAlimentarTaxaNormal(produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]));
+            case "ProdutoFarmaciaPrescrito" ->
+                    produto = new ProdutoFarmaciaPrescrito(produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, dados[6]);
+            case "ProdutoFarmaciaSemReceita" ->
+                    produto = new ProdutoFarmaciaSemReceita(produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, ProdutoFarmaciaSemReceita.Categoria.valueOf(dados[6]));
             default -> System.out.println("Tipo de produto desconhecido: " + dados[5]);
         }
 
@@ -158,8 +165,8 @@ public class FicheiroIO {
         File f = new File(filename);
 
         try (
-            FileWriter fw = new FileWriter(f);
-            BufferedWriter bw = new BufferedWriter(fw);
+                FileWriter fw = new FileWriter(f);
+                BufferedWriter bw = new BufferedWriter(fw);
         ) {
             for (Cliente c : gc.getTodosClientes()) {
                 escreverCliente(bw, c);
@@ -174,7 +181,7 @@ public class FicheiroIO {
     private void escreverCliente(BufferedWriter bw, Cliente c) throws IOException {
         bw.write(c.toFile());
         GestorFaturas gf = c.getFaturas();
-        for (Fatura f: gf.getArray()) {
+        for (Fatura f : gf.getArray()) {
             escreverFatura(bw, f);
         }
     }
@@ -182,7 +189,7 @@ public class FicheiroIO {
     private void escreverFatura(BufferedWriter bw, Fatura f) throws IOException {
         bw.write(f.toFile());
         GestorProdutos gp = f.getProdutos();
-        for (Produto p: gp.getArray()) {
+        for (Produto p : gp.getArray()) {
             escreverProduto(bw, p);
         }
     }

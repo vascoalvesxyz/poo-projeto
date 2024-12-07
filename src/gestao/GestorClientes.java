@@ -74,7 +74,6 @@ public class GestorClientes extends Gestor<Cliente> {
                     Cliente.Localizacao novaLocalizacao = Cliente.Localizacao.values()[idx];
                     cliente.setLocalizacao(novaLocalizacao);
                 }
-                case 4 -> System.out.print("Nova Fatura");
             }
         }
         while (input != 0);

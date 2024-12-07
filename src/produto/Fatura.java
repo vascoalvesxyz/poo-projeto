@@ -1,17 +1,18 @@
 package produto;
 
 import gestao.GestorProdutos;
-import io.Leitor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Fatura implements Serializable {
+    @Serial
     private static final long serialVersionUID = 4L;
 
-    private final int id;
-    private final Calendar data;
+    private int id;
+    private Calendar data;
     private final Cliente cliente;
     private final GestorProdutos produtos;
 
@@ -23,7 +24,7 @@ public class Fatura implements Serializable {
         this.produtos = new GestorProdutos();
     }
 
-    public Fatura(int id, Calendar data, Cliente cliente, Leitor leitor) {
+    public Fatura(int id, Calendar data, Cliente cliente) {
         this.id = id;
         this.data = data;
         this.cliente = cliente;
@@ -36,11 +37,11 @@ public class Fatura implements Serializable {
         apresentar da fatura o total sem IVA, o valor total do IVA e o valor total com IVA.
      */
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-        String res = String.format("=== ID: %02d, DATA: %s ===%n", id, sdf.format(data.getTime()));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String res = String.format("=== ID: %d, DATA: %s ===%n", id, sdf.format(data.getTime()));
         //int len = res.length();
         res += String.format("\tCLIENTE: \n\t  %s\n", cliente.toString());
-        res += String.format("\tPRODUTOS:\n");
+        res += "\tPRODUTOS:\n";
         double total = 0;
         for (Produto produto : produtos.getProdutos()) {
             double IVA = produto.calcIva(cliente.getLocalizacao());
@@ -55,6 +56,14 @@ public class Fatura implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setData(Calendar data) {
+        this.data = data;
     }
 
     public String toFile() {
