@@ -3,6 +3,7 @@ package gestao;
 import io.Leitor;
 import produto.Cliente;
 import produto.Fatura;
+import produto.Produto;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -74,9 +75,10 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
             System.out.println("""
                     1 - Editar ID.
                     2 - Editar Data.
+                    3 - Gerir Produtos (Adicionar/Remover/Editar).
                     0 - Sair.
                     """);
-            input = leitor.lerIntMinMax("Opção: ", 0, 2);
+            input = leitor.lerIntMinMax("Opção: ", 0, 3);
 
             switch (input) {
                 case 1 -> {
@@ -91,16 +93,52 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
                             fatura.setId(novoId);
                             terminado = true;
                         }
-                    }
-                    while (!terminado);
+                    } while (!terminado);
                 }
                 case 2 -> {
                     Calendar novaData = leitor.lerData();
                     fatura.setData(novaData);
                 }
+                case 3 -> gerirProdutos(fatura);
             }
-        }
-        while (input != 0);
+        } while (input != 0);
     }
 
+    private void gerirProdutos(Fatura fatura) {
+        Leitor leitor = new Leitor();
+        int opcao;
+        do {
+            System.out.println("""
+                    1 - Adicionar Produto.
+                    2 - Remover Produto.
+                    0 - Voltar.
+                    """);
+            opcao = leitor.lerIntMinMax("Escolha a ação para produtos: ", 0, 2);
+
+            switch (opcao) {
+                case 1 -> { // Adicionar Produto
+                    boolean adicionarProduto;
+                    do {
+                        fatura.getProdutos().criarOuEditar();
+                        adicionarProduto = leitor.lerBoolean("Deseja adicionar mais um produto? ");
+                    } while (adicionarProduto);
+                }
+                case 2 -> { // Remover Produto
+                    int idProduto;
+                    boolean terminado = false;
+                    do {
+                        idProduto = leitor.lerInt("Id do produto: ");
+                        try {
+                            Produto produto = fatura.getProdutos().procurarPorCodigo(idProduto);
+                            fatura.getProdutos().remover(produto);
+                            System.out.printf("Produto com id %d removido da fatura.\n", idProduto);
+                            terminado = true;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Não existe nenhum produto com esse id.");
+                        }
+                    } while (!terminado);
+                }
+            }
+        } while (opcao != 0);
+    }
 }

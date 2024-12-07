@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class GestorProdutos extends Gestor<Produto> implements Serializable {
     private static final long serialVersionUID = 5L;
 
-    public GestorProdutos() { super(); }
+    public GestorProdutos() {super();}
 
     public Produto procurarPorCodigo(int codigo) {
         for (Produto p : array)
@@ -60,14 +60,16 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
         array.add(produto);
     }
 
+    public void remover(Produto produto) {array.remove(produto);}
+
     public ArrayList<Produto> getProdutos() {
         return this.array;
     }
 
     private Produto pedirProdutoAlimentar(int codigo) {
         Leitor leitor = new Leitor();
-        String nome = leitor.lerString("Nome: ");
-        String descricao = leitor.lerString("Descrição: ");
+        String nome = leitor.lerNome("Nome: ");
+        String descricao = leitor.lerDescricao("Descrição: ");
         int quantidade = leitor.lerInt("Quantidade: ");
         int valor = leitor.lerInt("Valor Unitário: ");
 
@@ -118,8 +120,8 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
 
     private Produto pedirProdutoFarmaceutico(int codigo) {
         Leitor leitor = new Leitor();
-        String nome = leitor.lerString("Nome: ");
-        String descricao = leitor.lerString("Descrição: ");
+        String nome = leitor.lerNome("Nome: ");
+        String descricao = leitor.lerDescricao("Descrição: ");
         int quantidade = leitor.lerInt("Quantidade: ");
         int valor = leitor.lerInt("Valor Unitário: ");
 

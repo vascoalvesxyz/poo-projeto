@@ -16,6 +16,20 @@ public class Leitor implements Serializable {
         return scanner.nextLine();
     }
 
+    public String lerDescricao(String mensagem) {
+        String str;
+        boolean isValido = false;
+        do {
+            str = lerString(mensagem);
+            if (!str.contains(",")) {
+                isValido = true;
+            } else {
+                System.out.println("Descrição inválida. Por favor, insira uma descrição que não contenha vírgulas.");
+            }
+        } while (!isValido);
+        return str;
+    }
+
     public String lerNome(String mensagem) {
         String str;
         boolean isValido = false;
@@ -27,11 +41,9 @@ public class Leitor implements Serializable {
             } else {
                 System.out.println("Nome inválido. Por favor, insira um nome com caracteres alfabéticos e que comece com uma letra maiúscula.");
             }
-        }
-        while (!isValido);
+        } while (!isValido);
         return str;
     }
-
 
     public String lerContribuinte(String mensagem) {
         String str;
@@ -44,8 +56,7 @@ public class Leitor implements Serializable {
             } else {
                 System.out.println("Contribuinte inválido. Por favor, insira um número com 9 dígitos.");
             }
-        }
-        while (!isValido);
+        } while (!isValido);
         return str;
     }
 
@@ -77,8 +88,7 @@ public class Leitor implements Serializable {
             } else {
                 System.out.println("Valor inválido. Por favor, insira um número dentro gama permitida.");
             }
-        }
-        while (!valido);
+        } while (!valido);
         return res;
     }
 
@@ -94,8 +104,7 @@ public class Leitor implements Serializable {
             } else {
                 System.out.println("Opção inválida. Por favor, insira um \"s\" ou um \"n\".");
             }
-        }
-        while (!valido);
+        } while (!valido);
 
         return inputStr.equalsIgnoreCase("s");
     }
