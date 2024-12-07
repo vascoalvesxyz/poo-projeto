@@ -8,7 +8,7 @@ public class ProdutoAlimentarTaxaIntermedia extends ProdutoAlimentar {
         VINHO
     }
 
-    public Categoria categoria;
+    private final Categoria categoria;
 
     public ProdutoAlimentarTaxaIntermedia() {
         super();
@@ -26,8 +26,12 @@ public class ProdutoAlimentarTaxaIntermedia extends ProdutoAlimentar {
         /* Continente, Madeira, Açores */
         final int[] tabelaIva = {13, 12, 9};
         double taxa = tabelaIva[localizacao.ordinal()];
-        if (categoria == Categoria.VINHO) taxa += 1;
-        if (biologico) taxa = taxa * 0.9;
+        if (categoria == Categoria.VINHO) {
+            taxa += 1;
+        }
+        if (biologico) {
+            taxa = taxa * 0.9;
+        }
         return taxa;
     }
 
