@@ -96,6 +96,7 @@ public class GestorClientes extends Gestor<Cliente> {
     public void criarOuEditarFatura() {
         try {
             Cliente cliente = selecionar();
+            System.out.printf("Cliente selecionado: %s\n", cliente.toString());
             cliente.getFaturas().criarOuEditar();
         } catch (IllegalArgumentException e) {
             System.out.println("Não existe clientes.");

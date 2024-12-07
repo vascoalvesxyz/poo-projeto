@@ -1,6 +1,8 @@
 import gestao.GestorClientes;
+import gestao.GestorFaturas;
 import io.FicheiroIO;
 import io.Leitor;
+import produto.Cliente;
 
 public class POOFS {
     private final GestorClientes gestorClientes;
@@ -34,7 +36,7 @@ public class POOFS {
                     8. Estatísticas
                     0. Sair
                 """);
-            escolha = leitor.lerIntMinMax("Selecione uma opção: ", 0, 8);
+            escolha = leitor.lerIntMinMax("Selecione uma opção", 0, 8);
             tratarEscolha(escolha);
         }
         while (escolha != 0);
@@ -44,7 +46,7 @@ public class POOFS {
         switch (escolha) {
             case 1 -> menuClientes();
             case 2 -> gestorClientes.listar();
-            case 3 -> gestorClientes.criarOuEditarFatura();
+            case 3 -> menuFaturas();
             case 4 -> gestorClientes.listarTodasFaturas();
             case 5 -> gestorClientes.consultarFatura();
             case 6 -> importarDados();
@@ -63,7 +65,37 @@ public class POOFS {
         int i = leitor.lerIntMinMax("Opção", 1, 2);
         switch (i) {
             case 1 -> gestorClientes.criarOuEditar();
-            case 2 -> gestorClientes.editar(gestorClientes.selecionar());
+            case 2 -> {
+                try {
+                    Cliente c = gestorClientes.selecionar();
+                    gestorClientes.editar(c);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Não há clientes.");
+                }
+            }
+        }
+    }
+
+    private void menuFaturas() {
+        System.out.println("""
+                1 - Criar
+                2 - Editar
+                """);
+        int i = leitor.lerIntMinMax("Opção", 1, 2);
+        switch (i) {
+            case 1 -> gestorClientes.selecionar().getFaturas().criarOuEditar();
+            case 2 -> {
+                try {
+                    GestorFaturas gf = gestorClientes.selecionar().getFaturas();
+                    try {
+                        gf.editar(gf.selecionar());
+                    } catch (IllegalArgumentException e ) {
+                        System.out.println("Não há faturas para este cliente.");
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Não há clientes.");
+                }
+            }
         }
     }
 
