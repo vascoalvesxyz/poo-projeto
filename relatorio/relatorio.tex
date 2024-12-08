@@ -101,6 +101,10 @@ O programa está dividido em três pacotes principais:
     \caption{UML Projetado Vs. UML Final}%
 \end{figure}
 
+O UML de classes final, têm 17 classes, 4 das quais são \texttt{abstract}, comparado com o diagrama projectado que tinha apenas 7 classes, sendo duas \texttt{abstract}. Este aumento em complexidade deve-se sobretudo à criação dos pacotes \texttt{gestão} e \texttt{io} para auxiliar, respectivamente, com a gestão (criação, edição, listagem, remoção, etc.) de dados e com a validação, importação e exportação de dados.
+
+Mesmo assim, a estrutura original foi preservada na sua maioria dentro do pacote \texttt{produto}. A classe \texttt{produtoAlimentar} passou a ser \texttt{abstract} para dar lugar à criação de três subclasses, cada uma correspondente a um tipo de taxamento (reduzido, intermédio ou normal).
+
 \ssection{Conclusão e Observações}
 
 O programa \textbf{POOFS} (\textit{POO Financial Services}) foi concebido para ajudar empresas a organizar as suas operações financeiras. Ele regista clientes, cria faturas, e oferece dados detalhados de forma clara e prática.
@@ -117,6 +121,7 @@ O programa \textbf{POOFS} (\textit{POO Financial Services}) foi concebido para a
 \begin{itemize}
     \item O sistema tem uma arquitetura bem estruturada, que facilita manutenção e melhorias futuras.
 \end{itemize}
+
 
 
 
