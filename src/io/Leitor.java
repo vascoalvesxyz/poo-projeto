@@ -1,6 +1,5 @@
 package io;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Scanner;
 
@@ -8,7 +7,7 @@ import java.util.Scanner;
  * Classe utilitária para leitura de dados do utilizador a partir da consola.
  * Contém métodos para validar e garantir o formato correto dos dados introduzidos.
  */
-public class Leitor implements Serializable {
+public class Leitor {
 
     private static final Scanner scanner = new Scanner(System.in);
 
