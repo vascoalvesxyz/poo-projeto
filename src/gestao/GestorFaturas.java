@@ -36,12 +36,11 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
 
     @Override
     public void criarOuEditar() {
-        Leitor leitor = new Leitor();
-        int id = leitor.lerInt("Insira o ID da fatura: ");
+        int id = Leitor.lerUInt("Insira o ID da fatura: ");
 
         try {
             Fatura fatura = procurarPorNumero(id);
-            if (leitor.lerBoolean("Fatura já existe, deseja editar?")) {
+            if (Leitor.lerBoolean("Fatura já existe, deseja editar?")) {
                 editar(fatura);
             }
         } catch (IllegalArgumentException e) {
@@ -55,57 +54,55 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
     }
 
     public void criar(int id) {
-        Leitor leitor = new Leitor();
-        Calendar cal = leitor.lerData();
+        Calendar cal = Leitor.lerData();
         Fatura fatura = new Fatura(id, cal, cliente);
 
         boolean adicionarProduto;
         do {
             fatura.getProdutos().criarOuEditar();
-            adicionarProduto = leitor.lerBoolean("Deseja adicionar mais um produto? ");
+            adicionarProduto = Leitor.lerBoolean("Deseja adicionar mais um produto? ");
         }
         while (adicionarProduto);
         adicionar(fatura);
     }
 
-    public void editar(Fatura fatura) {
-        Leitor leitor = new Leitor();
+    @Override
+    public void editar(Fatura item) {
         int input;
         do {
             System.out.println("""
                     1 - Editar ID.
                     2 - Editar Data.
-                    3 - Gerir Produtos (Adicionar/Remover/Editar).
+                    3 - Gerir Produtos (Adicionar/Remover).
                     0 - Sair.
                     """);
-            input = leitor.lerIntMinMax("Opção: ", 0, 3);
+            input = Leitor.lerIntMinMax("Opção: ", 0, 3);
 
             switch (input) {
                 case 1 -> {
                     int novoId;
                     boolean terminado = false;
                     do {
-                        novoId = leitor.lerInt("Novo id: ");
+                        novoId = Leitor.lerUInt("Novo id: ");
                         try {
                             procurarPorNumero(novoId);
                             System.out.println("Já existe uma fatura com esse ID. Por favor, insira outro.");
                         } catch (IllegalArgumentException e) {
-                            fatura.setId(novoId);
+                            item.setId(novoId);
                             terminado = true;
                         }
                     } while (!terminado);
                 }
                 case 2 -> {
-                    Calendar novaData = leitor.lerData();
-                    fatura.setData(novaData);
+                    Calendar novaData = Leitor.lerData();
+                    item.setData(novaData);
                 }
-                case 3 -> gerirProdutos(fatura);
+                case 3 -> gerirProdutos(item);
             }
         } while (input != 0);
     }
 
     private void gerirProdutos(Fatura fatura) {
-        Leitor leitor = new Leitor();
         int opcao;
         do {
             System.out.println("""
@@ -113,21 +110,21 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
                     2 - Remover Produto.
                     0 - Voltar.
                     """);
-            opcao = leitor.lerIntMinMax("Escolha a ação para produtos: ", 0, 2);
+            opcao = Leitor.lerIntMinMax("Escolha a ação para produtos: ", 0, 2);
 
             switch (opcao) {
                 case 1 -> { // Adicionar Produto
                     boolean adicionarProduto;
                     do {
                         fatura.getProdutos().criarOuEditar();
-                        adicionarProduto = leitor.lerBoolean("Deseja adicionar mais um produto? ");
+                        adicionarProduto = Leitor.lerBoolean("Deseja adicionar mais um produto? ");
                     } while (adicionarProduto);
                 }
                 case 2 -> { // Remover Produto
                     int idProduto;
                     boolean terminado = false;
                     do {
-                        idProduto = leitor.lerInt("Id do produto: ");
+                        idProduto = Leitor.lerUInt("Id do produto: ");
                         try {
                             Produto produto = fatura.getProdutos().procurarPorCodigo(idProduto);
                             fatura.getProdutos().remover(produto);

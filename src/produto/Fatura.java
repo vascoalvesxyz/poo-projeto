@@ -16,14 +16,6 @@ public class Fatura implements Serializable {
     private final Cliente cliente;
     private final GestorProdutos produtos;
 
-
-    public Fatura() {
-        this.id = 0;
-        this.data = Calendar.getInstance();
-        this.cliente = new Cliente();
-        this.produtos = new GestorProdutos();
-    }
-
     public Fatura(int id, Calendar data, Cliente cliente) {
         this.id = id;
         this.data = data;
@@ -43,12 +35,12 @@ public class Fatura implements Serializable {
         res += String.format("\tCLIENTE: \n\t  %s\n", cliente.toString());
         res += "\tPRODUTOS:\n";
         double total = 0;
-        for (Produto produto : produtos.getProdutos()) {
+        for (Produto produto : produtos.getArray()) {
             double IVA = produto.calcIva(cliente.getLocalizacao());
             double valorReal = produto.getValorUnitario() * (1 + (IVA / 100));
             double totalProduto = valorReal * produto.getQuantidade();
             total += totalProduto;
-            res += String.format("\t- %s\n\t  IVA: %.1f%%, Valor Real: %.2f€, Total: %.2f€\n", produto.toString(), IVA, valorReal, totalProduto);
+            res = res.concat(String.format("\t- %s\n\t  IVA: %.1f%%, Valor Real: %.2f€, Total: %.2f€\n", produto, IVA, valorReal, totalProduto));
         }
         res += String.format("\tTOTAL: %.2f€\n", total);
         return res;
@@ -68,7 +60,7 @@ public class Fatura implements Serializable {
 
     public String toFile() {
         String dataStr = String.format("%02d/%02d/%04d", data.get(Calendar.DAY_OF_MONTH), data.get(Calendar.MONTH) + 1, data.get(Calendar.YEAR));
-        return String.format("FATURA,%d,%s,%s\n", getProdutos().getArraySize(), id, dataStr);
+        return String.format("FATURA;%d;%s;%s\n", getProdutos().getArraySize(), id, dataStr);
     }
 
     public GestorProdutos getProdutos() {

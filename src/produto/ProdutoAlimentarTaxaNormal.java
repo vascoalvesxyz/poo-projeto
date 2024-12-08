@@ -2,10 +2,6 @@ package produto;
 
 public class ProdutoAlimentarTaxaNormal extends ProdutoAlimentar {
 
-    public ProdutoAlimentarTaxaNormal() {
-        super();
-    }
-
     public ProdutoAlimentarTaxaNormal(int codigo, String nome, String descricao, int quantidade, double valorUnitario, boolean biologico) {
         super(codigo, nome, descricao, quantidade, valorUnitario, biologico);
     }
@@ -31,7 +27,7 @@ public class ProdutoAlimentarTaxaNormal extends ProdutoAlimentar {
     @Override
     public String toFile() {
         return String.format(
-                "ProdutoAlimentarTaxaNormal,%d,%s,%s,%d,%.2f,%s\n"
+                "ProdutoAlimentarTaxaNormal;%d;%s;%s;%d;%.2f;%s\n"
                 , codigo, nome, descricao, quantidade, valorUnitario, biologico
         );
     }

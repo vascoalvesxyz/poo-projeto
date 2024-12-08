@@ -5,23 +5,20 @@ import java.util.Calendar;
 import java.util.Scanner;
 
 public class Leitor implements Serializable {
-    private final Scanner scanner;
 
-    public Leitor() {
-        scanner = new Scanner(System.in);
-    }
+    private static final Scanner scanner = new Scanner(System.in);
 
-    public String lerString(String mensagem) {
+    public static String lerString(String mensagem) {
         System.out.print(mensagem);
         return scanner.nextLine();
     }
 
-    public String lerDescricao(String mensagem) {
+    public static String lerDescricao(String mensagem) {
         String str;
         boolean isValido = false;
         do {
             str = lerString(mensagem);
-            if (!str.contains(",")) {
+            if (!str.contains(FicheiroIO.separador)) {
                 isValido = true;
             } else {
                 System.out.println("Descrição inválida. Por favor, insira uma descrição que não contenha vírgulas.");
@@ -30,7 +27,7 @@ public class Leitor implements Serializable {
         return str;
     }
 
-    public String lerNome(String mensagem) {
+    public static String lerNome(String mensagem) {
         String str;
         boolean isValido = false;
         do {
@@ -45,7 +42,7 @@ public class Leitor implements Serializable {
         return str;
     }
 
-    public String lerContribuinte(String mensagem) {
+    public static String lerContribuinte(String mensagem) {
         String str;
         boolean isValido = false;
         do {
@@ -60,14 +57,14 @@ public class Leitor implements Serializable {
         return str;
     }
 
-    public int lerInt(String mensagem) {
+    public static int lerUInt(String mensagem) {
         int numero = 0;
         boolean valido = false;
 
         while (!valido) {
             String entrada = lerString(mensagem);
 
-            if (entrada.matches("-?[0-9]+")) {
+            if (entrada.matches("[0-9]+")) {
                 numero = Integer.parseInt(entrada);
                 valido = true;
             } else {
@@ -77,12 +74,38 @@ public class Leitor implements Serializable {
         return numero;
     }
 
-    public int lerIntMinMax(String mensagem, int min, int max) {
+    public static Double lerUDouble(String mensagem) {
+        Double numero = 0.0;
+        boolean valido = false;
+
+        while (!valido) {
+            String entrada = lerString(mensagem);
+
+            entrada = entrada.replace(',', '.');
+
+            /* REGEX: Número com pelo menos 1 digito,
+            seguido, ou não, de um ponto e pelo menos 1 digito
+             */
+            if (entrada.matches("[0-9]+([,.][0-9]+)?")) {
+                try {
+                    numero = Double.parseDouble(entrada);
+                    valido = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Entrada inválida. Por favor, insira um número válido.");
+                }
+            } else {
+                System.out.println("Entrada inválida. Por favor, insira um número válido.");
+            }
+        }
+        return numero;
+    }
+
+    public static int lerIntMinMax(String mensagem, int min, int max) {
         int res;
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
         boolean valido = false;
         do {
-            res = lerInt(mensagem);
+            res = lerUInt(mensagem);
             if (res >= min && res <= max) {
                 valido = true;
             } else {
@@ -92,7 +115,7 @@ public class Leitor implements Serializable {
         return res;
     }
 
-    public boolean lerBoolean(String questao) {
+    public static boolean lerBoolean(String questao) {
         System.out.println(questao + "(s/n)");
 
         String inputStr;
@@ -109,20 +132,20 @@ public class Leitor implements Serializable {
         return inputStr.equalsIgnoreCase("s");
     }
 
-    public void printEnum(Object[] valores) {
+    public static void printEnum(Object[] valores) {
         System.out.println("Escolha uma das opções:");
         for (int i = 0; i < valores.length; i++) {
             System.out.printf("%d - %s%n", i + 1, valores[i].toString());
         }
     }
 
-    public int lerEnum(Object[] valoresEnum) {
+    public static int lerEnum(Object[] valoresEnum) {
         printEnum(valoresEnum);
         int input = lerIntMinMax("Opção", 1, valoresEnum.length);
         return input - 1;
     }
 
-    public Calendar lerData() {
+    public static Calendar lerData() {
         while (true) {
             String input = lerString("Insere a Data (dd/mm/yyyy): ");
             Calendar cal = validarData(input);
@@ -132,7 +155,7 @@ public class Leitor implements Serializable {
         }
     }
 
-    public Calendar validarData(String data) {
+    public static Calendar validarData(String data) {
         try {
             validarFormatoData(data);
             Calendar cal = analisarData(data);
@@ -145,13 +168,13 @@ public class Leitor implements Serializable {
         return null;
     }
 
-    private void validarFormatoData(String data) {
+    private static void validarFormatoData(String data) {
         if (!data.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
             throw new IllegalArgumentException("Formato inválido! Use dd/mm/yyyy.");
         }
     }
 
-    private Calendar analisarData(String data) {
+    private static Calendar analisarData(String data) {
         String[] parts = data.split("/");
 
         int dia = Integer.parseInt(parts[0]);
@@ -169,7 +192,7 @@ public class Leitor implements Serializable {
         return cal;
     }
 
-    private boolean validarVeracidadeData(Calendar cal) {
+    private static boolean validarVeracidadeData(Calendar cal) {
         int ano = cal.get(Calendar.YEAR);
         int ANO_MAX = 2200, ANO_MIN = 1900;
         return ano <= ANO_MAX && ano >= ANO_MIN;

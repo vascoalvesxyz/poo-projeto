@@ -1,11 +1,12 @@
 package produto;
 
 import gestao.GestorFaturas;
-import io.Leitor;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Cliente implements Serializable {
+    @Serial
     private static final long serialVersionUID = 2L;
 
     /* Variaveis */
@@ -25,8 +26,7 @@ public class Cliente implements Serializable {
     public Cliente(
             String nome,
             String contribuinte,
-            Localizacao localizacao,
-            Leitor leitor
+            Localizacao localizacao
     ) {
         this.nome = nome;
         this.contribuinte = contribuinte;
@@ -66,7 +66,7 @@ public class Cliente implements Serializable {
     }
 
     public String toFile() {
-        return String.format("CLIENTE,%d,%s,%s,%s\n", getFaturas().getArraySize(), nome, contribuinte, localizacao);
+        return String.format("CLIENTE;%d;%s;%s;%s\n", getFaturas().getArraySize(), nome, contribuinte, localizacao);
     }
 
     /* Enums*/

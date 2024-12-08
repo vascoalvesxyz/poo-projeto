@@ -1,17 +1,13 @@
 import gestao.GestorClientes;
-import gestao.GestorFaturas;
 import io.FicheiroIO;
 import io.Leitor;
-import produto.Cliente;
 
 public class POOFS {
     private final GestorClientes gestorClientes;
-    private final Leitor leitor;
     private final FicheiroIO ficheiroIO;
 
     public POOFS() {
-        leitor = new Leitor();
-        ficheiroIO = new FicheiroIO(leitor);
+        ficheiroIO = new FicheiroIO();
         gestorClientes = new GestorClientes();
     }
 
@@ -36,7 +32,7 @@ public class POOFS {
                     8. Estatísticas
                     0. Sair
                 """);
-            escolha = leitor.lerIntMinMax("Selecione uma opção", 0, 8);
+            escolha = Leitor.lerIntMinMax("Selecione uma opção", 0, 8);
             tratarEscolha(escolha);
         }
         while (escolha != 0);
@@ -44,9 +40,9 @@ public class POOFS {
 
     private void tratarEscolha(int escolha) {
         switch (escolha) {
-            case 1 -> menuClientes();
+            case 1 -> gestorClientes.criarOuEditar();
             case 2 -> gestorClientes.listar();
-            case 3 -> menuFaturas();
+            case 3 -> gestorClientes.criarOuEditarFaturas();
             case 4 -> gestorClientes.listarTodasFaturas();
             case 5 -> gestorClientes.consultarFatura();
             case 6 -> importarDados();
@@ -54,48 +50,6 @@ public class POOFS {
             case 8 -> gestorClientes.printEstatisticas();
             case 0 -> salvarSair();
             default -> System.out.println("Opção inválida. Por favor, tente novamente.");
-        }
-    }
-
-    private void menuClientes() {
-        System.out.println("""
-                1 - Criar
-                2 - Editar
-                """);
-        int i = leitor.lerIntMinMax("Opção", 1, 2);
-        switch (i) {
-            case 1 -> gestorClientes.criarOuEditar();
-            case 2 -> {
-                try {
-                    Cliente c = gestorClientes.selecionar();
-                    gestorClientes.editar(c);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Não há clientes.");
-                }
-            }
-        }
-    }
-
-    private void menuFaturas() {
-        System.out.println("""
-                1 - Criar
-                2 - Editar
-                """);
-        int i = leitor.lerIntMinMax("Opção", 1, 2);
-        switch (i) {
-            case 1 -> gestorClientes.selecionar().getFaturas().criarOuEditar();
-            case 2 -> {
-                try {
-                    GestorFaturas gf = gestorClientes.selecionar().getFaturas();
-                    try {
-                        gf.editar(gf.selecionar());
-                    } catch (IllegalArgumentException e ) {
-                        System.out.println("Não há faturas para este cliente.");
-                    }
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Não há clientes.");
-                }
-            }
         }
     }
 
@@ -110,12 +64,12 @@ public class POOFS {
     }
 
     private void importarDados() {
-        String caminho = leitor.lerString("Nome do ficheiro: ");
+        String caminho = Leitor.lerString("Nome do ficheiro: ");
         ficheiroIO.importarClientes(gestorClientes, caminho);
     }
 
     private void exportarDadosTexto() {
-        String caminho = leitor.lerString("Nome do ficheiro: ");
+        String caminho = Leitor.lerString("Nome do ficheiro: ");
         ficheiroIO.exportarClientesTexto(gestorClientes, caminho);
     }
 

@@ -13,11 +13,9 @@ import java.util.ArrayList;
 
 public class FicheiroIO {
 
-    Leitor leitor;
+    static final String separador = ";";
 
-    public FicheiroIO(Leitor leitor) {
-        this.leitor = leitor;
-    }
+    public FicheiroIO() { }
 
     public void importarClientes(GestorClientes gc, String filename) {
         if (!existeFicheiro(filename)) {
@@ -65,7 +63,7 @@ public class FicheiroIO {
             BufferedReader br = new BufferedReader(fr);
             String linha = br.readLine();
             do {
-                String[] dados = linha.split(",");
+                String[] dados = linha.split(";");
                 if (dados[0].equals("CLIENTE")) {
                     System.out.printf("Importando Cliente: %s\n", dados[2]);
                     Cliente novoCliente = lerCliente(br, linha);
@@ -85,8 +83,8 @@ public class FicheiroIO {
 
     // Tipo, Filhos, Cliente_Nome, Cliente_Contribuinte, Cliente_Localizacao
     private Cliente lerCliente(BufferedReader br, String linha) throws IOException {
-        String[] dados = linha.split(",");
-        Cliente clienteNovo = new Cliente(dados[2], dados[3], Cliente.Localizacao.valueOf(dados[4]), leitor);
+        String[] dados = linha.split(separador);
+        Cliente clienteNovo = new Cliente(dados[2], dados[3], Cliente.Localizacao.valueOf(dados[4]));
 
         int nFaturas = Integer.parseInt(dados[1]);
         for (int i = 0; i < nFaturas; i++) {
@@ -100,8 +98,8 @@ public class FicheiroIO {
 
     // Tipo, Filhos, Fatura_ID, Fatura_Data
     private Fatura lerFatura(BufferedReader br, String linha, Cliente cliente) throws IOException {
-        String[] dados = linha.split(",");
-        Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), leitor.validarData(dados[3]), cliente);
+        String[] dados = linha.split(separador);
+        Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), Leitor.validarData(dados[3]), cliente);
 
         int nProdutos = Integer.parseInt(dados[1]);
         for (int i = 0; i < nProdutos; i++) {
@@ -115,11 +113,11 @@ public class FicheiroIO {
 
     //Produto_Tipo,Produto_Codigo,Produto_Nome,Produto_Descricao,Produto_Quantidade,Produto_ValorUnitario,EXTRA
     private Produto lerProduto(String input) {
-        String[] dados = input.split(",");
+        String[] dados = input.split(separador);
         Produto produto = null;
         int produtoCodigo = Integer.parseInt(dados[1]), produtoQuantidade = Integer.parseInt(dados[4]);
         String produtoNome = dados[2], produtoDescricao = dados[3];
-        double produtoValorUnitario = Double.parseDouble(dados[5]);
+        double produtoValorUnitario = Double.parseDouble(dados[5].replace(",", "."));
         switch (dados[0]) {
             case "ProdutoAlimentarTaxaReduzida" ->
                     produto = new ProdutoAlimentarTaxaReduzida(produtoCodigo, produtoNome, produtoDescricao, produtoQuantidade, produtoValorUnitario, Boolean.parseBoolean(dados[6]), lerCertificacoes(dados[7]));
@@ -166,15 +164,15 @@ public class FicheiroIO {
 
         try (
                 FileWriter fw = new FileWriter(f);
-                BufferedWriter bw = new BufferedWriter(fw);
+                BufferedWriter bw = new BufferedWriter(fw)
         ) {
-            for (Cliente c : gc.getTodosClientes()) {
+            for (Cliente c : gc.getArray()) {
                 escreverCliente(bw, c);
             }
         } catch (IOException e) {
             System.out.println("Não foi possivel escrever o ficheiro: " + e);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.toString());
         }
     }
 

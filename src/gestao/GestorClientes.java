@@ -25,30 +25,47 @@ public class GestorClientes extends Gestor<Cliente> {
 
     @Override
     public void criarOuEditar() {
-        Leitor l = new Leitor();
-        String nome = l.lerNome("Insira o nome do cliente: ");
-        try {
-            Cliente cliente = procurarPorNome(nome);
-            if (l.lerBoolean("Cliente existe, deseja editar?")) {
-                editar(cliente);
+        System.out.println("""
+                1 - Criar
+                2 - Editar
+                0 - Sair
+                """);
+        int i = Leitor.lerIntMinMax("Opção", 0, 2);
+        switch (i) {
+            case 1 -> {
+                String nome = Leitor.lerNome("Insira o nome do cliente: ");
+                try {
+                    Cliente cliente = procurarPorNome(nome);
+                    if (Leitor.lerBoolean("Cliente existe, deseja editar?")) {
+                        editar(cliente);
+                    }
+                } catch (IllegalArgumentException e) {
+                    criar(nome);
+                }
             }
-        } catch (IllegalArgumentException e) {
-            criar(nome);
+            case 2 -> {
+                try {
+                    Cliente cliente = selecionar();
+                    editar(cliente);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Não há clientes.");
+                }
+            }
+            case 0 -> { }
         }
     }
 
-    public void criar(String nome) {
-        Leitor leitor = new Leitor();
-        String contribuinte = leitor.lerContribuinte("Contribuinte novo:");
-        int escolhaLocalizacao = leitor.lerEnum(Localizacao.values());
+    private void criar(String nome) {
+        String contribuinte = Leitor.lerContribuinte("Contribuinte novo:");
+        int escolhaLocalizacao = Leitor.lerEnum(Localizacao.values());
         Localizacao localizacao = Localizacao.values()[escolhaLocalizacao];
-        Cliente novoCliente = new Cliente(nome, contribuinte, localizacao, leitor);
+        Cliente novoCliente = new Cliente(nome, contribuinte, localizacao);
         adicionar(novoCliente);
         System.out.println("O cliente foi criado.");
     }
 
-    public void editar(Cliente cliente) {
-        Leitor leitor = new Leitor();
+    @Override
+    protected void editar(Cliente item) {
         int input;
         do {
             System.out.println("""
@@ -57,22 +74,22 @@ public class GestorClientes extends Gestor<Cliente> {
                     3 - Editar Localização.
                     0 - Sair.
                     """);
-            input = leitor.lerIntMinMax("Opção: ", 0, 3);
+            input = Leitor.lerIntMinMax("Opção: ", 0, 3);
 
             switch (input) {
                 case 1 -> {
-                    String novoNome = leitor.lerNome("Novo nome: ");
-                    cliente.setNome(novoNome);
+                    String novoNome = Leitor.lerNome("Novo nome: ");
+                    item.setNome(novoNome);
                 }
                 case 2 -> {
-                    String novoContribuinte = leitor.lerContribuinte("Novo contribuinte: ");
-                    cliente.setContribuinte(novoContribuinte);
+                    String novoContribuinte = Leitor.lerContribuinte("Novo contribuinte: ");
+                    item.setContribuinte(novoContribuinte);
                 }
                 case 3 -> {
                     System.out.print("Nova Localização: ");
-                    int idx = leitor.lerEnum(Cliente.Localizacao.values());
-                    Cliente.Localizacao novaLocalizacao = Cliente.Localizacao.values()[idx];
-                    cliente.setLocalizacao(novaLocalizacao);
+                    int idx = Leitor.lerEnum(Localizacao.values());
+                    Localizacao novaLocalizacao = Localizacao.values()[idx];
+                    item.setLocalizacao(novaLocalizacao);
                 }
             }
         }
@@ -89,17 +106,28 @@ public class GestorClientes extends Gestor<Cliente> {
         }
     }
 
-    public ArrayList<Cliente> getTodosClientes() {
-        return array;
-    }
-
-    public void criarOuEditarFatura() {
-        try {
-            Cliente cliente = selecionar();
-            System.out.printf("Cliente selecionado: %s\n", cliente.toString());
-            cliente.getFaturas().criarOuEditar();
-        } catch (IllegalArgumentException e) {
-            System.out.println("Não existe clientes.");
+    public void criarOuEditarFaturas() {
+        System.out.println("""
+                1 - Criar
+                2 - Editar
+                0 - Sair
+                """);
+        int i = Leitor.lerIntMinMax("Opção", 0, 2);
+        switch (i) {
+            case 1 -> selecionar().getFaturas().criarOuEditar();
+            case 2 -> {
+                try {
+                    GestorFaturas gf = selecionar().getFaturas();
+                    try {
+                        gf.editar(gf.selecionar());
+                    } catch (IllegalArgumentException e ) {
+                        System.out.println("Não há faturas para este cliente.");
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Não há clientes.");
+                }
+            }
+            case 0 -> { }
         }
     }
 
@@ -114,7 +142,7 @@ public class GestorClientes extends Gestor<Cliente> {
 
     public void listarTodasFaturas() {
         System.out.println("Lista de Faturas:");
-        for (Cliente c : getTodosClientes())
+        for (Cliente c : getArray())
             c.getFaturas().listar();
     }
 

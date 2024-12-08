@@ -18,6 +18,7 @@ public abstract class Gestor<Tipo> implements Serializable {
     }
 
     public abstract void criarOuEditar();
+    protected abstract void editar(Tipo item);
 
     public void listar() {
         for (Tipo obj : array) {
@@ -42,8 +43,12 @@ public abstract class Gestor<Tipo> implements Serializable {
         return array.get(idx);
     }
 
-    protected void adicionar(Tipo obj) {
+    public void adicionar(Tipo obj) {
         array.add(obj);
+    }
+
+    public void remover(Tipo obj) {
+        array.remove(obj);
     }
 
     public int getArraySize() {

@@ -1,4 +1,14 @@
-CLIENTE,1,João Silva,123456789,PORTUGAL
-FATURA,2,1,29/11/2024
-ProdutoAlimentarTaxaReduzida,101,Pão Integral,Pão artesanal,2,1.00,true,ISO22000-FSSC22000-HACCP
-ProdutoAlimentarTaxaIntermedia,102,Leite Desnatado,Leite de alta qualidade,3,0.80,false,VINHO
+CLIENTE;1;João Silva;123456789;PORTUGAL
+FATURA;2;1;29/11/2024
+ProdutoAlimentarTaxaReduzida;101;Pão Integral;Pão artesanal;2;1,00;true;ISO22000-FSSC22000-HACCP
+ProdutoAlimentarTaxaIntermedia;102;Leite Desnatado;Leite de alta qualidade;3;0,80;false;VINHO
+CLIENTE;2;Vasco;123312123;MADEIRA
+FATURA;2;2;12/04/2023
+ProdutoAlimentarTaxaIntermedia;12;Batatas;Continente;12;20,00;false;VINHO
+ProdutoFarmaciaPrescrito;13;Benurom;pomada;2;7,00;Dr. João
+FATURA;1;3;13/04/2023
+ProdutoAlimentarTaxaReduzida;14;Donuts;Dunkin Donuts;4;2,00;false;HACCP-ISO22000
+CLIENTE;1;Miguel;987654321;ACORES
+FATURA;2;14;12/04/2008
+ProdutoFarmaciaPrescrito;110;Aspirinas;Over The Counter;100;4,00;OUTRO
+ProdutoFarmaciaPrescrito;111;Turkestorona;Marca continente;20;120,00;Greg Doucette

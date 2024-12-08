@@ -11,14 +11,6 @@ public abstract class Produto implements Serializable {
     protected int quantidade;
     protected double valorUnitario;
 
-    public Produto() {
-        this.codigo = 0;
-        this.nome = "";
-        this.descricao = "";
-        this.quantidade = 0;
-        this.valorUnitario = 0;
-    }
-
     public Produto(int codigo, String nome, String descricao, int quantidade, double valorUnitario) {
         this.codigo = codigo;
         this.nome = nome;

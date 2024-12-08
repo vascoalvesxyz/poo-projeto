@@ -13,11 +13,6 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
 
     private final ArrayList<Certificacao> certificacoes;
 
-    public ProdutoAlimentarTaxaReduzida() {
-        super();
-        this.certificacoes = new ArrayList<>();
-    }
-
     public ProdutoAlimentarTaxaReduzida(int codigo, String nome, String descricao, int quantidade, double valorUnitario, boolean biologico, ArrayList<Certificacao> certificacoes) {
         super(codigo, nome, descricao, quantidade, valorUnitario, biologico);
         this.certificacoes = certificacoes;
@@ -48,7 +43,7 @@ public class ProdutoAlimentarTaxaReduzida extends ProdutoAlimentar {
     @Override
     public String toFile() {
         return String.format(
-                "ProdutoAlimentarTaxaReduzida,%d,%s,%s,%d,%.2f,%s,%s\n"
+                "ProdutoAlimentarTaxaReduzida;%d;%s;%s;%d;%.2f;%s;%s\n"
                 , codigo, nome, descricao, quantidade, valorUnitario, biologico, certificacoesToString("-")
         );
     }
