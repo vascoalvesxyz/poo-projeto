@@ -66,7 +66,7 @@ public class Leitor {
      * Valida os Nomes inseridos pelo utilizador e no ficheiro de texto.
      * @return boolean
      */
-    static boolean validarNome(String str) {
+    protected static boolean validarNome(String str) {
         return str.matches("^[A-ZÁÉÍÓÚÂÊÔÀÃÕÇ][a-záéíóúâêôàãõç]*([ ]([A-ZÁÉÍÓÚÂÊÔÀÃÕÇ][a-záéíóúâêôàãõç]*))*$");
     }
 
@@ -95,7 +95,7 @@ public class Leitor {
      * Função que valida o contribuinte tanto no ficheiro de texto como input do utilizador.
      * @return boolean
      */
-    static boolean validarContribuinte(String str) {
+    protected static boolean validarContribuinte(String str) {
         return (str.length() == 9 && str.matches("^[0-9]{9}$"));
     }
 
@@ -126,7 +126,7 @@ public class Leitor {
      * Valida se o string inserido pelo utilizador corresponde a um número inteiro positivo.
      * @return boolean
      */
-    static boolean validarUint(String str) {
+    protected static boolean validarUint(String str) {
         return str.matches("[0-9]+");
     }
 
@@ -163,7 +163,7 @@ public class Leitor {
      * Valida o input de doubles unsigned.
      * @return boolean
      */
-    static boolean validarUDouble(String str) {
+    protected static boolean validarUDouble(String str) {
         return str.matches("[0-9]+([,.][0-9]+)?");
     }
 
