@@ -7,15 +7,40 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * Classe que representa uma fatura. Contém informações como ID, data, cliente associado e produtos.
+ */
 public class Fatura implements Serializable {
     @Serial
     private static final long serialVersionUID = 4L;
 
+    /**
+     * ID único da fatura.
+     */
     private int id;
+
+    /**
+     * Data da emissão da fatura.
+     */
     private Calendar data;
+
+    /**
+     * Cliente associado à fatura.
+     */
     private final Cliente cliente;
+
+    /**
+     * Gestor de produtos associados à fatura.
+     */
     private final GestorProdutos produtos;
 
+    /**
+     * Construtor que inicializa a fatura com os dados fornecidos.
+     *
+     * @param id      ID da fatura.
+     * @param data    Data da emissão da fatura.
+     * @param cliente Cliente associado à fatura.
+     */
     public Fatura(int id, Calendar data, Cliente cliente) {
         this.id = id;
         this.data = data;
@@ -23,15 +48,51 @@ public class Fatura implements Serializable {
         this.produtos = new GestorProdutos();
     }
 
-    /* Visualizar fatura: apresentar o número da fatura, os dados do cliente e, em seguida, listar
-        os produtos da fatura. Para cada produto, apresentar os dados relevantes do produto, o
-        valor total sem IVA, a taxa do IVA, o valor do IVA e o valor total com IVA. Após esta lista,
-        apresentar da fatura o total sem IVA, o valor total do IVA e o valor total com IVA.
+    /**
+     * Obtém o ID da fatura.
+     *
+     * @return ID da fatura.
      */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Define o ID da fatura.
+     *
+     * @param id ID a ser definido.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * Define a data da fatura.
+     *
+     * @param data Data a ser definida.
+     */
+    public void setData(Calendar data) {
+        this.data = data;
+    }
+
+    /**
+     * Obtém o gestor de produtos associados à fatura.
+     *
+     * @return Gestor de produtos.
+     */
+    public GestorProdutos getProdutos() {
+        return produtos;
+    }
+
+    /**
+     * Converte as informações da fatura para uma string formatada.
+     *
+     * @return Representação em string da fatura.
+     */
+    @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String res = String.format("=== ID: %d, DATA: %s ===%n", id, sdf.format(data.getTime()));
-        //int len = res.length();
         res += String.format("\tCLIENTE: \n\t  %s\n", cliente.toString());
         res += "\tPRODUTOS:\n";
         double total = 0;
@@ -46,27 +107,13 @@ public class Fatura implements Serializable {
         return res;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setData(Calendar data) {
-        this.data = data;
-    }
-
+    /**
+     * Converte as informações da fatura para um formato adequado para escrita em ficheiros.
+     *
+     * @return Representação em string para ficheiro.
+     */
     public String toFile() {
         String dataStr = String.format("%02d/%02d/%04d", data.get(Calendar.DAY_OF_MONTH), data.get(Calendar.MONTH) + 1, data.get(Calendar.YEAR));
         return String.format("FATURA;%d;%s;%s\n", getProdutos().getArraySize(), id, dataStr);
     }
-
-    public GestorProdutos getProdutos() {
-        return produtos;
-    }
-
-    //public Fatura[] import() { }
-    //public void export() { }
 }

@@ -8,12 +8,27 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Classe responsável pela gestão de produtos, permitindo criar, editar,
+ * listar e procurar produtos de diferentes tipos.
+ */
 public class GestorProdutos extends Gestor<Produto> implements Serializable {
     @Serial
     private static final long serialVersionUID = 5L;
 
-    public GestorProdutos() {super();}
+    /**
+     * Construtor padrão que inicializa a lista de produtos.
+     */
+    public GestorProdutos() {
+        super();
+    }
 
+    /**
+     * Procura um produto pelo código único.
+     *
+     * @param codigo Código do produto a procurar.
+     * @return O produto encontrado ou {@code null} se não for encontrado.
+     */
     public Produto procurarPorCodigo(int codigo) {
         for (Produto p : array)
             if (p.getCodigo() == codigo) {
@@ -22,6 +37,10 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
         return null;
     }
 
+    /**
+     * Permite criar ou editar um produto com base no código fornecido.
+     * Se o produto não existir, é criado; caso contrário, pode ser editado.
+     */
     @Override
     public void criarOuEditar() {
         int codigo = Leitor.lerUInt("Insira o código do produto: ");
@@ -34,17 +53,27 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
         }
     }
 
+    /**
+     * Edita as informações de um produto existente.
+     * Este método deve ser implementado com os campos específicos para edição.
+     *
+     * @param item Produto a ser editado.
+     */
     @Override
     public void editar(Produto item) {
-
+        // Implementação personalizada para edição de produtos.
     }
 
+    /**
+     * Cria um novo produto com base no código e nas informações fornecidas pelo utilizador.
+     *
+     * @param codigo Código do produto a ser criado.
+     */
     public void criar(int codigo) {
         String resposta;
         do {
             resposta = Leitor.lerString("O produto é alimentar ou farmaceutico? (a/f) ");
-        }
-        while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
+        } while (!resposta.equalsIgnoreCase("a") && !resposta.equalsIgnoreCase("f"));
         boolean isAlimentar = resposta.equalsIgnoreCase("a");
 
         Produto produto;
@@ -56,6 +85,12 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
         adicionar(produto);
     }
 
+    /**
+     * Solicita ao utilizador as informações de um produto alimentar para criar um novo produto.
+     *
+     * @param codigo Código do produto.
+     * @return O produto alimentar criado.
+     */
     private Produto pedirProdutoAlimentar(int codigo) {
         String nome = Leitor.lerNome("Nome: ");
         String descricao = Leitor.lerDescricao("Descrição: ");
@@ -85,6 +120,11 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
         return produto;
     }
 
+    /**
+     * Solicita ao utilizador as certificações de um produto alimentar.
+     *
+     * @return Lista de certificações selecionadas pelo utilizador.
+     */
     private ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> lerCertificacoes() {
         ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> certificacoesEscolhidas = new ArrayList<>();
         boolean continuar = true;
@@ -101,13 +141,17 @@ public class GestorProdutos extends Gestor<Produto> implements Serializable {
                 break;
             }
             continuar = Leitor.lerBoolean("Quer adicionar mais certificações?");
-        }
-        while (continuar);
+        } while (continuar);
         return certificacoesEscolhidas;
     }
 
+    /**
+     * Solicita ao utilizador as informações de um produto farmacêutico para criar um novo produto.
+     *
+     * @param codigo Código do produto.
+     * @return O produto farmacêutico criado.
+     */
     private Produto pedirProdutoFarmaceutico(int codigo) {
-        /* lerString() pois produtos farmaceuticos podem ter números */
         String nome = Leitor.lerString("Nome: ");
         String descricao = Leitor.lerDescricao("Descrição: ");
         int quantidade = Leitor.lerUInt("Quantidade: ");

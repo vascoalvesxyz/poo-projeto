@@ -8,12 +8,26 @@ import produto.Produto;
 
 import java.util.ArrayList;
 
+/**
+ * Classe responsável pela gestão de clientes, incluindo a criação, edição,
+ * listagem e manipulação de faturas associadas a clientes.
+ */
 public class GestorClientes extends Gestor<Cliente> {
 
+    /**
+     * Construtor que inicializa o gestor de clientes com uma lista vazia.
+     */
     public GestorClientes() {
         super(new ArrayList<>());
     }
 
+    /**
+     * Procura um cliente pelo nome.
+     *
+     * @param nome Nome do cliente a procurar.
+     * @return O cliente encontrado.
+     * @throws IllegalArgumentException Se não existir cliente com o nome fornecido.
+     */
     public Cliente procurarPorNome(String nome) throws IllegalArgumentException {
         for (Cliente cliente : array) {
             if (cliente.getNome().equalsIgnoreCase(nome)) {
@@ -23,6 +37,9 @@ public class GestorClientes extends Gestor<Cliente> {
         throw new IllegalArgumentException("Não existe cliente com esse nome!");
     }
 
+    /**
+     * Permite criar ou editar clientes, de acordo com a escolha do utilizador.
+     */
     @Override
     public void criarOuEditar() {
         System.out.println("""
@@ -51,10 +68,16 @@ public class GestorClientes extends Gestor<Cliente> {
                     System.out.println("Não há clientes.");
                 }
             }
-            case 0 -> { }
+            case 0 -> {
+            }
         }
     }
 
+    /**
+     * Cria um novo cliente com base no nome fornecido e nas informações adicionais solicitadas.
+     *
+     * @param nome Nome do cliente.
+     */
     private void criar(String nome) {
         String contribuinte = Leitor.lerContribuinte("Contribuinte novo:");
         int escolhaLocalizacao = Leitor.lerEnum(Localizacao.values());
@@ -64,6 +87,11 @@ public class GestorClientes extends Gestor<Cliente> {
         System.out.println("O cliente foi criado.");
     }
 
+    /**
+     * Edita as informações de um cliente existente.
+     *
+     * @param item Cliente a ser editado.
+     */
     @Override
     protected void editar(Cliente item) {
         int input;
@@ -96,6 +124,10 @@ public class GestorClientes extends Gestor<Cliente> {
         while (input != 0);
     }
 
+    /**
+     * Lista todos os clientes registados.
+     * Caso não existam clientes, é apresentada uma mensagem indicando que a lista está vazia.
+     */
     @Override
     public void listar() {
         System.out.println("Lista de Clientes:");
@@ -106,6 +138,9 @@ public class GestorClientes extends Gestor<Cliente> {
         }
     }
 
+    /**
+     * Permite criar ou editar faturas associadas aos clientes.
+     */
     public void criarOuEditarFaturas() {
         System.out.println("""
                 1 - Criar
@@ -120,17 +155,21 @@ public class GestorClientes extends Gestor<Cliente> {
                     GestorFaturas gf = selecionar().getFaturas();
                     try {
                         gf.editar(gf.selecionar());
-                    } catch (IllegalArgumentException e ) {
+                    } catch (IllegalArgumentException e) {
                         System.out.println("Não há faturas para este cliente.");
                     }
                 } catch (IllegalArgumentException e) {
                     System.out.println("Não há clientes.");
                 }
             }
-            case 0 -> { }
+            case 0 -> {
+            }
         }
     }
 
+    /**
+     * Consulta e lista as faturas de um cliente selecionado.
+     */
     public void consultarFatura() {
         try {
             Cliente cliente = selecionar();
@@ -140,12 +179,19 @@ public class GestorClientes extends Gestor<Cliente> {
         }
     }
 
+    /**
+     * Lista todas as faturas de todos os clientes.
+     */
     public void listarTodasFaturas() {
         System.out.println("Lista de Faturas:");
         for (Cliente c : getArray())
             c.getFaturas().listar();
     }
 
+    /**
+     * Imprime as estatísticas da aplicação, incluindo o número de clientes,
+     * faturas, produtos e valores totais com e sem IVA.
+     */
     public void printEstatisticas() {
         int nrClientes = 0, nrFaturas = 0, nrProdutos = 0;
         double valorTotalSemIva = 0, valorTotalComIva = 0;

@@ -11,12 +11,29 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * Classe responsável por operações de entrada e saída relacionadas com ficheiros.
+ * Inclui métodos para importar e exportar dados de clientes, faturas e produtos.
+ */
 public class FicheiroIO {
 
+    /**
+     * Separador utilizado nos ficheiros de texto para separar os campos.
+     */
     static final String separador = ";";
 
-    public FicheiroIO() { }
+    /**
+     * Construtor padrão.
+     */
+    public FicheiroIO() {}
 
+    /**
+     * Importa dados de clientes para um gestor de clientes a partir de um ficheiro.
+     * O tipo de ficheiro (texto ou objeto) é identificado pela extensão.
+     *
+     * @param gc       Gestor de clientes onde os dados serão carregados.
+     * @param filename Nome do ficheiro a ser lido.
+     */
     public void importarClientes(GestorClientes gc, String filename) {
         if (!existeFicheiro(filename)) {
             return;
@@ -37,11 +54,23 @@ public class FicheiroIO {
         gc.getArray().addAll(clientesImportados);
     }
 
+    /**
+     * Verifica se um ficheiro existe.
+     *
+     * @param pathStr Caminho do ficheiro.
+     * @return {@code true} se o ficheiro existir, {@code false} caso contrário.
+     */
     public boolean existeFicheiro(String pathStr) {
         Path caminho = Paths.get(pathStr);
         return Files.exists(caminho);
     }
 
+    /**
+     * Lê um ficheiro de objetos e retorna uma lista de clientes.
+     *
+     * @param filename Nome do ficheiro de objetos.
+     * @return Lista de clientes lida do ficheiro.
+     */
     private ArrayList<Cliente> lerFicheiroObjetos(String filename) {
         try (
                 FileInputStream fileIn = new FileInputStream(filename);
@@ -54,6 +83,12 @@ public class FicheiroIO {
         return new ArrayList<>();
     }
 
+    /**
+     * Lê um ficheiro de texto e retorna uma lista de clientes.
+     *
+     * @param filename Nome do ficheiro de texto.
+     * @return Lista de clientes lida do ficheiro.
+     */
     private ArrayList<Cliente> lerFicheiroTexto(String filename) {
         ArrayList<Cliente> clientes = new ArrayList<>();
         File f = new File(filename);
@@ -81,7 +116,14 @@ public class FicheiroIO {
         return clientes;
     }
 
-    // Tipo, Filhos, Cliente_Nome, Cliente_Contribuinte, Cliente_Localizacao
+    /**
+     * Lê os dados de um cliente a partir de um ficheiro de texto.
+     *
+     * @param br    BufferedReader para leitura do ficheiro.
+     * @param linha Linha atual do ficheiro.
+     * @return Um objeto {@code Cliente} com os dados lidos.
+     * @throws IOException Se ocorrer um erro de leitura.
+     */
     private Cliente lerCliente(BufferedReader br, String linha) throws IOException {
         String[] dados = linha.split(separador);
         Cliente clienteNovo = new Cliente(dados[2], dados[3], Cliente.Localizacao.valueOf(dados[4]));
@@ -96,7 +138,15 @@ public class FicheiroIO {
         return clienteNovo;
     }
 
-    // Tipo, Filhos, Fatura_ID, Fatura_Data
+    /**
+     * Lê os dados de uma fatura a partir de um ficheiro de texto.
+     *
+     * @param br      BufferedReader para leitura do ficheiro.
+     * @param linha   Linha atual do ficheiro.
+     * @param cliente Cliente associado à fatura.
+     * @return Um objeto {@code Fatura} com os dados lidos.
+     * @throws IOException Se ocorrer um erro de leitura.
+     */
     private Fatura lerFatura(BufferedReader br, String linha, Cliente cliente) throws IOException {
         String[] dados = linha.split(separador);
         Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), Leitor.validarData(dados[3]), cliente);
@@ -111,7 +161,12 @@ public class FicheiroIO {
         return novaFatura;
     }
 
-    //Produto_Tipo,Produto_Codigo,Produto_Nome,Produto_Descricao,Produto_Quantidade,Produto_ValorUnitario,EXTRA
+    /**
+     * Lê os dados de um produto a partir de uma linha de texto.
+     *
+     * @param input Linha com os dados do produto.
+     * @return Um objeto {@code Produto} com os dados lidos.
+     */
     private Produto lerProduto(String input) {
         String[] dados = input.split(separador);
         Produto produto = null;
@@ -135,6 +190,12 @@ public class FicheiroIO {
         return produto;
     }
 
+    /**
+     * Lê as certificações de um produto a partir de uma string.
+     *
+     * @param certificacoes String com as certificações separadas por "-".
+     * @return Lista de certificações lidas.
+     */
     private ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> lerCertificacoes(String certificacoes) {
         String[] certificacoesDivididas = certificacoes.split("-");
         ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> certificacoesLista = new ArrayList<>();
@@ -144,8 +205,13 @@ public class FicheiroIO {
         return certificacoesLista;
     }
 
+    /**
+     * Exporta os dados dos clientes para um ficheiro de objetos.
+     *
+     * @param gc       Gestor de clientes cujos dados serão exportados.
+     * @param filename Nome do ficheiro onde os dados serão armazenados.
+     */
     public void exportarClientesObj(GestorClientes gc, String filename) {
-        // Serialize the object to the file
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             ArrayList<Cliente> arrayClientes = gc.getArray();
             oos.writeObject(arrayClientes);
@@ -154,6 +220,12 @@ public class FicheiroIO {
         }
     }
 
+    /**
+     * Exporta os dados dos clientes para um ficheiro de texto.
+     *
+     * @param gc       Gestor de clientes cujos dados serão exportados.
+     * @param filename Nome do ficheiro onde os dados serão armazenados.
+     */
     public void exportarClientesTexto(GestorClientes gc, String filename) {
         if (existeFicheiro(filename)) {
             System.out.println("Ficheiro já existe!");
@@ -176,6 +248,13 @@ public class FicheiroIO {
         }
     }
 
+    /**
+     * Escreve os dados de um cliente num ficheiro de texto.
+     *
+     * @param bw BufferedWriter para escrever no ficheiro.
+     * @param c  Cliente cujos dados serão escritos.
+     * @throws IOException Se ocorrer um erro ao escrever.
+     */
     private void escreverCliente(BufferedWriter bw, Cliente c) throws IOException {
         bw.write(c.toFile());
         GestorFaturas gf = c.getFaturas();
@@ -184,6 +263,13 @@ public class FicheiroIO {
         }
     }
 
+    /**
+     * Escreve os dados de uma fatura num ficheiro de texto.
+     *
+     * @param bw BufferedWriter para escrever no ficheiro.
+     * @param f  Fatura cujos dados serão escritos.
+     * @throws IOException Se ocorrer um erro ao escrever.
+     */
     private void escreverFatura(BufferedWriter bw, Fatura f) throws IOException {
         bw.write(f.toFile());
         GestorProdutos gp = f.getProdutos();
@@ -192,8 +278,14 @@ public class FicheiroIO {
         }
     }
 
+    /**
+     * Escreve os dados de um produto num ficheiro de texto.
+     *
+     * @param bw BufferedWriter para escrever no ficheiro.
+     * @param p  Produto cujos dados serão escritos.
+     * @throws IOException Se ocorrer um erro ao escrever.
+     */
     private void escreverProduto(BufferedWriter bw, Produto p) throws IOException {
         bw.write(p.toFile());
     }
-
 }

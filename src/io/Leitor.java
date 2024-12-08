@@ -4,15 +4,31 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Scanner;
 
+/**
+ * Classe utilitária para leitura de dados do utilizador a partir da consola.
+ * Contém métodos para validar e garantir o formato correto dos dados introduzidos.
+ */
 public class Leitor implements Serializable {
 
     private static final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Lê uma string inserida pelo utilizador.
+     *
+     * @param mensagem Mensagem a ser exibida ao utilizador.
+     * @return A string inserida pelo utilizador.
+     */
     public static String lerString(String mensagem) {
         System.out.print(mensagem);
         return scanner.nextLine();
     }
 
+    /**
+     * Lê uma descrição válida. Não permite o uso de vírgulas.
+     *
+     * @param mensagem Mensagem a ser exibida ao utilizador.
+     * @return A descrição válida inserida pelo utilizador.
+     */
     public static String lerDescricao(String mensagem) {
         String str;
         boolean isValido = false;
@@ -27,12 +43,17 @@ public class Leitor implements Serializable {
         return str;
     }
 
+    /**
+     * Lê e valida um nome. O nome deve começar com letra maiúscula e conter apenas letras e espaços.
+     *
+     * @param mensagem Mensagem a ser exibida ao utilizador.
+     * @return O nome válido inserido pelo utilizador.
+     */
     public static String lerNome(String mensagem) {
         String str;
         boolean isValido = false;
         do {
             str = lerString(mensagem);
-            // REGEX: Letra Maiuscula, Combinação de Letras e Espaço
             if (str.matches("^[A-ZÁÉÍÓÚÂÊÔÀÃÕÇ][a-záéíóúâêôàãõç ]*$")) {
                 isValido = true;
             } else {
@@ -42,12 +63,17 @@ public class Leitor implements Serializable {
         return str;
     }
 
+    /**
+     * Lê e valida um número de contribuinte. Deve conter exatamente 9 dígitos.
+     *
+     * @param mensagem Mensagem a ser exibida ao utilizador.
+     * @return O contribuinte válido inserido pelo utilizador.
+     */
     public static String lerContribuinte(String mensagem) {
         String str;
         boolean isValido = false;
         do {
             str = lerString(mensagem);
-            // REGEX: Inicio da linha, Número com 9 digitos, fim da linha
             if (str.length() == 9 && str.matches("^[0-9]{9}$")) {
                 isValido = true;
             } else {
@@ -57,6 +83,12 @@ public class Leitor implements Serializable {
         return str;
     }
 
+    /**
+     * Lê um número inteiro positivo.
+     *
+     * @param mensagem Mensagem a ser exibida ao utilizador.
+     * @return O número inteiro positivo introduzido.
+     */
     public static int lerUInt(String mensagem) {
         int numero = 0;
         boolean valido = false;
@@ -74,8 +106,14 @@ public class Leitor implements Serializable {
         return numero;
     }
 
+    /**
+     * Lê um número decimal positivo.
+     *
+     * @param mensagem Mensagem a ser exibida ao utilizador.
+     * @return O número decimal válido introduzido.
+     */
     public static Double lerUDouble(String mensagem) {
-        Double numero = 0.0;
+        double numero = 0.0;
         boolean valido = false;
 
         while (!valido) {
@@ -83,9 +121,6 @@ public class Leitor implements Serializable {
 
             entrada = entrada.replace(',', '.');
 
-            /* REGEX: Número com pelo menos 1 digito,
-            seguido, ou não, de um ponto e pelo menos 1 digito
-             */
             if (entrada.matches("[0-9]+([,.][0-9]+)?")) {
                 try {
                     numero = Double.parseDouble(entrada);
@@ -100,6 +135,14 @@ public class Leitor implements Serializable {
         return numero;
     }
 
+    /**
+     * Lê um número inteiro dentro de um intervalo.
+     *
+     * @param mensagem Mensagem a ser exibida ao utilizador.
+     * @param min      Valor mínimo permitido.
+     * @param max      Valor máximo permitido.
+     * @return O número inteiro válido dentro do intervalo.
+     */
     public static int lerIntMinMax(String mensagem, int min, int max) {
         int res;
         mensagem = mensagem + String.format(" (%d-%d): ", min, max);
@@ -109,14 +152,20 @@ public class Leitor implements Serializable {
             if (res >= min && res <= max) {
                 valido = true;
             } else {
-                System.out.println("Valor inválido. Por favor, insira um número dentro gama permitida.");
+                System.out.println("Valor inválido. Por favor, insira um número dentro da gama permitida.");
             }
         } while (!valido);
         return res;
     }
 
+    /**
+     * Lê uma resposta booleana (sim/não) do utilizador.
+     *
+     * @param questao Pergunta a ser exibida ao utilizador.
+     * @return {@code true} para "s" (sim) e {@code false} para "n" (não).
+     */
     public static boolean lerBoolean(String questao) {
-        System.out.println(questao + "(s/n)");
+        System.out.println(questao + " (s/n)");
 
         String inputStr;
         boolean valido = false;
@@ -132,6 +181,11 @@ public class Leitor implements Serializable {
         return inputStr.equalsIgnoreCase("s");
     }
 
+    /**
+     * Imprime as opções disponíveis de um enum.
+     *
+     * @param valores Array de valores do enum.
+     */
     public static void printEnum(Object[] valores) {
         System.out.println("Escolha uma das opções:");
         for (int i = 0; i < valores.length; i++) {
@@ -139,15 +193,26 @@ public class Leitor implements Serializable {
         }
     }
 
+    /**
+     * Lê uma opção selecionada de um enum.
+     *
+     * @param valoresEnum Array de valores do enum.
+     * @return O índice da opção escolhida.
+     */
     public static int lerEnum(Object[] valoresEnum) {
         printEnum(valoresEnum);
         int input = lerIntMinMax("Opção", 1, valoresEnum.length);
         return input - 1;
     }
 
+    /**
+     * Lê e valida uma data no formato "dd/mm/yyyy".
+     *
+     * @return Um objeto {@code Calendar} representando a data válida.
+     */
     public static Calendar lerData() {
         while (true) {
-            String input = lerString("Insere a Data (dd/mm/yyyy): ");
+            String input = lerString("Insira a Data (dd/mm/yyyy): ");
             Calendar cal = validarData(input);
             if (cal != null) {
                 return cal;
@@ -155,6 +220,12 @@ public class Leitor implements Serializable {
         }
     }
 
+    /**
+     * Valida uma data no formato "dd/mm/yyyy".
+     *
+     * @param data Data em string para validação.
+     * @return Um objeto {@code Calendar} se a data for válida; caso contrário, {@code null}.
+     */
     public static Calendar validarData(String data) {
         try {
             validarFormatoData(data);
@@ -168,12 +239,24 @@ public class Leitor implements Serializable {
         return null;
     }
 
+    /**
+     * Valida o formato da data "dd/mm/yyyy".
+     *
+     * @param data Data em string.
+     * @throws IllegalArgumentException Se o formato for inválido.
+     */
     private static void validarFormatoData(String data) {
         if (!data.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
             throw new IllegalArgumentException("Formato inválido! Use dd/mm/yyyy.");
         }
     }
 
+    /**
+     * Analisa e converte uma data em string para um objeto {@code Calendar}.
+     *
+     * @param data Data em string.
+     * @return Um objeto {@code Calendar} representando a data.
+     */
     private static Calendar analisarData(String data) {
         String[] parts = data.split("/");
 
@@ -192,6 +275,12 @@ public class Leitor implements Serializable {
         return cal;
     }
 
+    /**
+     * Verifica se a data está dentro de um intervalo válido (1900-2200).
+     *
+     * @param cal Objeto {@code Calendar} com a data.
+     * @return {@code true} se a data for válida; caso contrário, {@code false}.
+     */
     private static boolean validarVeracidadeData(Calendar cal) {
         int ano = cal.get(Calendar.YEAR);
         int ANO_MAX = 2200, ANO_MIN = 1900;

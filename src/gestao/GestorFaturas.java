@@ -10,22 +10,44 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Classe responsável pela gestão de faturas associadas a um cliente.
+ * Permite criar, editar, listar e remover faturas, bem como gerir produtos dentro das faturas.
+ */
 public class GestorFaturas extends Gestor<Fatura> implements Serializable {
     @Serial
     private static final long serialVersionUID = 3L;
 
+    /**
+     * Cliente associado a este gestor de faturas.
+     */
     private final Cliente cliente;
 
+    /**
+     * Construtor padrão que inicializa o gestor com um cliente vazio.
+     */
     public GestorFaturas() {
         super();
         this.cliente = new Cliente();
     }
 
+    /**
+     * Construtor que inicializa o gestor com um cliente específico.
+     *
+     * @param cliente Cliente a ser associado ao gestor.
+     */
     public GestorFaturas(Cliente cliente) {
         super(new ArrayList<>());
         this.cliente = cliente;
     }
 
+    /**
+     * Procura uma fatura pelo número de ID.
+     *
+     * @param codigo ID da fatura a procurar.
+     * @return A fatura encontrada.
+     * @throws IllegalArgumentException Se não existir fatura com o ID fornecido.
+     */
     public Fatura procurarPorNumero(int codigo) throws IllegalArgumentException {
         for (Fatura f : array)
             if (f.getId() == codigo) {
@@ -34,6 +56,9 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Permite criar ou editar uma fatura com base no ID fornecido pelo utilizador.
+     */
     @Override
     public void criarOuEditar() {
         int id = Leitor.lerUInt("Insira o ID da fatura: ");
@@ -48,11 +73,21 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         }
     }
 
+    /**
+     * Adiciona uma nova fatura ao gestor.
+     *
+     * @param fatura Fatura a ser adicionada.
+     */
     @Override
     public void adicionar(Fatura fatura) {
         array.add(fatura);
     }
 
+    /**
+     * Cria uma nova fatura com base no ID fornecido e permite adicionar produtos à mesma.
+     *
+     * @param id ID da nova fatura.
+     */
     public void criar(int id) {
         Calendar cal = Leitor.lerData();
         Fatura fatura = new Fatura(id, cal, cliente);
@@ -61,11 +96,15 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         do {
             fatura.getProdutos().criarOuEditar();
             adicionarProduto = Leitor.lerBoolean("Deseja adicionar mais um produto? ");
-        }
-        while (adicionarProduto);
+        } while (adicionarProduto);
         adicionar(fatura);
     }
 
+    /**
+     * Edita os dados de uma fatura existente, como o ID, a data ou os produtos associados.
+     *
+     * @param item Fatura a ser editada.
+     */
     @Override
     public void editar(Fatura item) {
         int input;
@@ -102,6 +141,11 @@ public class GestorFaturas extends Gestor<Fatura> implements Serializable {
         } while (input != 0);
     }
 
+    /**
+     * Permite gerir os produtos de uma fatura, incluindo adicionar ou remover produtos.
+     *
+     * @param fatura Fatura cujos produtos serão geridos.
+     */
     private void gerirProdutos(Fatura fatura) {
         int opcao;
         do {
