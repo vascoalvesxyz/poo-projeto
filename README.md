@@ -9,9 +9,9 @@
     2. ~Faturas~
     3. ~Produtos~
 - Validar ao importar
-    1. Clientes
-    2. Faturas
-    3. Produtos
+    1. ~Cliente~
+    2. ~Faturas~
+    3. ~Produtos~
 - Menu:
   1. ~Selecionar cliente ao editar~
   2. ~Selecionar cliente ao consultar fatura~
