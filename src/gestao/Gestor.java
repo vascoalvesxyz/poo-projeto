@@ -2,7 +2,6 @@ package gestao;
 
 import io.Leitor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +11,7 @@ import java.util.ArrayList;
  *
  * @param <Tipo> Tipo genérico dos objetos a serem geridos.
  */
-public abstract class Gestor<Tipo> implements Serializable {
+public abstract class Gestor<Tipo> {
 
     /**
      * Lista que armazena os objetos geridos.
