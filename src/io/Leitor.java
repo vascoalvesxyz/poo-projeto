@@ -53,7 +53,7 @@ public class Leitor {
         boolean isValido = false;
         do {
             str = lerString(mensagem);
-            if (str.matches("^[A-ZÁÉÍÓÚÂÊÔÀÃÕÇ][a-záéíóúâêôàãõç ]*$")) {
+            if (validarNome(str)) {
                 isValido = true;
             } else {
                 System.out.println("Nome inválido. Por favor, insira um nome com caracteres alfabéticos e que comece com uma letra maiúscula.");
@@ -61,6 +61,15 @@ public class Leitor {
         } while (!isValido);
         return str;
     }
+
+    /**
+     * Valida os Nomes inseridos pelo utilizador e no ficheiro de texto.
+     * @return boolean
+     */
+    static boolean validarNome(String str) {
+        return str.matches("^[A-ZÁÉÍÓÚÂÊÔÀÃÕÇ][a-záéíóúâêôàãõç]*([ ]([A-ZÁÉÍÓÚÂÊÔÀÃÕÇ][a-záéíóúâêôàãõç]*))*$");
+    }
+
 
     /**
      * Lê e valida um número de contribuinte. Deve conter exatamente 9 dígitos.
@@ -73,13 +82,21 @@ public class Leitor {
         boolean isValido = false;
         do {
             str = lerString(mensagem);
-            if (str.length() == 9 && str.matches("^[0-9]{9}$")) {
+            if (validarContribuinte(str)) {
                 isValido = true;
             } else {
                 System.out.println("Contribuinte inválido. Por favor, insira um número com 9 dígitos.");
             }
         } while (!isValido);
         return str;
+    }
+
+    /**
+     * Função que valida o contribuinte tanto no ficheiro de texto como input do utilizador.
+     * @return boolean
+     */
+    static boolean validarContribuinte(String str) {
+        return (str.length() == 9 && str.matches("^[0-9]{9}$"));
     }
 
     /**
@@ -95,7 +112,7 @@ public class Leitor {
         while (!valido) {
             String entrada = lerString(mensagem);
 
-            if (entrada.matches("[0-9]+")) {
+            if (validarUint(entrada)) {
                 numero = Integer.parseInt(entrada);
                 valido = true;
             } else {
@@ -103,6 +120,14 @@ public class Leitor {
             }
         }
         return numero;
+    }
+
+    /**
+     * Valida se o string inserido pelo utilizador corresponde a um número inteiro positivo.
+     * @return boolean
+     */
+    static boolean validarUint(String str) {
+        return str.matches("[0-9]+");
     }
 
     /**
@@ -120,7 +145,7 @@ public class Leitor {
 
             entrada = entrada.replace(',', '.');
 
-            if (entrada.matches("[0-9]+([,.][0-9]+)?")) {
+            if (validarUDouble(entrada)) {
                 try {
                     numero = Double.parseDouble(entrada);
                     valido = true;
@@ -132,6 +157,14 @@ public class Leitor {
             }
         }
         return numero;
+    }
+
+    /**
+     * Valida o input de doubles unsigned.
+     * @return boolean
+     */
+    static boolean validarUDouble(String str) {
+        return str.matches("[0-9]+([,.][0-9]+)?");
     }
 
     /**

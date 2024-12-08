@@ -98,11 +98,16 @@ public class FicheiroIO {
             BufferedReader br = new BufferedReader(fr);
             String linha = br.readLine();
             do {
+                if (linha == null) break;
                 String[] dados = linha.split(";");
                 if (dados[0].equals("CLIENTE")) {
                     System.out.printf("Importando Cliente: %s\n", dados[2]);
-                    Cliente novoCliente = lerCliente(br, linha);
-                    clientes.add(novoCliente);
+                    try {
+                        Cliente novoCliente = lerCliente(br, linha);
+                        clientes.add(novoCliente);
+                    } catch (IllegalArgumentException ex) {
+                        throw new IllegalArgumentException("Erro a ler cliente:\n" + ex + "\nLinha: " + linha);
+                    }
                 }
             }
             while ((linha = br.readLine()) != null);
@@ -124,15 +129,24 @@ public class FicheiroIO {
      * @return Um objeto {@code Cliente} com os dados lidos.
      * @throws IOException Se ocorrer um erro de leitura.
      */
-    private Cliente lerCliente(BufferedReader br, String linha) throws IOException {
+    private Cliente lerCliente(BufferedReader br, String linha) throws IOException,IllegalArgumentException {
         String[] dados = linha.split(separador);
+        if (    !Leitor.validarUint(dados[1]) ||
+                !Leitor.validarNome(dados[2]) ||
+                !Leitor.validarContribuinte(dados[3]) ) {
+            throw new IllegalArgumentException("Dados inválidos na linha: " + linha);
+        }
         Cliente clienteNovo = new Cliente(dados[2], dados[3], Cliente.Localizacao.valueOf(dados[4]));
 
         int nFaturas = Integer.parseInt(dados[1]);
         for (int i = 0; i < nFaturas; i++) {
             linha = br.readLine();
-            Fatura novaFatura = lerFatura(br, linha, clienteNovo);
-            clienteNovo.getFaturas().adicionar(novaFatura);
+            try {
+                Fatura novaFatura = lerFatura(br, linha, clienteNovo);
+                clienteNovo.getFaturas().adicionar(novaFatura);
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("Erro a ler fatura:\n" + ex);
+            }
         }
 
         return clienteNovo;
@@ -147,15 +161,25 @@ public class FicheiroIO {
      * @return Um objeto {@code Fatura} com os dados lidos.
      * @throws IOException Se ocorrer um erro de leitura.
      */
-    private Fatura lerFatura(BufferedReader br, String linha, Cliente cliente) throws IOException {
+    private Fatura lerFatura(BufferedReader br, String linha, Cliente cliente) throws IOException,IllegalArgumentException {
         String[] dados = linha.split(separador);
-        Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), Leitor.validarData(dados[3]), cliente);
+        if (    !Leitor.validarUint(dados[1]) ||
+                !Leitor.validarUint(dados[2]) ||
+                Leitor.validarData(dados[3]) == null) {
+            throw new IllegalArgumentException("Dados inválidos na linha: " + linha);
+        }
+
+        Fatura novaFatura = new Fatura(Integer.parseInt(dados[2]), Leitor.validarData(dados[3]) , cliente);
 
         int nProdutos = Integer.parseInt(dados[1]);
         for (int i = 0; i < nProdutos; i++) {
             linha = br.readLine();
-            Produto novoProduto = lerProduto(linha);
-            novaFatura.getProdutos().adicionar(novoProduto);
+            try {
+                Produto novoProduto = lerProduto(linha);
+                novaFatura.getProdutos().adicionar(novoProduto);
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("Erro a ler Produtos: " + ex);
+            }
         }
 
         return novaFatura;
@@ -167,8 +191,12 @@ public class FicheiroIO {
      * @param input Linha com os dados do produto.
      * @return Um objeto {@code Produto} com os dados lidos.
      */
-    private Produto lerProduto(String input) {
+    private Produto lerProduto(String input) throws IllegalArgumentException {
         String[] dados = input.split(separador);
+        if (    !Leitor.validarUint(dados[1]) ||
+                !Leitor.validarNome(dados[2]) ) {
+            throw new IllegalArgumentException("Dados inválidos na linha: " + input);
+        }
         Produto produto = null;
         int produtoCodigo = Integer.parseInt(dados[1]), produtoQuantidade = Integer.parseInt(dados[4]);
         String produtoNome = dados[2], produtoDescricao = dados[3];
@@ -196,11 +224,13 @@ public class FicheiroIO {
      * @param certificacoes String com as certificações separadas por "-".
      * @return Lista de certificações lidas.
      */
-    private ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> lerCertificacoes(String certificacoes) {
+    private ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> lerCertificacoes(String certificacoes) throws IllegalArgumentException {
         String[] certificacoesDivididas = certificacoes.split("-");
         ArrayList<ProdutoAlimentarTaxaReduzida.Certificacao> certificacoesLista = new ArrayList<>();
         for (String c : certificacoesDivididas) {
-            certificacoesLista.add(ProdutoAlimentarTaxaReduzida.Certificacao.valueOf(c));
+            /* Dá throw se o argumento não for válido */
+            ProdutoAlimentarTaxaReduzida.Certificacao certificacaoNova = ProdutoAlimentarTaxaReduzida.Certificacao.valueOf(c);
+            certificacoesLista.add(certificacaoNova);
         }
         return certificacoesLista;
     }
