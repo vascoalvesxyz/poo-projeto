@@ -1,5 +1,6 @@
-# Todo
+Projecto Feito No Âmbito da Disciplina de POO. 
 
+# Todo
 - Relatorio
     1. ~Manual do utilizador~
     2. ~Mapa de classes~
